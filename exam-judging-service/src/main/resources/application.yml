@@ -1,0 +1,37 @@
+server:
+  port: ${port:8010}
+  shutdown: graceful
+
+spring:
+  application:
+    name: exam-judging-service
+  # Database
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog.xml
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url:
+    username:
+    password:
+    hikari:
+      maximum-pool-size: 50
+      connectionTimeout: 40000
+      idleTimeout: 600000
+      maxLifetime: 1800000
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        generate_ddl: false
+        ddl_auto: none
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        order_inserts: true
+        order_updates: true
+        flush-mode: manual
+        jdbc:
+          batch_size: 500
+
+logging:
+  file:
+    name: ${log.dir:/tmp}/exam-judging-service.main.log
