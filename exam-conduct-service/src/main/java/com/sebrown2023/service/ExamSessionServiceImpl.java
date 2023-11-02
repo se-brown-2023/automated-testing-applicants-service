@@ -24,7 +24,8 @@ public class ExamSessionServiceImpl implements ExamSessionService {
     public ExamSession startSession(UUID uuid) {
         ExamSession session = sessionRepository.findById(uuid).get();
 
-        if (session.isExpired() || session.getStarTimestamp() != null) {
+        if (session.getStatus() == Status.EXPIRED || session.getStatus() == Status.FINISHED
+                || session.getStatus() == Status.STARTED) {
             return null;
         }
 
