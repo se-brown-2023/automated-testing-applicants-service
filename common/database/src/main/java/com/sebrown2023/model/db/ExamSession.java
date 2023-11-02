@@ -5,16 +5,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class ExamSession {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     @ManyToOne
     private Exam exam;
     @ManyToOne
@@ -22,11 +26,14 @@ public class ExamSession {
     @Column(nullable = false)
     private Status status;
     @Column
-    private Date starTimestamp;
+    private LocalDateTime starTimestamp;
     @Column
-    private Date finishTimestamp;
+    private LocalDateTime finishTimestamp;
     @Column(nullable = false)
     private Boolean expired;
+    @OneToOne
+    @JoinColumn(name = "link_id", referencedColumnName = "id")
+    private Link link;
 
     public ExamSession() {
 
@@ -36,8 +43,8 @@ public class ExamSession {
             Exam exam,
             Examinee examine,
             Status status,
-            Date starTimestamp,
-            Date finishTimestamp,
+            LocalDateTime starTimestamp,
+            LocalDateTime finishTimestamp,
             Boolean expired
     ) {
         this.exam = exam;
@@ -48,7 +55,7 @@ public class ExamSession {
         this.expired = expired;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -64,16 +71,32 @@ public class ExamSession {
         return status;
     }
 
-    public Date getStarTimestamp() {
+    public LocalDateTime getStarTimestamp() {
         return starTimestamp;
     }
 
-    public Date getFinishTimestamp() {
+    public LocalDateTime getFinishTimestamp() {
         return finishTimestamp;
     }
 
-    public Boolean getExpired() {
+    public Link getLink() {
+        return link;
+    }
+
+    public Boolean isExpired() {
         return expired;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setStarTimestamp(LocalDateTime starTimestamp) {
+        this.starTimestamp = starTimestamp;
+    }
+
+    public void setFinishTimestamp(LocalDateTime finishTimestamp) {
+        this.finishTimestamp = finishTimestamp;
     }
 
     @Override

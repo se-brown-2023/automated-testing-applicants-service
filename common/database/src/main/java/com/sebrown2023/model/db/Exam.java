@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import org.hibernate.annotations.Type;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -36,7 +37,7 @@ public class Exam {
     @Column(columnDefinition = "interval")
     private Duration ttl;
     @Column
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     public Exam() {
     }
@@ -48,7 +49,7 @@ public class Exam {
             String programmingLanguage,
             Duration maxDuration,
             Duration ttl,
-            Date creationDate
+            LocalDateTime creationDate
     ) {
         this.examinerId = examinerId;
         this.name = name;
@@ -87,7 +88,7 @@ public class Exam {
         return ttl;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
