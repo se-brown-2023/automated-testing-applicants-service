@@ -1,6 +1,5 @@
 package com.sebrown2023.service;
 
-import com.sebrown2023.model.db.Exam;
 import com.sebrown2023.model.db.ExamSession;
 import com.sebrown2023.model.db.Link;
 import com.sebrown2023.model.db.Status;

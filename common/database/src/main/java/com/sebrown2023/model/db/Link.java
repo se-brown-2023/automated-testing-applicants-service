@@ -28,9 +28,6 @@ public class Link {
     @Column(nullable = false)
     private String url;
 
-    @Column
-    private UUID uuid;
-
     @Type(PostgreSQLIntervalType.class)
     @Column(columnDefinition = "interval")
     private Duration linkTTL;
