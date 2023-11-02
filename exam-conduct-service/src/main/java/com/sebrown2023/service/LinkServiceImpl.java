@@ -19,7 +19,7 @@ public class LinkServiceImpl implements LinkService {
         if (expired) {
             return true;
         } else {
-            expired = LocalDateTime.now().isAfter(link.getCreationTime());
+            expired = LocalDateTime.now().isAfter(link.getCreationTime().plus(link.getLinkTTL()));
             link.setExpired(expired);
             linkRepository.save(link);
             return expired;
