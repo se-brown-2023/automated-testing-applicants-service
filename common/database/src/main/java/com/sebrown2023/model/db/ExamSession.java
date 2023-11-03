@@ -29,8 +29,6 @@ public class ExamSession {
     private LocalDateTime starTimestamp;
     @Column
     private LocalDateTime finishTimestamp;
-    @Column(nullable = false)
-    private Boolean expired;
     @OneToOne
     @JoinColumn(name = "link_id", referencedColumnName = "id")
     private Link link;
@@ -44,15 +42,13 @@ public class ExamSession {
             Examinee examine,
             Status status,
             LocalDateTime starTimestamp,
-            LocalDateTime finishTimestamp,
-            Boolean expired
+            LocalDateTime finishTimestamp
     ) {
         this.exam = exam;
         this.examine = examine;
         this.status = status;
         this.starTimestamp = starTimestamp;
         this.finishTimestamp = finishTimestamp;
-        this.expired = expired;
     }
 
     public UUID getId() {
@@ -83,10 +79,6 @@ public class ExamSession {
         return link;
     }
 
-    public Boolean isExpired() {
-        return expired;
-    }
-
     public void setStatus(Status status) {
         this.status = status;
     }
@@ -108,13 +100,11 @@ public class ExamSession {
 
         if (!id.equals(that.id)) return false;
         if (!exam.equals(that.exam)) return false;
-        if (!examine.equals(that.examine)) return false;
+        if (!Objects.equals(examine, that.examine)) return false;
         if (status != that.status) return false;
         if (!Objects.equals(starTimestamp, that.starTimestamp))
             return false;
-        if (!Objects.equals(finishTimestamp, that.finishTimestamp))
-            return false;
-        return expired.equals(that.expired);
+        return Objects.equals(finishTimestamp, that.finishTimestamp);
     }
 
     @Override
@@ -125,7 +115,6 @@ public class ExamSession {
         result = 31 * result + status.hashCode();
         result = 31 * result + (starTimestamp != null ? starTimestamp.hashCode() : 0);
         result = 31 * result + (finishTimestamp != null ? finishTimestamp.hashCode() : 0);
-        result = 31 * result + expired.hashCode();
         return result;
     }
 }
