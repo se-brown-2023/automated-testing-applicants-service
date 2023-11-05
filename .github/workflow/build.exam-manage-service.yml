@@ -1,4 +1,4 @@
-name: Build exam conduct service
+name: Build exam manage service
 
 on:
   push:
