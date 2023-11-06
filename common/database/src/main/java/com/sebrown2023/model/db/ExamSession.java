@@ -29,9 +29,6 @@ public class ExamSession {
     private LocalDateTime starTimestamp;
     @Column
     private LocalDateTime finishTimestamp;
-    @OneToOne
-    @JoinColumn(name = "link_id", referencedColumnName = "id")
-    private Link link;
 
     public ExamSession() {
 
@@ -73,10 +70,6 @@ public class ExamSession {
 
     public LocalDateTime getFinishTimestamp() {
         return finishTimestamp;
-    }
-
-    public Link getLink() {
-        return link;
     }
 
     public void setStatus(Status status) {

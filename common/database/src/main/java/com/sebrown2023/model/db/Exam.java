@@ -6,11 +6,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import org.hibernate.annotations.Type;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -38,6 +40,9 @@ public class Exam {
     private Duration ttl;
     @Column
     private LocalDateTime creationDate;
+
+    @OneToMany(mappedBy = "exam")
+    private List<Task> tasks;
 
     public Exam() {
     }
@@ -90,6 +95,14 @@ public class Exam {
 
     public LocalDateTime getCreationDate() {
         return creationDate;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     @Override

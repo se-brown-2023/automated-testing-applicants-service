@@ -1,8 +1,9 @@
 package com.sebrown2023.service;
 
+import com.sebrown2023.model.db.Exam;
 import com.sebrown2023.model.db.ExamSession;
-import com.sebrown2023.model.db.Link;
 import com.sebrown2023.model.db.Status;
+import com.sebrown2023.model.db.Task;
 import com.sebrown2023.model.exceptions.ExamSessionAlreadyFinishedException;
 import com.sebrown2023.model.exceptions.ExamSessionException;
 import com.sebrown2023.model.exceptions.ExamSessionExpiredException;
@@ -14,13 +15,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class ExamSessionServiceImpl implements ExamSessionService {
-    @Autowired
-    private LinkService linkService;
-
     @Autowired
     private ExamSessionRepository sessionRepository;
 
@@ -32,14 +31,12 @@ public class ExamSessionServiceImpl implements ExamSessionService {
             case EXPIRED, FINISHED, STARTED -> throw new ExamSessionException("Exam session can not be started");
         }
 
-        Link link = session.getLink();
-        if (link.isExpired()) {
+        boolean isExpired = checkSessionExpiration(uuid);
+        if (isExpired) {
+            session.setStatus(Status.EXPIRED);
+            sessionRepository.save(session);
+
             throw new ExamSessionExpiredException();
-        } else {
-            boolean expired = linkService.checkExpired(link);
-            if (expired) {
-                throw new ExamSessionExpiredException();
-            }
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -58,7 +55,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         switch (session.getStatus()) {
             case EXPIRED -> session.setStatus(Status.FINISHED);
             case STARTED -> {
-                Duration duration = checkSessionExpiration(uuid);
+                Duration duration = checkExamExpiration(uuid);
                 if (duration.isPositive()) {
                     throw new ExamSessionNotExpiredException();
                 } else {
@@ -72,8 +69,20 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         return sessionRepository.save(session);
     }
 
+    /**
+     * This method is supposed to check link expiration
+     */
     @Override
-    public Duration checkSessionExpiration(UUID uuid) throws ExamSessionException {
+    public boolean checkSessionExpiration(UUID uuid) {
+        ExamSession session = sessionRepository.findById(uuid).get();
+        return session.getExam().getCreationDate().plus(session.getExam().getTtl()).isBefore(LocalDateTime.now());
+    }
+
+    /**
+     * This method is supposed to check how much time is left for exam when it's started
+     */
+    @Override
+    public Duration checkExamExpiration(UUID uuid) throws ExamSessionException {
         ExamSession session = sessionRepository.findById(uuid).get();
 
         return switch (session.getStatus()) {
@@ -94,4 +103,23 @@ public class ExamSessionServiceImpl implements ExamSessionService {
             }
         };
     }
+
+    @Override
+    public List<Task> getExamTasks(UUID uuid) throws ExamSessionException {
+        ExamSession session = sessionRepository.findById(uuid).get();
+        Exam exam = session.getExam();
+
+        if (session.getStatus() == Status.STARTED) {
+            throw new ExamSessionException("Exam is started");
+        }
+
+        boolean isExpired = checkSessionExpiration(uuid);
+
+        if (isExpired) {
+            throw new ExamSessionExpiredException();
+        }
+
+        return exam.getTasks();
+    }
+
 }
