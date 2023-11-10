@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface ExamSessionService {
     ExamSession startSession(UUID uuid) throws ExamSessionException;
     boolean checkSessionExpiration(ExamSession session);
-    Duration checkExamExpiration(UUID uuid) throws ExamSessionException;;
+    Duration checkExamExpiration(ExamSession session) throws ExamSessionException;;
     ExamSession finishSession(UUID uuid) throws ExamSessionException;
     public List<Task> getExamTasks(UUID uuid) throws ExamSessionException;
 

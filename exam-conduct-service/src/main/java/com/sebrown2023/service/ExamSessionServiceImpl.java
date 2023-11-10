@@ -55,7 +55,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         switch (session.getStatus()) {
             case EXPIRED -> throw new ExamSessionExpiredException();
             case STARTED -> {
-                Duration duration = checkExamExpiration(uuid);
+                Duration duration = checkExamExpiration(session);
                 if (duration.isPositive()) {
                     throw new ExamSessionNotExpiredException();
                 } else {
@@ -81,9 +81,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
      * This method is supposed to check how much time is left for exam when it's started
      */
     @Override
-    public Duration checkExamExpiration(UUID uuid) throws ExamSessionException {
-        ExamSession session = sessionRepository.findById(uuid).orElseThrow(ExamSessionNotFoundException::new);
-
+    public Duration checkExamExpiration(ExamSession session) throws ExamSessionException {
         return switch (session.getStatus()) {
             case EXPIRED -> Duration.ZERO;
             case CREATED, FINISHED -> throw new ExamSessionException("Can not check session expiration");
