@@ -16,7 +16,6 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name="exam_id", nullable = false)
     private Exam exam;
     @Column(nullable = false)
     private String name;
