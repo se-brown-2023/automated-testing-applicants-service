@@ -41,7 +41,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         }
 
         LocalDateTime now = LocalDateTime.now();
-        session.setStarTimestamp(now);
+        session.setStartTimestamp(now);
         session.setStatus(Status.STARTED);
 
         return sessionRepository.save(session);
@@ -86,7 +86,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
             case EXPIRED -> Duration.ZERO;
             case CREATED, FINISHED -> throw new ExamSessionException("Can not check session expiration");
             case STARTED -> {
-                LocalDateTime start = session.getStarTimestamp();
+                LocalDateTime start = session.getStartTimestamp();
                 LocalDateTime now = LocalDateTime.now();
 
                 Duration duration = Duration.between(start, now);

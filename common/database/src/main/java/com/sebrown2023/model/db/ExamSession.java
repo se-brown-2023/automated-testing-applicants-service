@@ -5,12 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -26,7 +23,7 @@ public class ExamSession {
     @Column(nullable = false)
     private Status status;
     @Column
-    private LocalDateTime starTimestamp;
+    private LocalDateTime startTimestamp;
     @Column
     private LocalDateTime finishTimestamp;
 
@@ -38,13 +35,13 @@ public class ExamSession {
             Exam exam,
             Examinee examine,
             Status status,
-            LocalDateTime starTimestamp,
+            LocalDateTime startTimestamp,
             LocalDateTime finishTimestamp
     ) {
         this.exam = exam;
         this.examine = examine;
         this.status = status;
-        this.starTimestamp = starTimestamp;
+        this.startTimestamp = startTimestamp;
         this.finishTimestamp = finishTimestamp;
     }
 
@@ -64,8 +61,8 @@ public class ExamSession {
         return status;
     }
 
-    public LocalDateTime getStarTimestamp() {
-        return starTimestamp;
+    public LocalDateTime getStartTimestamp() {
+        return startTimestamp;
     }
 
     public LocalDateTime getFinishTimestamp() {
@@ -76,8 +73,8 @@ public class ExamSession {
         this.status = status;
     }
 
-    public void setStarTimestamp(LocalDateTime starTimestamp) {
-        this.starTimestamp = starTimestamp;
+    public void setStartTimestamp(LocalDateTime startTimestamp) {
+        this.startTimestamp = startTimestamp;
     }
 
     public void setFinishTimestamp(LocalDateTime finishTimestamp) {
@@ -95,7 +92,7 @@ public class ExamSession {
         if (!exam.equals(that.exam)) return false;
         if (!Objects.equals(examine, that.examine)) return false;
         if (status != that.status) return false;
-        if (!Objects.equals(starTimestamp, that.starTimestamp))
+        if (!Objects.equals(startTimestamp, that.startTimestamp))
             return false;
         return Objects.equals(finishTimestamp, that.finishTimestamp);
     }
@@ -106,7 +103,7 @@ public class ExamSession {
         result = 31 * result + exam.hashCode();
         result = 31 * result + examine.hashCode();
         result = 31 * result + status.hashCode();
-        result = 31 * result + (starTimestamp != null ? starTimestamp.hashCode() : 0);
+        result = 31 * result + (startTimestamp != null ? startTimestamp.hashCode() : 0);
         result = 31 * result + (finishTimestamp != null ? finishTimestamp.hashCode() : 0);
         return result;
     }
