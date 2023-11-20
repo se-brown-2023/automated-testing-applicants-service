@@ -22,3 +22,8 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+springBoot {
+    mainClass.set("com.sebrown2023.ExamConductApplication")
+}
+
