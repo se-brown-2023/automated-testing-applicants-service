@@ -48,7 +48,9 @@ CREATE TABLE Submission (
     task_id INTEGER REFERENCES Task(id),
     exam_session_id INTEGER REFERENCES Exam_session(id),
     user_source_code TEXT,
-    submit_time TIMESTAMP
+    submit_time TIMESTAMP,
+    status TEXT not null,
+    processing_start_time timestamp
 );
 
 CREATE TABLE Test_result (
