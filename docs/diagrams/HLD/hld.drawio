@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-11-22T15:59:53.792Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36" etag="BsHS58EQd2_8yLqZSYHX" version="22.1.3" type="device">
+<mxfile host="app.diagrams.net" modified="2023-11-22T16:05:53.186Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36" etag="gr7ShjySBZfp5TbSB047" version="22.1.3" type="device">
   <diagram name="Page-1" id="MRzsRnbwaMJQk0XSHjTc">
     <mxGraphModel dx="905" dy="408" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -63,7 +63,7 @@
             <mxPoint x="360" y="90" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="oE--b2Kh5pRUx79Y7mFf-18" value="Get task&lt;br&gt;Submit solution" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="oE--b2Kh5pRUx79Y7mFf-18" value="Get task&lt;br&gt;Submit solution&lt;br&gt;Create exams, tasks" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="160" y="40" width="110" height="30" as="geometry" />
         </mxCell>
         <mxCell id="oE--b2Kh5pRUx79Y7mFf-19" value="Publish solutions" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
@@ -102,7 +102,7 @@
         <mxCell id="k67q0wwZx6QNSHhKVM2D-1" value="Manage Exam Service" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="470" y="80" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="k67q0wwZx6QNSHhKVM2D-3" value="Submit solution" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="k67q0wwZx6QNSHhKVM2D-3" value="Create exams, tasks" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="379" y="108" width="60" as="geometry" />
         </mxCell>
         <mxCell id="k67q0wwZx6QNSHhKVM2D-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="k67q0wwZx6QNSHhKVM2D-3" target="k67q0wwZx6QNSHhKVM2D-3">
