@@ -1,5 +1,6 @@
 package com.sebrown2023.compiler;
 
+import com.sebrown2023.compiler.model.ExecutionsStatus;
 import com.sebrown2023.compiler.model.InvokeStatus;
 import com.sebrown2023.compiler.model.Stream;
 import org.apache.commons.exec.CommandLine;
@@ -17,9 +18,9 @@ import java.util.concurrent.ExecutionException;
 public abstract class BaseCompiler {
     abstract InvokeStatus invokeCompiler(List<File> files, String pathToCompiled) throws IOException, ExecutionException;
 
-    abstract String executeCompiled(String pathToCompiled, Stream streamType, List<String> args);
+    abstract ExecutionsStatus executeCompiled(String pathToCompiled, Stream streamType, List<String> args);
 
-    public String commonExecution(String command, Stream streamType, long timeoutSec) throws IOException {
+    public ExecutionsStatus commonExecution(String command, Stream streamType, long timeoutSec) throws IOException {
         CommandLine cmdLine = CommandLine.parse(command);
         var outputStream = new ByteArrayOutputStream();
         var errorStream = new ByteArrayOutputStream();
@@ -38,12 +39,17 @@ public abstract class BaseCompiler {
             if (errorStream.toString().isEmpty() || errorStream.toString().toLowerCase().contains("stackoverflow")) {
                 streamOutput = "Exception timeout";
             }
-            return streamOutput;
+            return new ExecutionsStatus(streamOutput, streamOutput);
         }
+        var outputStreamString = outputStream.toString();
+        outputStreamString = outputStreamString.substring(0, Math.max(0, outputStreamString.length() - 1)); // drop last newline
+
+        var errorStreamString = errorStream.toString();
+        errorStreamString = errorStreamString.substring(0, Math.max(0, errorStreamString.length() - 1));
         return switch (streamType) {
-            case Stream.INPUT -> outputStream.toString();
-            case Stream.ERROR -> errorStream.toString();
-            case Stream.BOTH -> "OUTPUTSTREAM:\n$outputStream ERRORSTREAM:\n$errorStream";
+            case Stream.INPUT -> new ExecutionsStatus(outputStreamString, null);
+            case Stream.ERROR -> new ExecutionsStatus(null, errorStreamString);
+            case Stream.BOTH -> new ExecutionsStatus(outputStreamString, errorStreamString);
         };
     }
 }

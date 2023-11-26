@@ -1,0 +1,4 @@
+compilers:
+  compilerSettingsMap:
+    JAVA:
+      executionThreads: 1
