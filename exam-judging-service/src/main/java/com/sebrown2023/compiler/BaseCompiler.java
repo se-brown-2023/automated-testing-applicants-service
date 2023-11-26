@@ -6,7 +6,6 @@ import com.sebrown2023.compiler.model.Stream;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
-import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
 
 import java.io.ByteArrayOutputStream;
@@ -25,7 +24,7 @@ public abstract class BaseCompiler {
         var outputStream = new ByteArrayOutputStream();
         var errorStream = new ByteArrayOutputStream();
         var executor = new DefaultExecutor();
-        executor.setWatchdog(new ExecuteWatchdog(timeoutSec * 1000));
+        executor.setWatchdog(new JudgeExecuteWatchdog(timeoutSec * 1000));
         executor.setStreamHandler(new PumpStreamHandler(outputStream, errorStream));
         try {
             executor.execute(cmdLine);
@@ -39,17 +38,19 @@ public abstract class BaseCompiler {
             if (errorStream.toString().isEmpty() || errorStream.toString().toLowerCase().contains("stackoverflow")) {
                 streamOutput = "Exception timeout";
             }
-            return new ExecutionsStatus(streamOutput, streamOutput);
+            var time = ((JudgeExecuteWatchdog) executor.getWatchdog()).getExecutionTimeMs();
+            return new ExecutionsStatus(streamOutput, streamOutput, time);
         }
         var outputStreamString = outputStream.toString();
         outputStreamString = outputStreamString.substring(0, Math.max(0, outputStreamString.length() - 1)); // drop last newline
 
         var errorStreamString = errorStream.toString();
         errorStreamString = errorStreamString.substring(0, Math.max(0, errorStreamString.length() - 1));
+        var time = ((JudgeExecuteWatchdog) executor.getWatchdog()).getExecutionTimeMs();
         return switch (streamType) {
-            case Stream.INPUT -> new ExecutionsStatus(outputStreamString, null);
-            case Stream.ERROR -> new ExecutionsStatus(null, errorStreamString);
-            case Stream.BOTH -> new ExecutionsStatus(outputStreamString, errorStreamString);
+            case Stream.INPUT -> new ExecutionsStatus(outputStreamString, null, time);
+            case Stream.ERROR -> new ExecutionsStatus(null, errorStreamString, time);
+            case Stream.BOTH -> new ExecutionsStatus(outputStreamString, errorStreamString, time);
         };
     }
 }
