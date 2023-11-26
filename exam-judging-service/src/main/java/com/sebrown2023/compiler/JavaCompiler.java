@@ -1,6 +1,7 @@
 package com.sebrown2023.compiler;
 
 import com.sebrown2023.compiler.model.CompilerMessageLocation;
+import com.sebrown2023.compiler.model.ExecutionsStatus;
 import com.sebrown2023.compiler.model.InvokeStatus;
 import com.sebrown2023.compiler.model.JavacInvokeStatus;
 import com.sebrown2023.compiler.model.Stream;
@@ -14,9 +15,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -69,14 +67,6 @@ public class JavaCompiler extends BaseCompiler {
             futureExitCode.cancel(true);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-        } finally {
-            Files.walk(Path.of(pathToCompiled)).sorted(Comparator.reverseOrder()).forEach(path -> {
-                try {
-                    Files.delete(path);
-                } catch (IOException e) {
-                    // TODO log
-                }
-            });
         }
 
 
@@ -108,7 +98,7 @@ public class JavaCompiler extends BaseCompiler {
     }
 
     @Override
-    String executeCompiled(String pathToCompiled, Stream streamType, List<String> args) {
+    ExecutionsStatus executeCompiled(String pathToCompiled, Stream streamType, List<String> args) {
         var classPath = pathToCompiled;
         var mainClass = String.join(" ", args);
         try {

@@ -35,6 +35,7 @@ tasks.compileTestJava {
 }
 
 tasks.test {
+    allJvmArgs = allJvmArgs.toMutableList().apply { add("--enable-preview") }
     useJUnitPlatform()
 }
 
