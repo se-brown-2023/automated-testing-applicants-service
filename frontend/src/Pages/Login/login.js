@@ -12,15 +12,15 @@ export const Login = () => {
                         <div className="text-wrapper-2">Вход в систему</div>
                         <div className="login">
                             <div className="text-wrapper-3">Логин</div>
-                            <div className="rectangle-2" />
+                            <input className="rectangle-2" />
                         </div>
                         <div className="password">
                             <div className="text-wrapper-4">Пароль</div>
-                            <div className="rectangle-3" />
+                            <input className="rectangle-3" />
                         </div>
-                        <div className="submit">
+                        <button className="submit">
                                 <div className="text-wrapper-5">Вход</div>
-                        </div>
+                        </button>
                 </div>
             </div>
         </div>
