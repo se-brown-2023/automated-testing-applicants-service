@@ -34,7 +34,7 @@ public class JavaCompiler extends BaseCompiler {
     }
 
     @Override
-    InvokeStatus invokeCompiler(List<File> files, String pathToCompiled) throws IOException, ExecutionException {
+    InvokeStatus invokeCompiler(List<File> files, String pathToCompiled) throws ExecutionException {
 
         // Get the system Java compiler and initialize its components
         javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
