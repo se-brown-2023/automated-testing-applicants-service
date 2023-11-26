@@ -32,8 +32,30 @@ class JavaCompilerTest {
         Assertions.assertEquals(2, Files.walk(pathToCompiled).count()); // dir and Solution.class
         Assertions.assertTrue(Files.exists(pathToCompiled.resolve("Solution.class")));
 
-        var result = javaCompiler.executeCompiled(pathToCompiled.toString(), Stream.BOTH, List.of("Solution"));
+        var result = javaCompiler.executeCompiled(pathToCompiled.toString(), Stream.BOTH, List.of("Solution"), 5L);
         Assertions.assertTrue(result.errorStream().isEmpty());
         Assertions.assertEquals("[[1, 6], [8, 10], [15, 18]]", result.outputStream());
+    }
+
+    @Test
+    void testFailedJavaCompilation() throws IOException, ExecutionException {
+        var javaFile = new File(this.getClass().getResource("/javaCompilerTestData/BadSolution.java").getPath());
+        var pathToCompiled = Files.createTempDirectory("javaCompiler");
+        var javaCompilerInvokeResult = javaCompiler.invokeCompiler(List.of(javaFile), pathToCompiled.toString());
+        Assertions.assertFalse(javaCompilerInvokeResult.isCompileSuccess());
+        Assertions.assertEquals("';' expected", javaCompilerInvokeResult.combinedOutput());
+    }
+
+    @Test
+    void testExecutionTimeout() throws IOException, ExecutionException {
+        var javaFile = new File(this.getClass().getResource("/javaCompilerTestData/ExecutionTimeout.java").getPath());
+        var pathToCompiled = Files.createTempDirectory("javaCompiler");
+        var javaCompilerInvokeResult = javaCompiler.invokeCompiler(List.of(javaFile), pathToCompiled.toString());
+        Assertions.assertTrue(javaCompilerInvokeResult.isCompileSuccess());
+        Assertions.assertEquals(2, Files.walk(pathToCompiled).count()); // dir and Solution.class
+        Assertions.assertTrue(Files.exists(pathToCompiled.resolve("Solution.class")));
+
+        var result = javaCompiler.executeCompiled(pathToCompiled.toString(), Stream.BOTH, List.of("Solution"), 5L);
+        Assertions.assertEquals("Exception timeout", result.outputStream());
     }
 }

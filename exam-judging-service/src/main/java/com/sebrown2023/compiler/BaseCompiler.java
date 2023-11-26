@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 public abstract class BaseCompiler {
     abstract InvokeStatus invokeCompiler(List<File> files, String pathToCompiled) throws IOException, ExecutionException;
 
-    abstract ExecutionsStatus executeCompiled(String pathToCompiled, Stream streamType, List<String> args);
+    abstract ExecutionsStatus executeCompiled(String pathToCompiled, Stream streamType, List<String> args, long timeoutSec);
 
     public ExecutionsStatus commonExecution(String command, Stream streamType, long timeoutSec) throws IOException {
         CommandLine cmdLine = CommandLine.parse(command);
