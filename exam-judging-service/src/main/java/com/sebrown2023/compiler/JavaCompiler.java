@@ -98,11 +98,11 @@ public class JavaCompiler extends BaseCompiler {
     }
 
     @Override
-    ExecutionsStatus executeCompiled(String pathToCompiled, Stream streamType, List<String> args) {
+    ExecutionsStatus executeCompiled(String pathToCompiled, Stream streamType, List<String> args, long timeoutSec) {
         var classPath = pathToCompiled;
         var mainClass = String.join(" ", args);
         try {
-            return commonExecution(STR. "java -classpath \{ classPath } \{ mainClass }" , streamType, 5L);
+            return commonExecution(STR. "java -classpath \{ classPath } \{ mainClass }" , streamType, timeoutSec);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
