@@ -5,11 +5,13 @@
 
 .screen .header {
     background-color: #6b89c4;
-    height: 10vh;
-    width: 100vw;
+    height: 5vh;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 32px;
+    min-width: fit-content;
 }
 
 .screen .text-wrapper {
@@ -24,9 +26,9 @@
 
 .screen .loginSection {
     background-color: #9baac8;
-    height: 90vh;
+    height: 95vh;
     position: relative;
-    width: 100vw;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
