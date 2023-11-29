@@ -19,7 +19,7 @@ public class ExamSession {
     @ManyToOne
     private Exam exam;
     @ManyToOne
-    private Examinee examine;
+    private Examinee examinee;
     @Column(nullable = false)
     private Status status;
     @Column
@@ -33,13 +33,13 @@ public class ExamSession {
 
     public ExamSession(
             Exam exam,
-            Examinee examine,
+            Examinee examinee,
             Status status,
             LocalDateTime startTimestamp,
             LocalDateTime finishTimestamp
     ) {
         this.exam = exam;
-        this.examine = examine;
+        this.examinee = examinee;
         this.status = status;
         this.startTimestamp = startTimestamp;
         this.finishTimestamp = finishTimestamp;
@@ -57,8 +57,8 @@ public class ExamSession {
         this.exam = exam;
     }
 
-    public Examinee getExamine() {
-        return examine;
+    public Examinee getExaminee() {
+        return examinee;
     }
 
     public Status getStatus() {
@@ -94,7 +94,7 @@ public class ExamSession {
 
         if (!id.equals(that.id)) return false;
         if (!exam.equals(that.exam)) return false;
-        if (!Objects.equals(examine, that.examine)) return false;
+        if (!examinee.equals(that.examinee)) return false;
         if (status != that.status) return false;
         if (!Objects.equals(startTimestamp, that.startTimestamp))
             return false;
@@ -105,7 +105,7 @@ public class ExamSession {
     public int hashCode() {
         int result = id.hashCode();
         result = 31 * result + exam.hashCode();
-        result = 31 * result + examine.hashCode();
+        result = 31 * result + examinee.hashCode();
         result = 31 * result + status.hashCode();
         result = 31 * result + (startTimestamp != null ? startTimestamp.hashCode() : 0);
         result = 31 * result + (finishTimestamp != null ? finishTimestamp.hashCode() : 0);

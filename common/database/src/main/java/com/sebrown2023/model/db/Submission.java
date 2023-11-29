@@ -1,5 +1,6 @@
 package com.sebrown2023.model.db;
 
+import com.sebrown2023.model.dto.SubmissionDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +27,14 @@ public class Submission {
 
     public Submission() {
 
+    }
+
+    public static Submission createFromDto(Task task, ExamSession session, SubmissionDto submissionDto) {
+        return new Submission(task,
+                session,
+                submissionDto.userSourceCode(),
+                submissionDto.submitTime()
+        );
     }
 
     public Submission(Task task, ExamSession examSession, String userSourceCode, Date submitTime) {
