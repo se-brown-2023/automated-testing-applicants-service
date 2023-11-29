@@ -31,6 +31,24 @@ spring:
         flush-mode: manual
         jdbc:
           batch_size: 500
+  kafka:
+    bootstrap-servers:
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      group-id: ${spring.application.name}
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: "com.sebrown2023.model.dto"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    admin:
+      client-id: ${spring.application.name}
+      security:
+        protocol:
+
 
 logging:
   file:
