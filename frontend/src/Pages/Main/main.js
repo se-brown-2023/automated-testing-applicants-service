@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import {
-    Table,
-    Header,
-    HeaderRow,
-    Body,
-    Row,
-    HeaderCell,
-    Cell,
-} from '@table-library/react-table-library/table';
+import { Table, Header, HeaderRow, Body, Row, HeaderCell, Cell } from '@table-library/react-table-library/table';
 import { useTheme } from '@table-library/react-table-library/theme';
 import { getTheme } from '@table-library/react-table-library/baseline';
 import './main.css';
@@ -16,9 +9,11 @@ import Avatar from './photo_2023-08-21_10-55-05.jpg';
 import Modal from './modal';
 
 export const Main = () => {
+    const navigate = useNavigate();
     const [vacancies, setVacancies] = useState([]);
     const [expandedRowId, setExpandedRowId] = useState(null);
     const [selectedVacancy, setSelectedVacancy] = useState(null);
+    const [selectedTasks, setSelectedTasks] = useState([]);
 
     const handleAddVacancy = () => {
         const newVacancy = {
@@ -51,6 +46,10 @@ export const Main = () => {
 
     const theme = useTheme(getTheme());
 
+    const handleCreateExam = () => {
+        navigate('/tasks');
+    };
+
     return (
         <div>
             <div className="main-screen">
@@ -62,9 +61,9 @@ export const Main = () => {
                     <div className="text-wrapper-container">
                         <div className="text-wrapper">Система тестирования соискателей</div>
                     </div>
-                    <div className="button-container">
-                        <button onClick={handleAddVacancy}>Добавить вакансию</button>
-                    </div>
+                    <button className="assign-button" onClick={handleCreateExam}>
+                        Создать экзамен
+                    </button>
                 </div>
                 <div className="mainSection">
                     <Table data={{ nodes: vacancies }} theme={theme} className="table">
@@ -131,7 +130,7 @@ export const Main = () => {
                 </div>
             </div>
             {selectedVacancy && (
-                <Modal vacancy={selectedVacancy} onClose={handleCloseModal} />
+                <Modal vacancy={selectedVacancy} onClose={handleCloseModal} selectedTasks={selectedTasks} />
             )}
         </div>
     );

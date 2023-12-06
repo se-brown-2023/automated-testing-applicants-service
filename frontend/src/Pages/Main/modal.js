@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./modal.css";
 
-const Modal = ({vacancy, onClose}) => {
+const Modal = ({ vacancy, onClose, selectedTasks }) => {
     const [rating, setRating] = useState(0);
     const [isRatingMode, setIsRatingMode] = useState(true);
 
@@ -21,7 +21,6 @@ const Modal = ({vacancy, onClose}) => {
     return (
         <div className="modal" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-
                 <div className="modal-header">
                     <h2>Задание</h2>
                     <span className="close" onClick={onClose}>
@@ -31,7 +30,7 @@ const Modal = ({vacancy, onClose}) => {
                 <div className="modal-body">
                     <p>Текст задания</p>
                     <textarea
-                        value="Код"
+                        value={selectedTasks.map(task => task.title).join(', ')}
                         rows={10}
                         cols={50}
                     />
