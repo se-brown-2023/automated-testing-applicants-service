@@ -9,15 +9,15 @@ import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.PumpStreamHandler;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public abstract class BaseCompiler {
-    abstract InvokeStatus invokeCompiler(List<File> files, String pathToCompiled) throws IOException, ExecutionException;
+    public abstract InvokeStatus invokeCompiler(List<Path> files, String pathToCompiled) throws IOException, ExecutionException;
 
-    abstract ExecutionsStatus executeCompiled(String pathToCompiled, Stream streamType, List<String> args, long timeoutSec);
+    public abstract ExecutionsStatus executeCompiled(String pathToCompiled, Stream streamType, List<String> args, long timeoutSec);
 
     public ExecutionsStatus commonExecution(String command, Stream streamType, long timeoutSec) throws IOException {
         CommandLine cmdLine = CommandLine.parse(command);

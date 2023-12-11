@@ -30,7 +30,7 @@ public class Exam {
     private String description;
 
     @Column(nullable = false)
-    private String programmingLanguage;
+    private ProgrammingLanguage programmingLanguage;
 
     @Type(PostgreSQLIntervalType.class)
     @Column(columnDefinition = "interval")
@@ -51,7 +51,7 @@ public class Exam {
             Integer examinerId,
             String name,
             String description,
-            String programmingLanguage,
+            ProgrammingLanguage programmingLanguage,
             Duration maxDuration,
             Duration ttl,
             LocalDateTime creationDate
@@ -81,7 +81,7 @@ public class Exam {
         return description;
     }
 
-    public String getProgrammingLanguage() {
+    public ProgrammingLanguage getProgrammingLanguage() {
         return programmingLanguage;
     }
 
