@@ -5,7 +5,6 @@ import com.sebrown2023.compiler.model.ExecutionsStatus;
 import com.sebrown2023.compiler.model.InvokeStatus;
 import com.sebrown2023.compiler.model.JavacInvokeStatus;
 import com.sebrown2023.compiler.model.Stream;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.tools.Diagnostic;
@@ -15,32 +14,32 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 @Component
 public class JavaCompiler extends BaseCompiler {
-    @Qualifier("javaCompilerExecutorService")
-    private final ExecutorService threadPool;
 
-    public JavaCompiler(ExecutorService threadPool) {
-        this.threadPool = threadPool;
-    }
+    private final ExecutorService threadPool = Executors.newVirtualThreadPerTaskExecutor();
 
     @Override
-    InvokeStatus invokeCompiler(List<File> files, String pathToCompiled) throws ExecutionException {
+    public InvokeStatus invokeCompiler(List<Path> files, String pathToCompiled) throws ExecutionException {
 
         // Get the system Java compiler and initialize its components
         javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         StandardJavaFileManager manager = compiler.getStandardFileManager(diagnostics, null, null);
-        Iterable<? extends JavaFileObject> sources = manager.getJavaFileObjectsFromFiles(files);
+        Iterable<? extends JavaFileObject> sources = manager.getJavaFileObjectsFromPaths(files);
 
         // Create the output directory if it doesn't already exist
         new File(pathToCompiled).mkdirs();
@@ -98,11 +97,10 @@ public class JavaCompiler extends BaseCompiler {
     }
 
     @Override
-    ExecutionsStatus executeCompiled(String pathToCompiled, Stream streamType, List<String> args, long timeoutSec) {
-        var classPath = pathToCompiled;
+    public ExecutionsStatus executeCompiled(String pathToCompiled, Stream streamType, List<String> args, long timeoutSec) {
         var mainClass = String.join(" ", args);
         try {
-            return commonExecution(STR. "java -classpath \{ classPath } \{ mainClass }" , streamType, timeoutSec);
+            return commonExecution(STR. "java -classpath \{ pathToCompiled } \{ mainClass }" , streamType, timeoutSec);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

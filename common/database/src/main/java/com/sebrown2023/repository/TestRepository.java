@@ -14,4 +14,6 @@ public interface TestRepository extends JpaRepository<Test, Long> {
     List<Test> findTestsByTaskId(Long task_id);
 
     void deleteTestById(Long id);
+
+    List<Test> findAllByTaskId(long taskId);
 }

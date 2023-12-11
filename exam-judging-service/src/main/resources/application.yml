@@ -49,6 +49,11 @@ spring:
       security:
         protocol:
 
+submissionService:
+  executionThreads:
+
+java-compiler:
+  lib-dir:
 
 logging:
   file:

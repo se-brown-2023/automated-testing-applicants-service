@@ -26,7 +26,8 @@ kafka:
     delay: 3000
     retry: 3
 
-compilers:
-  compilerSettingsMap:
-    JAVA:
-      executionThreads: 1
+submissionService:
+  executionThreads: 1
+
+java-compiler:
+  lib-dir: exam-judging-service/src/main/conf/lib
