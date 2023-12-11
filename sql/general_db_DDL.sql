@@ -34,13 +34,12 @@ CREATE TABLE Examinee (
 );
 
 CREATE TABLE Exam_session (
-    id SERIAL PRIMARY KEY,
+    id uuid PRIMARY KEY,
     exam_id INTEGER REFERENCES Exam(id),
     examinee_id INTEGER REFERENCES Examinee(id),
     status VARCHAR(10),
     start_timestamp TIMESTAMP,
     finish_timestamp TIMESTAMP,
-    expired BOOLEAN
 );
 
 CREATE TABLE Submission (
