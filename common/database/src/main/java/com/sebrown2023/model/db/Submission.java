@@ -30,7 +30,8 @@ public class Submission {
     }
 
     public static Submission createFromDto(Task task, ExamSession session, SubmissionDto submissionDto) {
-        return new Submission(task,
+        return new Submission(
+                task,
                 session,
                 submissionDto.userSourceCode(),
                 submissionDto.submitTime()

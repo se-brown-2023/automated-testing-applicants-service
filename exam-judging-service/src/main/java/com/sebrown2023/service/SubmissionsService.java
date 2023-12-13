@@ -4,6 +4,7 @@ import com.sebrown2023.compiler.BaseCompiler;
 import com.sebrown2023.compiler.JavaCompiler;
 import com.sebrown2023.compiler.model.InvokeStatus;
 import com.sebrown2023.compiler.model.Stream;
+import com.sebrown2023.configuration.properties.JavaCompilerProperties;
 import com.sebrown2023.exception.JudgeServiceException;
 import com.sebrown2023.model.WrappedCode;
 import com.sebrown2023.model.db.ProgrammingLanguage;
@@ -28,6 +29,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.io.IOException;
@@ -54,14 +56,18 @@ public class SubmissionsService {
 
     private final TransactionTemplate transactionTemplate;
 
+    private final JavaCompilerProperties javaCompilerProperties;
+
     public SubmissionsService(
             SubmissionRepository submissionRepository,
             TaskRepository taskRepository,
             ExamSessionRepository examSessionRepository,
             ExecutorService submissionExecutorService,
-            TestResultRepository testResultRepository, TestRepository testRepository, Map<ProgrammingLanguage, BaseCompiler> compilers,
-            TransactionTemplate transactionTemplate
-    ) {
+            TestResultRepository testResultRepository,
+            TestRepository testRepository,
+            Map<ProgrammingLanguage, BaseCompiler> compilers,
+            TransactionTemplate transactionTemplate,
+            JavaCompilerProperties javaCompilerProperties) {
         this.submissionRepository = submissionRepository;
         this.taskRepository = taskRepository;
         this.examSessionRepository = examSessionRepository;
@@ -70,6 +76,7 @@ public class SubmissionsService {
         this.testRepository = testRepository;
         this.compilers = compilers;
         this.transactionTemplate = transactionTemplate;
+        this.javaCompilerProperties = javaCompilerProperties;
     }
 
     @KafkaListener(topics = "submissionsTopic")
@@ -91,7 +98,7 @@ public class SubmissionsService {
     }
 
     private void processSubmissionInBG(Submission submission) {
-        logger.info(STR. "Start procession submission#\{ submission.getId() }" );
+        logger.info(STR. "Start processing submission#\{ submission.getId() }" );
         switch (submission.getTask().getExam().getProgrammingLanguage()) {
             case JAVA -> processJavaSubmission((JavaCompiler) compilers.get(ProgrammingLanguage.JAVA), submission);
             case JAVA_SCRIPT -> {
@@ -103,17 +110,21 @@ public class SubmissionsService {
     private void processJavaSubmission(JavaCompiler javac, Submission submission) {
         try {
             var wrappedCode = TestUtil.addMainFunction(submission.getUserSourceCode(), ProgrammingLanguage.JAVA);
+            TestUtil.copyJavaLibs(javaCompilerProperties.libDir(), wrappedCode.sourceDir().resolve("compiled"));
             var invokeStatus =
                     javac.invokeCompiler(wrappedCode.sourceCode(), wrappedCode.sourceDir().resolve("compiled").toString());
             if (invokeStatus.hasCompilationError()) {
-                transactionTemplate.executeWithoutResult((_) ->
-                        saveCompilationErrorResult("Timeout Exception:", submission, invokeStatus)
-                );
-            } else if (invokeStatus.hasTimeout()) {
+                logger.info(STR. "Submission#\{ submission.getId() } has compilation error: \{ invokeStatus.combinedOutput() }" );
                 transactionTemplate.executeWithoutResult((_) ->
                         saveCompilationErrorResult("Compilation Error:", submission, invokeStatus)
                 );
+            } else if (invokeStatus.hasTimeout()) {
+                logger.info(STR. "Submission#\{ submission.getId() } has timeout error: \{ invokeStatus.combinedOutput() }" );
+                transactionTemplate.executeWithoutResult((_) ->
+                        saveCompilationErrorResult("Timeout Exception:", submission, invokeStatus)
+                );
             } else if (invokeStatus.isCompileSuccess()) {
+                logger.info(STR. "Submission#\{ submission.getId() } was compiled succsessful" );
                 var testResults = runTests(testRepository.findAllByTaskId(submission.getTask().getId()), javac, wrappedCode, submission);
                 logger.info(STR. "Tests results for submission \{ submission }: \{ StringUtils.joinToString(testResults, ", ") }" );
                 transactionTemplate.executeWithoutResult((_) ->
@@ -124,7 +135,7 @@ public class SubmissionsService {
             }
         } catch (IOException e) {
             throw new JudgeServiceException.SubmissionProcessingException(e);
-        } catch (ExecutionException e) {
+        } catch (ExecutionException | TransactionException e) {
             throw new RuntimeException(e);
         }
     }
@@ -132,8 +143,8 @@ public class SubmissionsService {
     private List<TestResult> runTests(List<Test> tests, JavaCompiler javac, WrappedCode wrappedCode, Submission submission) {
         return tests.stream().parallel().map(test -> {
             var executionsStatus =
-                    javac.executeCompiled(wrappedCode.sourceDir().toString(), Stream.BOTH, List.of(wrappedCode.mainMethod()), 5L);
-            if (!executionsStatus.errorStream().isEmpty()) {
+                    javac.executeCompiled(TestUtil.prepareJavaPathToCompiled(wrappedCode), Stream.BOTH, List.of(wrappedCode.mainMethod(), test.getInputData()), 5L);
+                if (!executionsStatus.errorStream().isEmpty()) {
                 logger.info(STR. "Test \{ test } failed: \{ executionsStatus.errorStream() }" );
                 return new TestResult(
                         submission,
