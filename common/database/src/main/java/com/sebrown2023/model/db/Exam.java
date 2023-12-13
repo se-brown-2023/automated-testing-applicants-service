@@ -3,6 +3,8 @@ package com.sebrown2023.model.db;
 import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,6 +40,7 @@ public class Exam {
     private String description;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ProgrammingLanguage programmingLanguage;
 
     @Type(PostgreSQLIntervalType.class)
