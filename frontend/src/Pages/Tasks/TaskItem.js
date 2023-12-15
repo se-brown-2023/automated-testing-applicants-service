@@ -1,7 +1,7 @@
 import React from 'react';
 import './TaskItem.css';
 
-const TaskItem = ({ task, onTaskSelect, onTaskClick, selectedTasks }) => {
+const TaskItem = ({ task, onTaskSelect, onTaskClick, selectedTasks = [] }) => {
     return (
         <div className="task-item">
             <input type="checkbox" checked={selectedTasks.includes(task)} onChange={() => onTaskSelect(task)} />

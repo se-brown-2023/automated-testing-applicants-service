@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./modal.css";
 
-const Modal = ({ vacancy, onClose, selectedTasks }) => {
+const Modal = ({ vacancy, onClose, selectedTasks, examSession }) => {
     const [rating, setRating] = useState(0);
     const [isRatingMode, setIsRatingMode] = useState(true);
 
@@ -30,7 +30,7 @@ const Modal = ({ vacancy, onClose, selectedTasks }) => {
                 <div className="modal-body">
                     <p>Текст задания</p>
                     <textarea
-                        value={selectedTasks.map(task => task.title).join(', ')}
+                        value={examSession.tasks.map(task => task.title).join(', ')}
                         rows={10}
                         cols={50}
                     />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import { Table, Header, HeaderRow, Body, Row, HeaderCell, Cell } from '@table-library/react-table-library/table';
 import { useTheme } from '@table-library/react-table-library/theme';
 import { getTheme } from '@table-library/react-table-library/baseline';
@@ -9,28 +9,15 @@ import Avatar from './photo_2023-08-21_10-55-05.jpg';
 import Modal from './modal';
 
 export const Main = () => {
+    const dispatch = useDispatch();
+    const tasks = useSelector(state => state.tasks);
+    const users = useSelector(state => state.users);
+    const examSessions = useSelector(state => state.examSessions);
     const navigate = useNavigate();
-    const [vacancies, setVacancies] = useState([]);
     const [expandedRowId, setExpandedRowId] = useState(null);
     const [selectedVacancy, setSelectedVacancy] = useState(null);
     const [selectedTasks, setSelectedTasks] = useState([]);
-
-    const handleAddVacancy = () => {
-        const newVacancy = {
-            id: uuidv4(),
-            name: 'Имя экзаменуемого',
-            email: 'example@example.com',
-            description: 'Описание тестирования...',
-            language: 'Язык',
-            creationDate: '01.01.2023',
-            startTime: '10:00',
-            endTime: '12:00',
-            testResults: 'Результаты тестов',
-        };
-
-        setVacancies([...vacancies, newVacancy]);
-        setExpandedRowId(null);
-    };
+    const [selectedExamSession, setSelectedExamSession] = useState(null)
 
     const handleToggleExpansion = (rowId) => {
         setExpandedRowId(rowId === expandedRowId ? null : rowId);
@@ -46,8 +33,8 @@ export const Main = () => {
 
     const theme = useTheme(getTheme());
 
-    const handleCreateExam = () => {
-        navigate('/tasks');
+    const handleCreateSession = () => {
+        navigate('/exam-session');
     };
 
     return (
@@ -61,12 +48,12 @@ export const Main = () => {
                     <div className="text-wrapper-container">
                         <div className="text-wrapper">Система тестирования соискателей</div>
                     </div>
-                    <button className="assign-button" onClick={handleCreateExam}>
+                    <button className="assign-button" onClick={handleCreateSession}>
                         Создать экзамен
                     </button>
                 </div>
                 <div className="mainSection">
-                    <Table data={{ nodes: vacancies }} theme={theme} className="table">
+                    <Table data={{ nodes: examSessions }} theme={theme} className="table">
                         {(tableList) => (
                             <>
                                 <Header>
@@ -83,8 +70,8 @@ export const Main = () => {
                                                 item={item}
                                                 onClick={() => handleToggleExpansion(item.id)}
                                             >
-                                                <Cell>{item.name}</Cell>
-                                                <Cell>{item.email}</Cell>
+                                                <Cell>{item.user?.name}</Cell>
+                                                <Cell>{item.user?.email}</Cell>
                                                 <Cell>{item.testResults}</Cell>
                                             </Row>
                                             {item.id === expandedRowId && (
@@ -129,8 +116,8 @@ export const Main = () => {
                     </Table>
                 </div>
             </div>
-            {selectedVacancy && (
-                <Modal vacancy={selectedVacancy} onClose={handleCloseModal} selectedTasks={selectedTasks} />
+            {selectedExamSession && (
+                <Modal vacancy={selectedVacancy} onClose={handleCloseModal} selectedTasks={selectedTasks} examSession={selectedExamSession} />
             )}
         </div>
     );
