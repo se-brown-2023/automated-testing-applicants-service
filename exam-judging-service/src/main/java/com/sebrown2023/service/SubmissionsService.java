@@ -84,7 +84,7 @@ public class SubmissionsService {
             backoff = @Backoff(delayExpression = "#{'${kafka.backoff.delay}'}"),
             attempts = "${kafka.backoff.retry}"
     )
-    public void submissionsListen(@Header("retry_topic-attempts") Integer attempts, @Payload SubmissionDto submissionDto) {
+    public void submissionsListen(@Header(value = "retry_topic-attempts", required = false) Integer attempts, @Payload SubmissionDto submissionDto) {
         logger.info(STR. "Received new submission: \{ submissionDto }. Attempt \{ attempts == null ? 1 : attempts }" );
         var task = taskRepository.findById(submissionDto.taskId()).orElseThrow(() ->
                 new JudgeServiceException.TaskNotFoundException(submissionDto.taskId())

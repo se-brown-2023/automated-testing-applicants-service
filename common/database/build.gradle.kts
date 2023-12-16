@@ -7,8 +7,7 @@ plugins {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-
+    api("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("io.hypersistence:hypersistence-utils-hibernate-62:3.6.0")
 
     api("org.postgresql:postgresql:42.6.0")
