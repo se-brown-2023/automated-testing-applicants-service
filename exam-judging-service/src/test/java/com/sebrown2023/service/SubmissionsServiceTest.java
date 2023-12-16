@@ -16,6 +16,7 @@ import com.sebrown2023.repository.TaskRepository;
 import com.sebrown2023.repository.TestRepository;
 import com.sebrown2023.repository.TestResultRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +33,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.StreamSupport;
 
 @SpringBootTest
@@ -66,8 +68,19 @@ class SubmissionsServiceTest extends WithPostgresTest {
     @Autowired
     private KafkaTemplate<String, SubmissionDto> kafkaTemplate;
 
+    @BeforeEach
+    void cleanUpDataBase() {
+        examineeRepository.deleteAll();
+        examRepository.deleteAll();
+        taskRepository.deleteAll();
+        testRepository.deleteAll();
+        examSessionRepository.deleteAll();
+        submissionRepository.deleteAll();
+        testResultRepository.deleteAll();
+    }
+
     @Test
-    void javaCompileTest() throws InterruptedException, IOException {
+    void javaCompileTest() throws InterruptedException, IOException, ExecutionException {
         var examinee = examineeRepository.save(
                 new Examinee("Oleg", "Mongol", "oleg@mongol.com", "78889997766")
         );
@@ -101,15 +114,19 @@ class SubmissionsServiceTest extends WithPostgresTest {
         var sourceCode =
                 Files.readString(Path.of(this.getClass().getResource("/submissions/submission1SourceCode.txt").getPath()));
 
-
-        kafkaTemplate.send("submissionsTopic", new SubmissionDto(
+        var newSubmission = new SubmissionDto(
                 1,
                 examSession.getId(),
                 sourceCode,
                 Date.from(Instant.now())
-        ));
+        );
 
-        Thread.sleep(10000); // wait for processing
+
+        var sendResult = kafkaTemplate.send("submissionsTopic", newSubmission).get();
+
+        Assertions.assertEquals(newSubmission, sendResult.getProducerRecord().value());
+
+        Thread.sleep(5000); // wait for processing
 
         var submissions = StreamSupport.stream(submissionRepository.findAll().spliterator(), false).toList();
         Assertions.assertEquals(1, submissions.size());
