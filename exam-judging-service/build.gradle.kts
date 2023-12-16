@@ -11,8 +11,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.kafka:spring-kafka")
 
-    runtimeOnly("org.postgresql:postgresql:42.6.0")
-
     implementation(project(":common:database"))
 
     implementation("org.apache.commons:commons-exec:1.3")
