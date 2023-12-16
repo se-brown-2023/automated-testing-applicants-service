@@ -19,7 +19,7 @@ class TestUtilTest {
         assertEquals("ListNode", TestUtil.extractSolutionReturnType(Files.readString(javaFile)));
 
         javaFile = Path.of(this.getClass().getResource("/javaCompilerTestData/Solution_3.java").getPath());
-        assertEquals("boolean", TestUtil.extractSolutionReturnType(Files.readString(javaFile)));
+        assertEquals("Boolean", TestUtil.extractSolutionReturnType(Files.readString(javaFile)));
 
         javaFile = Path.of(this.getClass().getResource("/javaCompilerTestData/Solution_4.java").getPath());
         assertEquals("List<Map<String, Tuple<Integer, String>>>", TestUtil.extractSolutionReturnType(Files.readString(javaFile)));
