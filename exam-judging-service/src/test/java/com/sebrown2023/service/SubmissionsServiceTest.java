@@ -15,12 +15,14 @@ import com.sebrown2023.repository.SubmissionRepository;
 import com.sebrown2023.repository.TaskRepository;
 import com.sebrown2023.repository.TestRepository;
 import com.sebrown2023.repository.TestResultRepository;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -39,7 +41,8 @@ import java.util.stream.StreamSupport;
 @SpringBootTest
 @EmbeddedKafka(
         partitions = 1,
-        brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"}
+        brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"},
+        topics = {"submissionsTopic", "submissionsTopic-dlt", "submissionsTopic-retry-0", "submissionsTopic-retry-1",}
 )
 @DirtiesContext
 @ActiveProfiles("test")
@@ -67,6 +70,9 @@ class SubmissionsServiceTest extends WithPostgresTest {
 
     @Autowired
     private KafkaTemplate<String, SubmissionDto> kafkaTemplate;
+
+    @Autowired
+    private ProducerFactory<String, SubmissionDto> producerFactory;
 
     @BeforeEach
     void cleanUpDataBase() {
@@ -126,7 +132,7 @@ class SubmissionsServiceTest extends WithPostgresTest {
 
         Assertions.assertEquals(newSubmission, sendResult.getProducerRecord().value());
 
-        Thread.sleep(10000); // wait for processing
+        Thread.sleep(5000); // wait for processing
 
         var submissions = StreamSupport.stream(submissionRepository.findAll().spliterator(), false).toList();
         Assertions.assertEquals(1, submissions.size());
