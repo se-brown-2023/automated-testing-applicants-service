@@ -37,3 +37,5 @@ local.properties
 
 ### Mac OS ###
 .DS_Store
+/kafka/
+/postgres/
