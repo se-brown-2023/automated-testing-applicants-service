@@ -51,11 +51,9 @@ create table if not exists submission
 (
     id                    serial primary key,
     task_id               integer references task (id),
-    exam_session_id       integer references exam_session (id),
+    exam_session_id       uuid references exam_session (id),
     user_source_code      text,
-    submit_time           timestamp,
-    status                text not null,
-    processing_start_time timestamp
+    submit_time           timestamp
 );
 
 create table if not exists test_result
