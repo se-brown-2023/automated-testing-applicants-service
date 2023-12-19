@@ -4,12 +4,12 @@ import com.sebrown2023.model.db.Exam;
 import com.sebrown2023.model.db.ExamSession;
 import com.sebrown2023.model.db.Status;
 import com.sebrown2023.model.db.Task;
-import com.sebrown2023.model.exceptions.ExamSessionAlreadyFinishedException;
-import com.sebrown2023.model.exceptions.ExamSessionException;
-import com.sebrown2023.model.exceptions.ExamSessionExpiredException;
-import com.sebrown2023.model.exceptions.ExamSessionNotExpiredException;
-import com.sebrown2023.model.exceptions.ExamSessionNotFoundException;
-import com.sebrown2023.model.exceptions.ExamSessionNotStartedException;
+import com.sebrown2023.exceptions.ExamSessionAlreadyFinishedException;
+import com.sebrown2023.exceptions.ExamSessionException;
+import com.sebrown2023.exceptions.ExamSessionExpiredException;
+import com.sebrown2023.exceptions.ExamSessionNotExpiredException;
+import com.sebrown2023.exceptions.ExamSessionNotFoundException;
+import com.sebrown2023.exceptions.ExamSessionNotStartedException;
 import com.sebrown2023.repository.ExamSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -119,6 +119,19 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         }
 
         return exam.getTasks();
+    }
+
+    @Override
+    public ExamSession create() {
+        ExamSession session = new ExamSession();
+        session.setStatus(Status.CREATED);
+
+        return sessionRepository.save(session);
+    }
+
+    @Override
+    public void deleteSession(UUID uuid) {
+        sessionRepository.deleteById(uuid);
     }
 
 }

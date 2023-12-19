@@ -1,4 +1,4 @@
-package com.sebrown2023.model.exceptions;
+package com.sebrown2023.exceptions;
 
 import org.springframework.http.HttpStatus;
 

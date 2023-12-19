@@ -1,8 +1,7 @@
 package com.sebrown2023.controller;
 
-import com.sebrown2023.service.ExamSessionService;
 import com.sebrown2023.model.db.ExamSession;
-import com.sebrown2023.model.exceptions.ExamSessionNotFoundException;
+import com.sebrown2023.exceptions.ExamSessionNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

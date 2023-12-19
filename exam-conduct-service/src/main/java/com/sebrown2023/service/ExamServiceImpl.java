@@ -3,9 +3,9 @@ package com.sebrown2023.service;
 import com.sebrown2023.model.db.Exam;
 import com.sebrown2023.model.db.ExamSession;
 import com.sebrown2023.model.db.Status;
-import com.sebrown2023.model.exceptions.ExamSessionAlreadyStartedException;
-import com.sebrown2023.model.exceptions.ExamSessionException;
-import com.sebrown2023.model.exceptions.ExamSessionExpiredException;
+import com.sebrown2023.exceptions.ExamSessionAlreadyStartedException;
+import com.sebrown2023.exceptions.ExamSessionException;
+import com.sebrown2023.exceptions.ExamSessionExpiredException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
