@@ -842,11 +842,11 @@
             "id": "173b5614-5acd-404a-9ac8-6fd47b8fc37b",
             "name": "Default Policy",
             "description": "A policy that grants access only for users within this realm",
-            "type": "js",
+            "type": "role",
             "logic": "POSITIVE",
             "decisionStrategy": "AFFIRMATIVE",
             "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
+              "roles": "[{\"id\":\"default-roles-swe-brown-2023-realm\",\"required\":false}]"
             }
           },
           {
