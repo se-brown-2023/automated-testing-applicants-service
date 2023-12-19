@@ -1,5 +1,6 @@
 package com.sebrown2023.service;
 
+import com.sebrown2023.exceptions.ExamNotFoundException;
 import com.sebrown2023.model.db.ExamSession;
 import com.sebrown2023.model.db.Task;
 import com.sebrown2023.exceptions.ExamSessionException;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ExamSessionService {
-    ExamSession create();
+    ExamSession create(Long examId) throws ExamNotFoundException;
     ExamSession getByUUID(UUID uuid) throws ExamSessionException;
     ExamSession startSession(UUID uuid) throws ExamSessionException;
     boolean checkSessionExpiration(ExamSession session);

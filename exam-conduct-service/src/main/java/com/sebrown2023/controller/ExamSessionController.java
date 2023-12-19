@@ -1,7 +1,10 @@
 package com.sebrown2023.controller;
 
+import com.sebrown2023.exceptions.ExamNotFoundException;
+import com.sebrown2023.exceptions.ExamSessionException;
 import com.sebrown2023.model.db.ExamSession;
 import com.sebrown2023.exceptions.ExamSessionNotFoundException;
+import com.sebrown2023.service.ExamSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,22 +28,22 @@ public class ExamSessionController {
     private ExamSessionService sessionService;
 
     @GetMapping(value = "/get/{uuid}")
-    public ResponseEntity<ExamSession> getSessionById(@PathVariable("uuid") UUID sessionId) throws ExamSessionNotFoundException {
-        ExamSession session = sessionService.get(sessionId);
+    public ResponseEntity<ExamSession> getSessionById(@PathVariable("uuid") UUID sessionId) throws ExamSessionException {
+        ExamSession session = sessionService.getByUUID(sessionId);
 
         return ResponseEntity.ok(session);
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<ExamSession> createSession() {
-        ExamSession session = sessionService.create();
+    public ResponseEntity<ExamSession> createSession(@PathVariable("id") Long examId) throws ExamNotFoundException {
+        ExamSession session = sessionService.create(examId);
 
         return ResponseEntity.ok(session);
     }
 
     @DeleteMapping(value = "/delete/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSession(@PathVariable("uuid") UUID sessionId) throws ExamSessionNotFoundException {
+    public void deleteSession(@PathVariable("uuid") UUID sessionId) {
         sessionService.deleteSession(sessionId);
     }
 

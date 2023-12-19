@@ -1,5 +1,6 @@
 package com.sebrown2023.service;
 
+import com.sebrown2023.exceptions.ExamNotFoundException;
 import com.sebrown2023.model.db.Exam;
 import com.sebrown2023.model.db.ExamSession;
 import com.sebrown2023.model.db.Status;
@@ -24,6 +25,8 @@ import java.util.UUID;
 public class ExamSessionServiceImpl implements ExamSessionService {
     @Autowired
     private ExamSessionRepository sessionRepository;
+    @Autowired
+    private ExamService examService;
 
     @Override
     public ExamSession getByUUID(UUID uuid) throws ExamSessionException {
@@ -122,8 +125,10 @@ public class ExamSessionServiceImpl implements ExamSessionService {
     }
 
     @Override
-    public ExamSession create() {
+    public ExamSession create(Long examId) throws ExamNotFoundException {
         ExamSession session = new ExamSession();
+        Exam exam = examService.getExamById(examId);
+        session.setExam(exam);
         session.setStatus(Status.CREATED);
 
         return sessionRepository.save(session);

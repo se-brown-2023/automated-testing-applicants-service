@@ -53,6 +53,10 @@ public class ExamSession {
         return exam;
     }
 
+    public void setExam(Exam exam) {
+        this.exam = exam;
+    }
+
     public Examinee getExamine() {
         return examine;
     }
