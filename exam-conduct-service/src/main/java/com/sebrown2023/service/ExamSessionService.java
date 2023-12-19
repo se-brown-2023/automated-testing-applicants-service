@@ -10,10 +10,12 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ExamSessionService {
+    ExamSession getByUUID(UUID uuid) throws ExamSessionException;
     ExamSession startSession(UUID uuid) throws ExamSessionException;
     boolean checkSessionExpiration(ExamSession session);
     Duration checkExamExpiration(ExamSession session) throws ExamSessionException;;
     ExamSession finishSession(UUID uuid) throws ExamSessionException;
-    public List<Task> getExamTasks(UUID uuid) throws ExamSessionException;
+    List<Task> getExamTasks(UUID uuid) throws ExamSessionException;
+
 
 }

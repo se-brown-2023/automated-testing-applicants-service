@@ -26,8 +26,13 @@ public class ExamSessionServiceImpl implements ExamSessionService {
     private ExamSessionRepository sessionRepository;
 
     @Override
+    public ExamSession getByUUID(UUID uuid) throws ExamSessionException {
+        return sessionRepository.findById(uuid).orElseThrow(ExamSessionNotFoundException::new);
+    }
+
+    @Override
     public ExamSession startSession(UUID uuid) throws ExamSessionException {
-        ExamSession session = sessionRepository.findById(uuid).orElseThrow(ExamSessionNotFoundException::new);
+        ExamSession session = getByUUID(uuid);
 
         switch (session.getStatus()) {
             case EXPIRED, FINISHED, STARTED -> throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Exam session can not be started");
@@ -51,7 +56,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
 
     @Override
     public ExamSession finishSession(UUID uuid) throws ExamSessionException {
-        ExamSession session = sessionRepository.findById(uuid).orElseThrow(ExamSessionNotFoundException::new);
+        ExamSession session = getByUUID(uuid);
 
         switch (session.getStatus()) {
             case EXPIRED -> throw new ExamSessionExpiredException();
@@ -104,7 +109,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
 
     @Override
     public List<Task> getExamTasks(UUID uuid) throws ExamSessionException {
-        ExamSession session = sessionRepository.findById(uuid).orElseThrow(ExamSessionNotFoundException::new);
+        ExamSession session = getByUUID(uuid);
         Exam exam = session.getExam();
 
         boolean isExpired = checkSessionExpiration(session);

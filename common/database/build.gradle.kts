@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     id("java")
     id("org.springframework.boot")
@@ -17,4 +19,8 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.getByName<BootJar>("bootJar") {
+    enabled = false
 }
