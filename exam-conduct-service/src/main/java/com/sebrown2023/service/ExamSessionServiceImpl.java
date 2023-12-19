@@ -12,6 +12,7 @@ import com.sebrown2023.model.exceptions.ExamSessionNotFoundException;
 import com.sebrown2023.model.exceptions.ExamSessionNotStartedException;
 import com.sebrown2023.repository.ExamSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -29,7 +30,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         ExamSession session = sessionRepository.findById(uuid).orElseThrow(ExamSessionNotFoundException::new);
 
         switch (session.getStatus()) {
-            case EXPIRED, FINISHED, STARTED -> throw new ExamSessionException("Exam session can not be started");
+            case EXPIRED, FINISHED, STARTED -> throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Exam session can not be started");
         }
 
         boolean isExpired = checkSessionExpiration(session);
@@ -84,7 +85,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
     public Duration checkExamExpiration(ExamSession session) throws ExamSessionException {
         return switch (session.getStatus()) {
             case EXPIRED -> Duration.ZERO;
-            case CREATED, FINISHED -> throw new ExamSessionException("Can not check session expiration");
+            case CREATED, FINISHED -> throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Can not check session expiration");
             case STARTED -> {
                 LocalDateTime start = session.getStartTimestamp();
                 LocalDateTime now = LocalDateTime.now();

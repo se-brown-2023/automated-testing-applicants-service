@@ -29,7 +29,6 @@ public class ExamSessionServiceImpl implements ExamSessionService {
 
     @Override
     public void deleteSession(UUID uuid) throws ExamSessionNotFoundException {
-        ExamSession session = get(uuid);
-        sessionRepository.delete(session);
+        sessionRepository.deleteById(uuid);
     }
 }
