@@ -1,6 +1,6 @@
 package com.sebrown2023.controller;
 
-import com.sebrown2023.model.exceptions.ExamSessionException;
+import com.sebrown2023.exceptions.ExamSessionException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
