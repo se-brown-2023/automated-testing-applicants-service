@@ -1,11 +1,6 @@
 package com.sebrown2023.model.db;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Test {
@@ -24,7 +19,7 @@ public class Test {
     public Test() {
     }
 
-    public Test( Task task, String name, String inputData, String expectedOutputData) {
+    public Test(Task task, String name, String inputData, String expectedOutputData) {
         this.task = task;
         this.name = name;
         this.inputData = inputData;
@@ -64,5 +59,45 @@ public class Test {
                 ", inputData='" + inputData + '\'' +
                 ", expectedOutputData='" + expectedOutputData + '\'' +
                 '}';
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public Task getTask() {
+        return this.task;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getInputData() {
+        return this.inputData;
+    }
+
+    public String getExpectedOutputData() {
+        return this.expectedOutputData;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setInputData(String inputData) {
+        this.inputData = inputData;
+    }
+
+    public void setExpectedOutputData(String expectedOutputData) {
+        this.expectedOutputData = expectedOutputData;
     }
 }

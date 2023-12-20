@@ -1,11 +1,6 @@
 package com.sebrown2023.model.db;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.Objects;
@@ -15,9 +10,9 @@ public class ExamSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne()
     private Exam exam;
-    @ManyToOne
+    @ManyToOne()
     private Examinee examine;
     @Column(nullable = false)
     private Status status;

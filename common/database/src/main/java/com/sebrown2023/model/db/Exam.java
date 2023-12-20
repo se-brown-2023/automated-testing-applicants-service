@@ -6,6 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import java.time.Duration;
@@ -13,6 +16,9 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,9 +43,6 @@ public class Exam {
     private Duration ttl;
     @Column
     private Date creationDate;
-
-    public Exam() {
-    }
 
     public Exam(
             Integer examinerId,
