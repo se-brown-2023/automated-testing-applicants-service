@@ -35,7 +35,7 @@ const TaskList = () => {
     };
 
     const handleBack = () => {
-        navigate('/exam-session'); // navigate back to the Main page
+        navigate('/exam-session'); // navigate back to the MainPage page
     };
 
     return (

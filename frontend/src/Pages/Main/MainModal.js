@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import "./modal.css";
+import "./MainModal.css";
 
-const Modal = ({ vacancy, onClose, selectedTasks, examSession }) => {
+const MainModal = ({ onClose, selectedTasks, examSession, isRatingMode, setIsRatingMode }) => {
     const [rating, setRating] = useState(0);
-    const [isRatingMode, setIsRatingMode] = useState(true);
 
     const handleRatingChange = (event) => {
         setRating(event.target.value);
@@ -23,7 +22,7 @@ const Modal = ({ vacancy, onClose, selectedTasks, examSession }) => {
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
                     <h2>Задание</h2>
-                    <span className="close" onClick={onClose}>
+                    <span className="close" onClick={onClose}> {/* Убедитесь, что вы вызываете onClose здесь */}
                         &times;
                     </span>
                 </div>
@@ -66,4 +65,4 @@ const Modal = ({ vacancy, onClose, selectedTasks, examSession }) => {
     );
 };
 
-export default Modal;
+export default MainModal;

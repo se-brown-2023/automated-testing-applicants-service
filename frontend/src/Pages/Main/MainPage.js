@@ -4,31 +4,31 @@ import { useNavigate } from 'react-router-dom';
 import { Table, Header, HeaderRow, Body, Row, HeaderCell, Cell } from '@table-library/react-table-library/table';
 import { useTheme } from '@table-library/react-table-library/theme';
 import { getTheme } from '@table-library/react-table-library/baseline';
-import './main.css';
+import './MainPage.css';
 import Avatar from './photo_2023-08-21_10-55-05.jpg';
-import Modal from './modal';
+import MainModal from './MainModal';
 
-export const Main = () => {
+export const MainPage = () => {
     const dispatch = useDispatch();
     const tasks = useSelector(state => state.tasks);
     const users = useSelector(state => state.users);
     const examSessions = useSelector(state => state.examSessions);
     const navigate = useNavigate();
     const [expandedRowId, setExpandedRowId] = useState(null);
-    const [selectedVacancy, setSelectedVacancy] = useState(null);
     const [selectedTasks, setSelectedTasks] = useState([]);
     const [selectedExamSession, setSelectedExamSession] = useState(null)
+    const [isRatingMode, setIsRatingMode] = useState(true);
 
     const handleToggleExpansion = (rowId) => {
         setExpandedRowId(rowId === expandedRowId ? null : rowId);
     };
 
-    const handleOpenModal = (vacancy) => {
-        setSelectedVacancy(vacancy);
+    const handleOpenModal = (examSession) => {
+        setSelectedExamSession(examSession);
     };
 
     const handleCloseModal = () => {
-        setSelectedVacancy(null);
+        setSelectedExamSession(null);
     };
 
     const theme = useTheme(getTheme());
@@ -117,7 +117,13 @@ export const Main = () => {
                 </div>
             </div>
             {selectedExamSession && (
-                <Modal vacancy={selectedVacancy} onClose={handleCloseModal} selectedTasks={selectedTasks} examSession={selectedExamSession} />
+                <MainModal
+                    onClose={handleCloseModal}
+                    selectedTasks={selectedTasks}
+                    examSession={selectedExamSession}
+                    isRatingMode={isRatingMode}
+                    setIsRatingMode={setIsRatingMode}
+                />
             )}
         </div>
     );
