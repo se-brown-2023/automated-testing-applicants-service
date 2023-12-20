@@ -1,17 +1,19 @@
 package com.sebrown2023.service;
 
+import com.sebrown2023.exceptions.ExamNotFoundException;
 import com.sebrown2023.model.db.Exam;
 import com.sebrown2023.model.db.ExamSession;
 import com.sebrown2023.model.db.Status;
 import com.sebrown2023.model.db.Task;
-import com.sebrown2023.model.exceptions.ExamSessionAlreadyFinishedException;
-import com.sebrown2023.model.exceptions.ExamSessionException;
-import com.sebrown2023.model.exceptions.ExamSessionExpiredException;
-import com.sebrown2023.model.exceptions.ExamSessionNotExpiredException;
-import com.sebrown2023.model.exceptions.ExamSessionNotFoundException;
-import com.sebrown2023.model.exceptions.ExamSessionNotStartedException;
+import com.sebrown2023.exceptions.ExamSessionAlreadyFinishedException;
+import com.sebrown2023.exceptions.ExamSessionException;
+import com.sebrown2023.exceptions.ExamSessionExpiredException;
+import com.sebrown2023.exceptions.ExamSessionNotExpiredException;
+import com.sebrown2023.exceptions.ExamSessionNotFoundException;
+import com.sebrown2023.exceptions.ExamSessionNotStartedException;
 import com.sebrown2023.repository.ExamSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -23,6 +25,8 @@ import java.util.UUID;
 public class ExamSessionServiceImpl implements ExamSessionService {
     @Autowired
     private ExamSessionRepository sessionRepository;
+    @Autowired
+    private ExamService examService;
 
     @Override
     public ExamSession getByUUID(UUID uuid) throws ExamSessionException {
@@ -34,7 +38,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         ExamSession session = getByUUID(uuid);
 
         switch (session.getStatus()) {
-            case EXPIRED, FINISHED, STARTED -> throw new ExamSessionException("Exam session can not be started");
+            case EXPIRED, FINISHED, STARTED -> throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Exam session can not be started");
         }
 
         boolean isExpired = checkSessionExpiration(session);
@@ -89,7 +93,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
     public Duration checkExamExpiration(ExamSession session) throws ExamSessionException {
         return switch (session.getStatus()) {
             case EXPIRED -> Duration.ZERO;
-            case CREATED, FINISHED -> throw new ExamSessionException("Can not check session expiration");
+            case CREATED, FINISHED -> throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Can not check session expiration");
             case STARTED -> {
                 LocalDateTime start = session.getStartTimestamp();
                 LocalDateTime now = LocalDateTime.now();
@@ -118,6 +122,21 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         }
 
         return exam.getTasks();
+    }
+
+    @Override
+    public ExamSession create(Long examId) throws ExamNotFoundException {
+        ExamSession session = new ExamSession();
+        Exam exam = examService.getExamById(examId);
+        session.setExam(exam);
+        session.setStatus(Status.CREATED);
+
+        return sessionRepository.save(session);
+    }
+
+    @Override
+    public void deleteSession(UUID uuid) {
+        sessionRepository.deleteById(uuid);
     }
 
 }
