@@ -1,10 +1,10 @@
 .main-screen {
-    background-color: #ffffff;
     min-width: 1000px;
 }
 
 .main-screen-header {
-    background-color: #6b89c4;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,10 +34,10 @@
 }
 
 .main-screen-header .text-wrapper {
-    color: #000000;
+    color: #ffffff;
     font-family: "Inter-Regular", Helvetica;
     font-size: 32px;
-    font-weight: 400;
+    font-weight: 700;
     letter-spacing: 0;
     line-height: normal;
     white-space: nowrap;
@@ -52,15 +52,16 @@
 }
 
 .main-screen-header button {
-    background-color: #007bff;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
 .main-screen .mainSection {
-    background-color: #9baac8;
+    background-color: #1e1e2f;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -72,12 +73,13 @@
 }
 
 .main-screen .vacancy button {
-    background-color: #007bff;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
     width: 2px;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
 .main-screen .table {
@@ -103,17 +105,18 @@
 }
 
 .main-screen .table th {
-    background-color: #6b89c4;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
     color: #fff;
     padding: 15px;
     font-weight: bold;
     border-radius: 8px;
     border-bottom: transparent;
     margin: 0 5px 10px 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .main-screen .table button {
-    background-color: #007bff;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
     color: #fff;
     border: none;
     padding: 8px 12px;
@@ -123,7 +126,7 @@
 }
 
 .main-screen .table button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(90deg, #e52e71, #ff8a00);
 }
 .main-screen .table td {
     margin: 0 5px 10px 5px;

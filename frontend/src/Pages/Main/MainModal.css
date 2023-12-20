@@ -39,7 +39,7 @@
 }
 
 .modal-header {
-    background-color: #007bff;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
     color: #fff;
     padding: 15px;
     text-align: center;
@@ -88,7 +88,7 @@ input {
 }
 
 button {
-    background-color: #007bff;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
     color: #fff;
     border: none;
     padding: 10px 15px;
@@ -99,7 +99,7 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(90deg, #e52e71, #ff8a00);
 }
 
 .rating span {

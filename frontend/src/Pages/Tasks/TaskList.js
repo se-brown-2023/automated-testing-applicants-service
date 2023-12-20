@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createTask, updateTask } from '../../redux/tasksSlice';
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {createTask, updateTask} from '../../redux/tasksSlice';
 import TaskModal from './TaskModal';
 import TaskItem from './TaskItem';
 import './TaskList.css';
@@ -35,20 +35,23 @@ const TaskList = () => {
     };
 
     const handleBack = () => {
-        navigate('/exam-session'); // navigate back to the MainPage page
+        navigate('/exam-session');
     };
 
     return (
-        <div className="task-list-container">
-            <div className="task-list-header">Список заданий</div>
-            {tasks.map(task => (
-                <TaskItem key={task.id} task={task} onTaskClick={handleTaskClick} />
-            ))}
-            <button className="assign-button" onClick={openModal}>
-                Создать новое задание
-            </button>
-            <button onClick={handleBack}>Назад</button>
-            <TaskModal isOpen={modalIsOpen} closeModal={closeModal} createTask={handleCreateTask} updateTask={handleUpdateTask} task={selectedTask} />
+        <div className="task-screen">
+            <div className="task-list-container">
+                <div className="task-list-header">Список заданий</div>
+                {tasks.map(task => (
+                    <TaskItem key={task.id} task={task} onTaskClick={handleTaskClick}/>
+                ))}
+                <button className="assign-button" onClick={openModal}>
+                    Создать новое задание
+                </button>
+                <button onClick={handleBack}>Назад</button>
+                <TaskModal isOpen={modalIsOpen} closeModal={closeModal} createTask={handleCreateTask}
+                           updateTask={handleUpdateTask} task={selectedTask}/>
+            </div>
         </div>
     );
 };

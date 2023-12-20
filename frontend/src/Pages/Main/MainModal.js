@@ -22,7 +22,7 @@ const MainModal = ({ onClose, selectedTasks, examSession, isRatingMode, setIsRat
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
                     <h2>Задание</h2>
-                    <span className="close" onClick={onClose}> {/* Убедитесь, что вы вызываете onClose здесь */}
+                    <span className="close" onClick={onClose}>
                         &times;
                     </span>
                 </div>
