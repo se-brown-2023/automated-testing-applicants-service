@@ -61,7 +61,7 @@ jobs:
         uses: docker/build-push-action@v5.1.0
         with:
           context: .
-          build-args: ${{ env.VERSION }}
+          build-args: VERSION=${{ env.VERSION }}
           push: true
           file: ${{ matrix.dockerfile }}
           tags: ${{ steps.meta.outputs.tags }}
