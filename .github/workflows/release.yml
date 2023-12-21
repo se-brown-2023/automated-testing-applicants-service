@@ -1,9 +1,6 @@
 name: release
 
 on:
-  pull_request:
-    branches:
-      - master
   release:
     types: [ published ]
   workflow_dispatch:
@@ -53,8 +50,8 @@ jobs:
             echo "VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
             echo "VERSION=${{ github.event.release.tag_name }}"
           else
-            echo "VERSION=0.0.1-SNAPSHOT" >> $GITHUB_ENV
-            echo "VERSION=0.0.1-SNAPSHOT"
+            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+            echo "VERSION=${{ github.event.inputs.version }}"
           fi
 
       - name: Build and push Docker image
