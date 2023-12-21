@@ -17,8 +17,8 @@
 }
 
 .examinee-page textarea {
-    width: 80%;
-    height: 200px;
+    width: 60%;
+    min-height: 800px;
     margin: 20px 0;
     padding: 10px;
     border: 1px solid #ddd;
@@ -50,4 +50,20 @@
     font-size: 24px;
     font-weight: bold;
     color: white;
+}
+
+.finish-exam-button {
+    position: absolute;
+    top: 50px;
+    right: 100px;
+    padding: 10px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.finish-exam-button:hover {
+    background-color: #0056b3;
 }

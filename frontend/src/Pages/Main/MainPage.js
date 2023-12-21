@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Table, Header, HeaderRow, Body, Row, HeaderCell, Cell } from '@table-library/react-table-library/table';
-import { useTheme } from '@table-library/react-table-library/theme';
-import { getTheme } from '@table-library/react-table-library/baseline';
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
+import {Body, Cell, Header, HeaderCell, HeaderRow, Row, Table} from '@table-library/react-table-library/table';
+import {useTheme} from '@table-library/react-table-library/theme';
+import {getTheme} from '@table-library/react-table-library/baseline';
 import './MainPage.css';
-import Avatar from './photo_2023-08-21_10-55-05.jpg';
+import Avatar from './user.png';
 import MainModal from './MainModal';
 
 export const MainPage = () => {
@@ -42,18 +42,20 @@ export const MainPage = () => {
             <div className="main-screen">
                 <div className="main-screen-header">
                     <div className="user-info">
-                        <img className="avatar" src={Avatar} alt="User Avatar" />
+                        <img className="avatar" src={Avatar} alt="User Avatar"/>
                         <div>Username</div>
                     </div>
                     <div className="text-wrapper-container">
                         <div className="text-wrapper">Система тестирования соискателей</div>
                     </div>
-                    <button className="assign-button" onClick={handleCreateSession}>
-                        Создать экзамен
-                    </button>
+                    <div className="button-container">
+                        <button className="assign-button" onClick={handleCreateSession}>
+                            Создать экзамен
+                        </button>
+                    </div>
                 </div>
                 <div className="mainSection">
-                    <Table data={{ nodes: examSessions }} theme={theme} className="table">
+                    <Table data={{nodes: examSessions}} theme={theme} className="table">
                         {(tableList) => (
                             <>
                                 <Header>
@@ -76,8 +78,12 @@ export const MainPage = () => {
                                             </Row>
                                             {item.id === expandedRowId && (
                                                 <Row item={item}>
-                                                    <tr style={{ display: "flex", gridColumn: "1 / -1", margin: "0 5px 10px 5px"}}>
-                                                        <td style={{ flex: "1", border: "0"}}>
+                                                    <tr style={{
+                                                        display: "flex",
+                                                        gridColumn: "1 / -1",
+                                                        margin: "0 5px 10px 5px"
+                                                    }}>
+                                                        <td style={{flex: "1", border: "0"}}>
                                                             <ul>
                                                                 <li>
                                                                     <strong>Name:</strong> {item.name}

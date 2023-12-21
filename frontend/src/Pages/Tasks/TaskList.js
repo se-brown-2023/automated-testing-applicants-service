@@ -42,13 +42,17 @@ const TaskList = () => {
         <div className="task-screen">
             <div className="task-list-container">
                 <div className="task-list-header">Список заданий</div>
-                {tasks.map(task => (
-                    <TaskItem key={task.id} task={task} onTaskClick={handleTaskClick}/>
-                ))}
-                <button className="assign-button" onClick={openModal}>
-                    Создать новое задание
-                </button>
-                <button onClick={handleBack}>Назад</button>
+                <div className="task-list">
+                    {tasks.map(task => (
+                        <TaskItem key={task.id} task={task} onTaskClick={handleTaskClick}/>
+                    ))}
+                </div>
+                <div className="task-list-footer">
+                    <button onClick={handleBack}>Назад</button>
+                    <button className="assign-button" onClick={openModal}>
+                        Создать новое задание
+                    </button>
+                </div>
                 <TaskModal isOpen={modalIsOpen} closeModal={closeModal} createTask={handleCreateTask}
                            updateTask={handleUpdateTask} task={selectedTask}/>
             </div>

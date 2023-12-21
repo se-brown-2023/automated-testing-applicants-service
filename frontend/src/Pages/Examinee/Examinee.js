@@ -38,6 +38,7 @@ const Examinee = () => {
 
     return (
         <div className="examinee-page">
+            <button className="finish-exam-button" onClick={handleSubmit}>Завершить экзамен</button>
             <h1>{tasks[currentTask]}</h1>
             <p>Текст задания</p>
             <p className="time">Оставшееся время: {formatTime(time)}</p>
