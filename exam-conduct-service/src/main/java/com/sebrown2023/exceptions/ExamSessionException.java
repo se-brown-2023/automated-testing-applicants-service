@@ -2,7 +2,7 @@ package com.sebrown2023.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class ExamSessionException extends Exception {
+public class ExamSessionException extends RuntimeException {
 
     private final HttpStatus status;
 

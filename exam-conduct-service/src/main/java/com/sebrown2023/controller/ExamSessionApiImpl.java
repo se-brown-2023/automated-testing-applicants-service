@@ -22,7 +22,7 @@ public class ExamSessionApiImpl implements ExamSessionApi {
     private ExamSessionService sessionService;
 
     @Override
-    public ResponseEntity<FinishExamSessionResponse> apiExamSessionExamSessionIdFinishGet(UUID examSessionId) throws ExamSessionException {
+    public ResponseEntity<FinishExamSessionResponse> apiExamSessionExamSessionIdFinishGet(UUID examSessionId) {
         ExamSession examSession = sessionService.finishSession(examSessionId);
 
         ModelMapper modelMapper = new ModelMapper();
@@ -32,7 +32,7 @@ public class ExamSessionApiImpl implements ExamSessionApi {
     }
 
     @Override
-    public ResponseEntity<String> apiExamSessionExamSessionIdSendSolutionPut(UUID examSessionId, SendTaskSolutionRequest sendTaskSolutionRequest) throws ExamSessionException {
+    public ResponseEntity<String> apiExamSessionExamSessionIdSendSolutionPut(UUID examSessionId, SendTaskSolutionRequest sendTaskSolutionRequest) {
         Submission submission = sendTaskSolutionRequest.getSubmission();
         sessionService.sendTask(examSessionId, submission);
 
@@ -40,7 +40,7 @@ public class ExamSessionApiImpl implements ExamSessionApi {
     }
 
     @Override
-    public ResponseEntity<StartExamSessionResponse> apiExamSessionExamSessionIdStartGet(UUID examSessionId) throws ExamSessionException {
+    public ResponseEntity<StartExamSessionResponse> apiExamSessionExamSessionIdStartGet(UUID examSessionId) {
         ExamSession examSession = sessionService.startSession(examSessionId);
 
         ModelMapper modelMapper = new ModelMapper();
