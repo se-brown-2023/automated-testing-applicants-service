@@ -59,4 +59,29 @@ services:
       - type: bind
         source: ${KEYCLOAK_IMPORT_DIR:-./docs/keycloak}
         target: /opt/keycloak/data/import
-
+  exam-manage-service:
+    image: ghcr.io/se-brown-2023/automated-testing-applicants-service/manage-service:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - './manage-service:/etc/swe2023brown/exam-manage-service/'
+    depends_on:
+      - postgres
+  exam-judging-service:
+    image: ghcr.io/se-brown-2023/automated-testing-applicants-service/judging-service:latest
+    ports:
+      - "8010:8010"
+    volumes:
+      - './judging-service:/etc/swe2023brown/exam-judging-service/'
+    depends_on:
+      - postgres
+      - kafka
+  exam-conduct-service:
+    image: ghcr.io/se-brown-2023/automated-testing-applicants-service/conduct-service:latest
+    ports:
+      - "8020:8020"
+    volumes:
+      - './conduct-service:/etc/swe2023brown/exam-conduct-service/'
+    depends_on:
+      - postgres
+      - kafka
