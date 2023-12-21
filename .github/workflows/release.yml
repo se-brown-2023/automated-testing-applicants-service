@@ -19,7 +19,7 @@ jobs:
         include:
           - dockerfile: "conductService.Dockerfile"
             image: ghcr.io/${{ github.repository }}/conduct-service
-          - dockerfile: "judjeService.Dockerfile"
+          - dockerfile: "judgingService.Dockerfile"
             image: ghcr.io/${{ github.repository }}/judje-service
           - dockerfile: "manageService.Dockerfile"
             image: ghcr.io/${{ github.repository }}/manage-service
