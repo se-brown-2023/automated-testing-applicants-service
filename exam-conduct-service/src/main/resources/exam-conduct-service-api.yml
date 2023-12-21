@@ -5,9 +5,8 @@ info:
 security:
   - bearerAuth: [ ]
 paths:
-  /api/exam-session/start/{examSessionId}:
-    put:
-      security: [ ]
+  /api/exam-session/{examSessionId}/start:
+    get:
       tags:
         - ExamSession
       summary: Start an exam session
@@ -32,9 +31,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/ApiErrorDto"
               example: { "status": "Bad Request", "message": "Exam can not be started" }
-  /api/exam-session/finish/{examSessionId}:
-    put:
-      security: [ ]
+  /api/exam-session/{examSessionId}/finish:
+    get:
       tags:
         - ExamSession
       summary: Finish an exam session
@@ -59,9 +57,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/ApiErrorDto"
               example: { "status": "Bad Request", "message": "Exam session can not be finished" }
-  /api/exam-session/sendSolution/{examSessionId}:
+  /api/exam-session/{examSessionId}/sendSolution:
     put:
-      security: [ ]
       tags:
         - ExamSession
       summary: Send task solution
@@ -135,23 +132,9 @@ components:
           format: uuid
         status:
           type: string
-        exam:
-          $ref: "#/components/schemas/Exam"
-        examine:
-          $ref: "#/components/schemas/Examine"
-        startTimestamp:
-          type: string
-          format: date-time
-        finishTimestamp:
-          type: string
-          format: date-time
       required:
         - id
         - status
-        - exam
-        - examine
-        - startTimestamp
-        - finishTimestamp
     SendTaskSolutionRequest:
       type: object
       properties:
@@ -201,8 +184,7 @@ components:
     Tasks:
       type: array
       items:
-        oneOf:
-          - $ref: "#/components/schemas/Task"
+          $ref: "#/components/schemas/Task"
     Task:
       type: object
       properties:
