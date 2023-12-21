@@ -2,17 +2,9 @@ name: Build exam manage service
 
 on:
   push:
-    branches: master
-    paths:
-      - exam-manage-service/**
-      - common/**
-      - .github/workflows/build.exam-manage-service.yml
+    branches: [ master ]
   pull_request:
-    branches: master
-    paths:
-      - exam-manage-service/**
-      - common/**
-      - .github/workflows/build.exam-manage-service.yml
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
