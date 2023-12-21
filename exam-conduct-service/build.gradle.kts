@@ -36,7 +36,10 @@ openApiGenerate {
     generatorName.set("spring")
     validateSpec.set(true)
     inputSpec.set("$projectDir/src/main/resources/exam-conduct-service-api.yml") // path to spec
-    outputDir.set("${layout.buildDirectory.asFile.get()}/generated/openapi")
+    outputDir.set("${layout.buildDirectory.asFile.get()}/generated/java")
+    sourceSets.main {
+        java.srcDirs("${layout.buildDirectory.asFile.get()}/generated/java")
+    }
     apiPackage.set("com.sebrown2023.controller")
     modelPackage.set("com.sebrown2023.model.dto")
     generateApiTests.set(false)

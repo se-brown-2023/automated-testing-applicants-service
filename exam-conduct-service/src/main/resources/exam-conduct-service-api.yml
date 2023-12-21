@@ -200,11 +200,9 @@ components:
     Submission:
       type: object
       properties:
-        id:
+        taskId:
           type: integer
           format: int64
-        task:
-          $ref: "#/components/schemas/Task"
         userSourceCode:
           type: string
 
