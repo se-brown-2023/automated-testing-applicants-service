@@ -1,7 +1,8 @@
-package com.sebrown2023.dto;
+package com.sebrown2023.dto.deprecated;
 
 import java.util.List;
 
+@Deprecated
 public record PostTaskDto(
         Long examId,
         String name,

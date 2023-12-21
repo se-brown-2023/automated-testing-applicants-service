@@ -1,12 +1,11 @@
 package com.sebrown2023.controllers;
 
-import com.sebrown2023.dto.GetSubmissionDto;
-import com.sebrown2023.dto.PostSubmissionDto;
+import com.sebrown2023.dto.deprecated.GetSubmissionDto;
+import com.sebrown2023.dto.deprecated.PostSubmissionDto;
 import com.sebrown2023.services.SubmissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

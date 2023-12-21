@@ -1,7 +1,7 @@
 package com.sebrown2023.services;
 
-import com.sebrown2023.dto.PostTaskDto;
-import com.sebrown2023.dto.TaskDto;
+import com.sebrown2023.dto.deprecated.PostTaskDto;
+import com.sebrown2023.dto.deprecated.TaskDto;
 import com.sebrown2023.mappers.TaskMapper;
 import com.sebrown2023.mappers.TestMapper;
 import com.sebrown2023.repository.TaskRepository;

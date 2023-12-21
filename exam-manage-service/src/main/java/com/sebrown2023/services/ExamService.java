@@ -1,9 +1,9 @@
 package com.sebrown2023.services;
 
-import com.sebrown2023.dto.PostExamDto;
-import com.sebrown2023.dto.ExamDto;
-import com.sebrown2023.dto.TaskDto;
-import com.sebrown2023.dto.TestDto;
+import com.sebrown2023.dto.deprecated.ExamDto;
+import com.sebrown2023.dto.deprecated.PostExamDto;
+import com.sebrown2023.dto.deprecated.TaskDto;
+import com.sebrown2023.dto.deprecated.TestDto;
 import com.sebrown2023.mappers.ExamMapper;
 import com.sebrown2023.mappers.TaskMapper;
 import com.sebrown2023.mappers.TestMapper;

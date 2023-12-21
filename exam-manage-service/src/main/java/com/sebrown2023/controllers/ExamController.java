@@ -1,9 +1,9 @@
 package com.sebrown2023.controllers;
 
-import com.sebrown2023.dto.ExamDto;
-import com.sebrown2023.dto.PostExamDto;
-import com.sebrown2023.dto.PostTaskDto;
-import com.sebrown2023.dto.TaskDto;
+import com.sebrown2023.controller.ExamApi;
+import com.sebrown2023.dto.deprecated.ExamDto;
+import com.sebrown2023.dto.deprecated.PostExamDto;
+import com.sebrown2023.model.dto.ExamComponent;
 import com.sebrown2023.services.ExamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/exam")
-public class ExamController {
+public class ExamController implements ExamApi {
     private final ExamService examService;
 
     @GetMapping(value = "/{examId}")
@@ -47,5 +47,10 @@ public class ExamController {
     public ResponseEntity<?> deleteTask(@PathVariable long examId) {
         examService.deleteExam(examId);
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<ExamComponent> createExam(ExamComponent examComponent) {
+        return null;
     }
 }

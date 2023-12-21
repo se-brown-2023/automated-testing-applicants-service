@@ -1,11 +1,8 @@
-package com.sebrown2023.dto;
-
-import com.sebrown2023.model.db.Submission;
-import com.sebrown2023.model.db.Test;
-import jakarta.persistence.*;
+package com.sebrown2023.dto.deprecated;
 
 import java.time.Duration;
 
+@Deprecated
 public record TestResultDto (
     Long id,
     String actualOutputData,

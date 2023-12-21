@@ -1,5 +1,6 @@
-package com.sebrown2023.dto;
+package com.sebrown2023.dto.deprecated;
 
+@Deprecated
 public record TestDto (
     Long id,
     String name,

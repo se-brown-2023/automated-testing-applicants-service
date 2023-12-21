@@ -1,10 +1,11 @@
-package com.sebrown2023.dto;
+package com.sebrown2023.dto.deprecated;
 
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 
-public record PostExamDto (
+@Deprecated
+public record ExamDto(
         Long id,
         Integer examinerId,
         String name,
@@ -13,5 +14,6 @@ public record PostExamDto (
         Duration maxDuration,
         Duration ttl,
         Date creationDate,
-        List<PostTaskDto> tasks
-) {}
+        List<TaskDto> tasks
+) {
+}

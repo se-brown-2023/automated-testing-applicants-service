@@ -1,7 +1,7 @@
 package com.sebrown2023.services;
 
-import com.sebrown2023.dto.PostTestDto;
-import com.sebrown2023.dto.TestDto;
+import com.sebrown2023.dto.deprecated.PostTestDto;
+import com.sebrown2023.dto.deprecated.TestDto;
 import com.sebrown2023.mappers.TestMapper;
 import com.sebrown2023.repository.TestRepository;
 import lombok.RequiredArgsConstructor;

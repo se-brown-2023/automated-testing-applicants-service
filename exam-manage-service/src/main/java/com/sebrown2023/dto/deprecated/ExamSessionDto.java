@@ -1,12 +1,10 @@
-package com.sebrown2023.dto;
+package com.sebrown2023.dto.deprecated;
 
-import com.sebrown2023.model.db.Exam;
-import com.sebrown2023.model.db.Examinee;
 import com.sebrown2023.model.db.Status;
-import jakarta.persistence.*;
 
 import java.util.Date;
 
+@Deprecated
 public record ExamSessionDto (
     Long id,
     Long examId,

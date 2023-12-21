@@ -1,12 +1,11 @@
 package com.sebrown2023.controllers;
 
-import com.sebrown2023.dto.PostTaskDto;
-import com.sebrown2023.dto.TaskDto;
+import com.sebrown2023.dto.deprecated.PostTaskDto;
+import com.sebrown2023.dto.deprecated.TaskDto;
 import com.sebrown2023.services.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

@@ -1,12 +1,11 @@
 package com.sebrown2023.controllers;
 
-import com.sebrown2023.dto.PostTestDto;
-import com.sebrown2023.dto.TestDto;
+import com.sebrown2023.dto.deprecated.PostTestDto;
+import com.sebrown2023.dto.deprecated.TestDto;
 import com.sebrown2023.services.TestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

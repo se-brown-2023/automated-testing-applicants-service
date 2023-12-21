@@ -9,11 +9,10 @@ info:
     version: 1.0.0
 
 servers:
-    - url: https://localhost:8080/manager
-
+    - url: https://localhost:8080/manage
 tags:
     - name: exam
-      description: exam creating, updating and other opartions
+      description: operations with exams
     - name: test
       description: test creating, updating and other opartions
 paths:
@@ -104,7 +103,7 @@ components:
                     type: string
                     example: '2023-03-21 23:59:59'
                 tasks:
-                    minItems: 1
+                    minItems: 0
                     type: array
                     items:
                         $ref: '#/components/schemas/TaskComponent'
@@ -127,7 +126,7 @@ components:
                     type: string
                 tests:
                     type: array
-                    minItems: 1
+                    minItems: 0
                     items:
                         $ref: '#/components/schemas/TestComponent'
 

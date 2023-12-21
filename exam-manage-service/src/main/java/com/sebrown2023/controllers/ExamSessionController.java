@@ -1,8 +1,6 @@
 package com.sebrown2023.controllers;
 
-import com.sebrown2023.dto.ExamSessionDto;
-import com.sebrown2023.dto.TaskDto;
-import com.sebrown2023.services.TaskService;
+import com.sebrown2023.dto.deprecated.ExamSessionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

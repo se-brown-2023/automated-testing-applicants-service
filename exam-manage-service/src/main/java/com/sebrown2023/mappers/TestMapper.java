@@ -1,7 +1,7 @@
 package com.sebrown2023.mappers;
 
-import com.sebrown2023.dto.PostTestDto;
-import com.sebrown2023.dto.TestDto;
+import com.sebrown2023.dto.deprecated.PostTestDto;
+import com.sebrown2023.dto.deprecated.TestDto;
 import com.sebrown2023.model.db.Test;
 import org.mapstruct.Mapper;
 

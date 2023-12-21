@@ -1,8 +1,8 @@
 package com.sebrown2023.mappers;
 
-import com.sebrown2023.dto.PostTaskDto;
-import com.sebrown2023.dto.PostTestDto;
-import com.sebrown2023.dto.TaskDto;
+import com.sebrown2023.dto.deprecated.PostTaskDto;
+import com.sebrown2023.dto.deprecated.PostTestDto;
+import com.sebrown2023.dto.deprecated.TaskDto;
 import com.sebrown2023.model.db.Task;
 import org.mapstruct.Mapper;
 

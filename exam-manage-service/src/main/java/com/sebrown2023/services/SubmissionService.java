@@ -1,8 +1,8 @@
 package com.sebrown2023.services;
 
-import com.sebrown2023.dto.GetSubmissionDto;
-import com.sebrown2023.dto.TestDto;
-import com.sebrown2023.dto.TestResultDto;
+import com.sebrown2023.dto.deprecated.GetSubmissionDto;
+import com.sebrown2023.dto.deprecated.TestDto;
+import com.sebrown2023.dto.deprecated.TestResultDto;
 import com.sebrown2023.mappers.ExamSessionMapper;
 import com.sebrown2023.mappers.TaskMapper;
 import com.sebrown2023.mappers.TestMapper;
