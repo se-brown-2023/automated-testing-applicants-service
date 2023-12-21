@@ -17,7 +17,7 @@ jobs:
           - dockerfile: "conductService.Dockerfile"
             image: ghcr.io/${{ github.repository }}/conduct-service
           - dockerfile: "judgingService.Dockerfile"
-            image: ghcr.io/${{ github.repository }}/judje-service
+            image: ghcr.io/${{ github.repository }}/judging-service
           - dockerfile: "manageService.Dockerfile"
             image: ghcr.io/${{ github.repository }}/manage-service
     runs-on: ubuntu-latest
