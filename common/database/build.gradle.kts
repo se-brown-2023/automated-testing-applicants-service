@@ -8,6 +8,7 @@ plugins {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
     implementation("io.hypersistence:hypersistence-utils-hibernate-62:3.6.0")
     implementation("org.projectlombok:lombok:1.18.28")
 

@@ -9,10 +9,13 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.OneToMany;
 import org.hibernate.annotations.Type;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -42,7 +45,13 @@ public class Exam {
     @Column(columnDefinition = "interval")
     private Duration ttl;
     @Column
-    private Date creationDate;
+    private LocalDateTime creationDate;
+
+    @OneToMany(mappedBy = "exam")
+    private List<Task> tasks;
+
+    public Exam() {
+    }
 
     public Exam(
             Integer examinerId,
@@ -51,7 +60,7 @@ public class Exam {
             String programmingLanguage,
             Duration maxDuration,
             Duration ttl,
-            Date creationDate
+            LocalDateTime creationDate
     ) {
         this.examinerId = examinerId;
         this.name = name;
@@ -90,8 +99,16 @@ public class Exam {
         return ttl;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     @Override
