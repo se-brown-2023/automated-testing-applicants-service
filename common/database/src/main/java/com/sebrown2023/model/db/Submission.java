@@ -55,6 +55,22 @@ public class Submission {
         return submitTime;
     }
 
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    public void setExamSession(ExamSession examSession) {
+        this.examSession = examSession;
+    }
+
+    public void setUserSourceCode(String userSourceCode) {
+        this.userSourceCode = userSourceCode;
+    }
+
+    public void setSubmitTime(Date submitTime) {
+        this.submitTime = submitTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
