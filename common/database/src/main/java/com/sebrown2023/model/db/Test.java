@@ -1,16 +1,16 @@
 package com.sebrown2023.model.db;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

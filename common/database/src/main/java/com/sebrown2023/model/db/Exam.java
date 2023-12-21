@@ -1,16 +1,11 @@
 package com.sebrown2023.model.db;
 
 import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.OneToMany;
 import org.hibernate.annotations.Type;
 
 import java.time.Duration;
@@ -22,7 +17,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
