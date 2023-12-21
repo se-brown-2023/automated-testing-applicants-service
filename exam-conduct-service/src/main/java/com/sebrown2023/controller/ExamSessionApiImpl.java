@@ -1,6 +1,5 @@
 package com.sebrown2023.controller;
 
-import com.sebrown2023.exceptions.ExamSessionException;
 import com.sebrown2023.model.db.ExamSession;
 import com.sebrown2023.model.dto.FinishExamSessionResponse;
 import com.sebrown2023.model.dto.SendTaskSolutionRequest;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@ControllerAdvice
 public class ExamSessionApiImpl implements ExamSessionApi {
     @Autowired
     private ExamSessionService sessionService;
@@ -36,7 +34,7 @@ public class ExamSessionApiImpl implements ExamSessionApi {
         Submission submission = sendTaskSolutionRequest.getSubmission();
         sessionService.sendTask(examSessionId, submission);
 
-        return ResponseEntity.ok("Task solution has been sent successfully");
+        return ResponseEntity.ok("Ok");
     }
 
     @Override
