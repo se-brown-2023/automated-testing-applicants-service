@@ -6,60 +6,37 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.Duration;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class TestResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(optional = false)
     private Submission submission;
+
     @ManyToOne(optional = false)
     private Test test;
+
     @Column(nullable = false)
     private String actualOutputData;
+
     @Column(nullable = false)
     private Boolean passed;
+
     @Column(nullable = false)
     private Duration elapsedTime;
-
-    public TestResult() {
-
-    }
-
-    public TestResult(Submission submission, Test test, String actualOutputData, Boolean passed, Duration elapsedTime) {
-        this.submission = submission;
-        this.test = test;
-        this.actualOutputData = actualOutputData;
-        this.passed = passed;
-        this.elapsedTime = elapsedTime;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Submission getSubmission() {
-        return submission;
-    }
-
-    public Test getTest() {
-        return test;
-    }
-
-    public String getActualOutputData() {
-        return actualOutputData;
-    }
-
-    public Boolean getPassed() {
-        return passed;
-    }
-
-    public Duration getElapsedTime() {
-        return elapsedTime;
-    }
 
     @Override
     public boolean equals(Object o) {

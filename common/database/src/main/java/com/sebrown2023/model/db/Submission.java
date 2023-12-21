@@ -8,35 +8,33 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
 import java.util.Objects;
 
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Submission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(optional = false)
     private Task task;
+
     @ManyToOne(optional = false)
     private ExamSession examSession;
+
     @Column
     private String userSourceCode;
+
     @Column(nullable = false)
     private Date submitTime;
-
-    public Submission(Task task, ExamSession examSession, String userSourceCode, Date submitTime) {
-        this.task = task;
-        this.examSession = examSession;
-        this.userSourceCode = userSourceCode;
-        this.submitTime = submitTime;
-    }
 
     @Override
     public boolean equals(Object o) {

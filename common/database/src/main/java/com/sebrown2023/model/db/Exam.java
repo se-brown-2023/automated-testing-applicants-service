@@ -8,13 +8,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.OneToMany;
 import org.hibernate.annotations.Type;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,10 +22,12 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private Integer examinerId;
 
@@ -41,75 +43,16 @@ public class Exam {
     @Type(PostgreSQLIntervalType.class)
     @Column(columnDefinition = "interval")
     private Duration maxDuration;
+
     @Type(PostgreSQLIntervalType.class)
     @Column(columnDefinition = "interval")
     private Duration ttl;
+
     @Column
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "exam")
     private List<Task> tasks;
-
-    public Exam() {
-    }
-
-    public Exam(
-            Integer examinerId,
-            String name,
-            String description,
-            String programmingLanguage,
-            Duration maxDuration,
-            Duration ttl,
-            LocalDateTime creationDate
-    ) {
-        this.examinerId = examinerId;
-        this.name = name;
-        this.description = description;
-        this.programmingLanguage = programmingLanguage;
-        this.maxDuration = maxDuration;
-        this.ttl = ttl;
-        this.creationDate = creationDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Integer getExaminerId() {
-        return examinerId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getProgrammingLanguage() {
-        return programmingLanguage;
-    }
-
-    public Duration getMaxDuration() {
-        return maxDuration;
-    }
-
-    public Duration getTtl() {
-        return ttl;
-    }
-
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -1,12 +1,20 @@
 package com.sebrown2023.model.db;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class ExamSession {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -21,64 +29,6 @@ public class ExamSession {
     private LocalDateTime startTimestamp;
     @Column
     private LocalDateTime finishTimestamp;
-
-    public ExamSession() {
-
-    }
-
-    public ExamSession(
-            Exam exam,
-            Examinee examine,
-            Status status,
-            LocalDateTime startTimestamp,
-            LocalDateTime finishTimestamp
-    ) {
-        this.exam = exam;
-        this.examine = examine;
-        this.status = status;
-        this.startTimestamp = startTimestamp;
-        this.finishTimestamp = finishTimestamp;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public Exam getExam() {
-        return exam;
-    }
-
-    public void setExam(Exam exam) {
-        this.exam = exam;
-    }
-
-    public Examinee getExamine() {
-        return examine;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public LocalDateTime getStartTimestamp() {
-        return startTimestamp;
-    }
-
-    public LocalDateTime getFinishTimestamp() {
-        return finishTimestamp;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public void setStartTimestamp(LocalDateTime startTimestamp) {
-        this.startTimestamp = startTimestamp;
-    }
-
-    public void setFinishTimestamp(LocalDateTime finishTimestamp) {
-        this.finishTimestamp = finishTimestamp;
-    }
 
     @Override
     public boolean equals(Object o) {

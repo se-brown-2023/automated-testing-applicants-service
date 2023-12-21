@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
@@ -16,25 +17,23 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne
     private Exam exam;
+
     @Column(nullable = false)
     private String name;
+
     @Column
     private String description;
+
     @Column
     private String authorSourceCode;
-
-    public Task( Exam exam, String name, String description, String authorSourceCode) {
-        this.exam = exam;
-        this.name = name;
-        this.description = description;
-        this.authorSourceCode = authorSourceCode;
-    }
 
     @Override
     public String toString() {

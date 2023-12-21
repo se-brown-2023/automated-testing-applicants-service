@@ -1,30 +1,32 @@
 package com.sebrown2023.model.db;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(optional = false)
     private Task task;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String inputData;
+
     @Column(nullable = false)
     private String expectedOutputData;
-
-    public Test() {
-    }
-
-    public Test(Task task, String name, String inputData, String expectedOutputData) {
-        this.task = task;
-        this.name = name;
-        this.inputData = inputData;
-        this.expectedOutputData = expectedOutputData;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -59,45 +61,5 @@ public class Test {
                 ", inputData='" + inputData + '\'' +
                 ", expectedOutputData='" + expectedOutputData + '\'' +
                 '}';
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public Task getTask() {
-        return this.task;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getInputData() {
-        return this.inputData;
-    }
-
-    public String getExpectedOutputData() {
-        return this.expectedOutputData;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTask(Task task) {
-        this.task = task;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInputData(String inputData) {
-        this.inputData = inputData;
-    }
-
-    public void setExpectedOutputData(String expectedOutputData) {
-        this.expectedOutputData = expectedOutputData;
     }
 }
