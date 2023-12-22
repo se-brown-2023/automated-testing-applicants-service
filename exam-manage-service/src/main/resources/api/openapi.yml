@@ -17,6 +17,8 @@ tags:
     description: Operations with tasks.
   - name: test
     description: Operations with tests.
+  - name: exam_session
+    description: Operations with tests.
 paths:
   /exam:
     get:
@@ -106,6 +108,41 @@ paths:
           description: Successful operation.
         '405':
           description: Invalid id or the specified HTTP method is not supported for this resource.
+
+  /exam/{exam_id}/add_tasks:
+    post:
+      tags:
+        - exam
+      summary: Adding tasks to exam
+      description: Endpoint for adding tasks to exam. Requires a JSON payload with tasks ids in the request body.
+      operationId: addTasksToExam
+      parameters:
+        - name: exam_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: JSON payload containing tasks ids.
+        content:
+          application/json:
+            schema:
+              items:
+                type: integer
+                format: int64
+        required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
 
   /exam/examine/{examiner_id}:
     get:
@@ -373,6 +410,98 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
+  /exam_session:
+    get:
+      tags:
+        - exam_session
+      summary: Get all exam sessions
+      description: Endpoint for getting all exam sessions with examine.
+      operationId: getAllExamSessions
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExamSessionComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
+  /exam_session/{exam_session_id}:
+    get:
+      tags:
+        - exam_session
+      summary: Get an exam session by id
+      description: Endpoint for getting exam session with examine by id.
+      operationId: getExamSession
+      parameters:
+        - name: exam_session_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamSessionComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
+    delete:
+      tags:
+        - exam_session
+      summary: Delete an exam session
+      description: Endpoint for exam session deleting.
+      operationId: deleteExamSession
+      parameters:
+        - name: exam_session_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation.
+        '405':
+          description: Invalid id or the specified HTTP method is not supported for this resource.
+
+  /exam_session/{exam_id}:
+    get:
+      tags:
+        - exam_session
+      summary: Get exam sessions by exam id
+      description: Endpoint for getting exam sessions by exam id.
+      operationId: getExamSessionsByExam
+      parameters:
+        - name: exam_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExamSessionComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
 components:
   schemas:
     ExamComponent:
@@ -460,4 +589,45 @@ components:
         input_data:
           type: string
         output_data:
+          type: string
+
+    ExamSessionComponent:
+      type: object
+      properties:
+        id:
+          type: string
+        exam_id:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+            - CREATED
+            - STARTED
+            - FINISHED
+            - EXPIRED
+        start_time_stamp:
+          type: integer
+          format: int128
+          default: 1000_000
+        finish_time_stamp:
+          type: integer
+          format: int128
+          default: 1000_000
+        examine:
+            $ref: '#/components/schemas/ExamineComponent'
+
+    ExamineComponent:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        phone_number:
           type: string

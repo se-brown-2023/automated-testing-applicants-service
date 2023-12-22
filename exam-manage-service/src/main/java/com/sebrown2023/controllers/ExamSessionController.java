@@ -1,31 +1,40 @@
 package com.sebrown2023.controllers;
 
-import com.sebrown2023.dto.deprecated.ExamSessionDto;
+import com.sebrown2023.controller.ExamSessionApi;
+import com.sebrown2023.model.dto.ExamSessionComponent;
+import com.sebrown2023.services.ExamSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/exam_session")
-public class ExamSessionController {
+public class ExamSessionController implements ExamSessionApi {
+    private final ExamSessionService examSessionService;
 
-    //Todo получение всех сессий по экзамену
-    //Todo Submission тоже сюда тянем
-
-
-    @GetMapping(value = "/{examSessionId}")
-    public ResponseEntity<ExamSessionDto> getExamSession(@PathVariable long examSessionId) {
-        return ResponseEntity.ok().build();
+    @Override
+    public ResponseEntity<ExamSessionComponent> getExamSession(String examSessionId) {
+        var examSessionComponent = examSessionService.getExamSessionComponentById(examSessionId);
+        return ResponseEntity.ok().body(examSessionComponent);
     }
 
-    @GetMapping(value = "")
-    public ResponseEntity<List<ExamSessionDto>> getAllExamSessions() {
+    @Override
+    public ResponseEntity<List<ExamSessionComponent>> getAllExamSessions() {
+        var examSessionsComponent = examSessionService.getAllExamSessions();
+        return ResponseEntity.ok().body(examSessionsComponent);
+    }
+
+    @Override
+    public ResponseEntity<List<ExamSessionComponent>> getExamSessionsByExam(Long examId) {
+        var examSessionsComponent = examSessionService.getExamSessionComponentsByExamId(examId);
+        return ResponseEntity.ok().body(examSessionsComponent);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteExamSession(String examSessionId) {
+        examSessionService.deleteExamSession(examSessionId);
         return ResponseEntity.ok().build();
     }
 }

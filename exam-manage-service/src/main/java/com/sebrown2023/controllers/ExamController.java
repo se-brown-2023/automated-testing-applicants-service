@@ -33,6 +33,12 @@ public class ExamController implements ExamApi {
     }
 
     @Override
+    public ResponseEntity<ExamComponent> addTasksToExam(Long examId, List<Long> tasksIds) {
+        var examComponent = examService.addTasksToExam(examId, tasksIds);
+        return ResponseEntity.ok(examComponent);
+    }
+
+    @Override
     public ResponseEntity<ExamComponent> createExam(ExamComponent examComponent) {
         var createdExamComponent = examService.createExam(examComponent);
         return ResponseEntity.ok().body(createdExamComponent);

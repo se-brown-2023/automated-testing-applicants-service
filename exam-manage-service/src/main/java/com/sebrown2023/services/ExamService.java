@@ -49,6 +49,19 @@ public class ExamService {
                 .collect(Collectors.toList());
     }
 
+    public ExamComponent addTasksToExam(Long examId, List<Long> tasksIds) {
+        tasksIds.forEach(taskId -> {
+            var task = taskRepository.findTaskById(taskId);
+            var exam = examRepository.findExamById(examId);
+            if (task.isPresent() && exam.isPresent()) {
+                var updatedTask = task.get();
+                updatedTask.setExam(exam.get());
+                taskRepository.updateTaskById(taskId, updatedTask);
+            }
+        });
+        return buildExamComponent(examRepository.findExamById(examId).orElseThrow());
+    }
+
     @Transactional
     public ExamComponent createExam(ExamComponent examComponent) {
         var createdExam = examRepository.save(examMapper.examComponentToExam(examComponent));
