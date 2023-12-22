@@ -1,8 +1,8 @@
 package com.sebrown2023.services;
 
-import com.sebrown2023.dto.deprecated.PostTestDto;
-import com.sebrown2023.dto.deprecated.TestDto;
+import com.sebrown2023.exceptions.NoElementException;
 import com.sebrown2023.mappers.TestMapper;
+import com.sebrown2023.model.dto.TestComponent;
 import com.sebrown2023.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,24 +17,33 @@ public class TestService {
 
     private final TestMapper testMapper;
 
-    public TestDto getTestDtoById(long testId) {
+    public TestComponent getTestComponentById(long testId) {
         var test = testRepository.findTestById(testId);
-        return testMapper.testToTestDto(test);
+
+        if (test.isPresent()) {
+            return testMapper.testToTestComponent(test.get());
+        } else throw new NoElementException();
     }
 
-    public List<TestDto> getAllTestsDto() {
+    public List<TestComponent> getAllTestsComponents() {
         var tests = testRepository.findAll();
         return tests.stream()
-                .map(testMapper::testToTestDto)
+                .map(testMapper::testToTestComponent)
                 .collect(Collectors.toList());
     }
 
-    public void createTest(PostTestDto postTestDto) {
-        testRepository.save(testMapper.postTestDtoToTest(postTestDto));
+    public List<TestComponent> getAllTestComponentsByTaskId(long taskId) {
+        var tests = testRepository.findTestsByTaskId(taskId);
+        return tests.stream().map(testMapper::testToTestComponent)
+                .collect(Collectors.toList());
+    }
+
+    public TestComponent createTest(TestComponent testComponent) {
+        var createdTest = testRepository.save(testMapper.testComponentToTest(testComponent));
+        return testMapper.testToTestComponent(createdTest);
     }
 
     public void deleteTest(Long testId) {
         testRepository.deleteTestById(testId);
     }
-
 }

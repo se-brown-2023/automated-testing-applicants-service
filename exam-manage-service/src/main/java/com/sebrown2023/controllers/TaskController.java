@@ -1,7 +1,6 @@
 package com.sebrown2023.controllers;
 
 import com.sebrown2023.controller.TaskApi;
-import com.sebrown2023.model.dto.ExamComponent;
 import com.sebrown2023.model.dto.TaskComponent;
 import com.sebrown2023.services.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +33,9 @@ public class TaskController implements TaskApi {
     }
 
     @Override
-    public ResponseEntity<ExamComponent> createTask(TaskComponent taskComponent) {
-        taskService.createTask(taskComponent);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<TaskComponent> createTask(TaskComponent taskComponent) {
+        var createdTaskComponent = taskService.createTask(taskComponent);
+        return ResponseEntity.ok().body(createdTaskComponent);
     }
 
     @Override

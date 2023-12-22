@@ -175,7 +175,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExamComponent'
+                $ref: '#/components/schemas/TaskComponent'
         '400':
           description: Bad Request. The request was invalid or malformed.
         '405':
@@ -185,7 +185,7 @@ paths:
     get:
       tags:
         - task
-      summary: Get an exam by id
+      summary: Get a task by id
       description: Endpoint for getting task with its tests by id.
       operationId: getTask
       parameters:
@@ -254,11 +254,58 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
+  /test:
+    get:
+      tags:
+        - test
+      summary: Get all tests
+      description: Endpoint for getting all tests.
+      operationId: getAllTests
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TestComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
+    post:
+      tags:
+        - test
+      summary: Creating a new test
+      description: Endpoint for creating a new test. Requires a JSON payload with test details in the request body.
+      operationId: createTest
+      requestBody:
+        description: JSON payload containing Test.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestComponent'
+        required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
   /test/{test_id}:
     get:
       tags:
         - test
-      summary: get the test by id
+      summary: Get an test by id
+      description: Endpoint for getting test by id.
       operationId: getTest
       parameters:
         - name: test_id
@@ -269,13 +316,62 @@ paths:
             format: int64
       responses:
         '200':
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TestComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
         '405':
-          description: Invalid id
+          description: The specified HTTP method is not supported for this resource.
+
+    delete:
+      tags:
+        - test
+      summary: Delete a test
+      description: Endpoint for test deleting.
+      operationId: deleteTest
+      parameters:
+        - name: test_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation.
+        '405':
+          description: Invalid id or the specified HTTP method is not supported for this resource.
+
+  /test/task/{test_id}:
+    get:
+      tags:
+        - test
+      summary: Get tests by task id
+      description: Endpoint for getting tests with by task id.
+      operationId: getTestsForTask
+      parameters:
+        - name: test_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TestComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
 
 components:
   schemas:

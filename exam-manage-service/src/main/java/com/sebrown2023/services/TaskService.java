@@ -48,7 +48,7 @@ public class TaskService {
     }
 
     @Transactional
-    public void createTask(TaskComponent taskComponent) {
+    public TaskComponent createTask(TaskComponent taskComponent) {
         var exam = examRepository.findExamById(taskComponent.getExamId());
         var task = taskMapper.taskComponentToTask(taskComponent);
         exam.ifPresent(task::setExam);
@@ -61,6 +61,7 @@ public class TaskService {
                     testRepository.save(test);
                 }
         );
+        return buildTaskComponent(createdTask);
     }
 
     @Transactional

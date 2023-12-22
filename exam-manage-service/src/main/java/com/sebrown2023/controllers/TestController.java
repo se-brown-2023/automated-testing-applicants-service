@@ -1,43 +1,46 @@
 package com.sebrown2023.controllers;
 
-import com.sebrown2023.dto.deprecated.PostTestDto;
-import com.sebrown2023.dto.deprecated.TestDto;
+import com.sebrown2023.controller.TestApi;
+import com.sebrown2023.model.dto.TestComponent;
 import com.sebrown2023.services.TestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/test")
-public class TestController {
+public class TestController implements TestApi {
     private final TestService testService;
 
-    @GetMapping(value = "/{testId}")
-    public ResponseEntity<TestDto> getTest(@PathVariable long testId) {
-        var testDto = testService.getTestDtoById(testId);
+    @Override
+    public ResponseEntity<TestComponent> getTest(Long testId) {
+        var testDto = testService.getTestComponentById(testId);
         return ResponseEntity.ok(testDto);
     }
 
-    @GetMapping(value = "")
-    public ResponseEntity<List<TestDto>> getAllTest() {
-        var testsDto = testService.getAllTestsDto();
-        return ResponseEntity.ok(testsDto);
+    @Override
+    public ResponseEntity<List<TestComponent>> getAllTests() {
+        var testComponents = testService.getAllTestsComponents();
+        return ResponseEntity.ok(testComponents);
     }
 
-    @PostMapping()
-    public ResponseEntity<?> createNewTest(PostTestDto postTestDto) {
-        testService.createTest(postTestDto);
-        return ResponseEntity.ok().build();
+    @Override
+    public ResponseEntity<List<TestComponent>> getTestsForTask(Long testId) {
+        var testComponents = testService.getAllTestComponentsByTaskId(testId);
+        return ResponseEntity.ok(testComponents);
     }
 
-    @DeleteMapping(value = "/{testId}")
-    public ResponseEntity<?> deleteTest(@PathVariable long testId) {
+    @Override
+    public ResponseEntity<TestComponent> createTest(TestComponent testComponent) {
+        var createdTest = testService.createTest(testComponent);
+        return ResponseEntity.ok().body(createdTest);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteTest(Long testId) {
         testService.deleteTest(testId);
         return ResponseEntity.ok().build();
     }
-
-    //TODO Возможно нужен ендпойнт для update
 }

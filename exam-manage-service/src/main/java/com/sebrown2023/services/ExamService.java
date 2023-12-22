@@ -50,7 +50,7 @@ public class ExamService {
     }
 
     @Transactional
-    public void createExam(ExamComponent examComponent) {
+    public ExamComponent createExam(ExamComponent examComponent) {
         var createdExam = examRepository.save(examMapper.examComponentToExam(examComponent));
 
         examComponent.getTasks().forEach(taskComponent -> {
@@ -69,6 +69,7 @@ public class ExamService {
                     }
             );
         });
+        return buildExamComponent(createdExam);
     }
 
     @Transactional

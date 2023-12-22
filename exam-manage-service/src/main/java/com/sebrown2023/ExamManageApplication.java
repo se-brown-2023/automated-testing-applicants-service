@@ -30,6 +30,7 @@ public class ExamManageApplication {
     ////TODO проверить работу методов репозитория
     ////TODO корректно настроить мапперы
 
+    ///TODO пока живем без апдейтов сущностей(только создание и удаления)
     @Bean
     public ExamComponentToExamMapperImpl examComponentToExamMapper() {
         // instantiate and configure MyBean obj

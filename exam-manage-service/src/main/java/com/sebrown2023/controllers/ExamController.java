@@ -34,8 +34,8 @@ public class ExamController implements ExamApi {
 
     @Override
     public ResponseEntity<ExamComponent> createExam(ExamComponent examComponent) {
-        examService.createExam(examComponent);
-        return ResponseEntity.ok().build();
+        var createdExamComponent = examService.createExam(examComponent);
+        return ResponseEntity.ok().body(createdExamComponent);
     }
 
     @Override
