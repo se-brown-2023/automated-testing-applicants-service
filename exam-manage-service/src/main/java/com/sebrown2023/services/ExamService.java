@@ -1,5 +1,6 @@
 package com.sebrown2023.services;
 
+import com.sebrown2023.exceptions.NoElementException;
 import com.sebrown2023.mappers.ExamMapper;
 import com.sebrown2023.mappers.TaskMapper;
 import com.sebrown2023.mappers.TestMapper;
@@ -26,9 +27,12 @@ public class ExamService {
     private final TaskMapper taskMapper;
     private final TestMapper testMapper;
 
-    public ExamComponent getExamDtoById(long examId) {
+    public ExamComponent getExamComponentById(long examId) {
         var exam = examRepository.findExamById(examId);
-        return buildExamComponent(exam);
+
+        if (exam.isPresent()) {
+            return buildExamComponent(exam.get());
+        } else throw new NoElementException();
     }
 
     public List<ExamComponent> getAllExamWithTasksAndTestsByExaminerId(long examinerId) {

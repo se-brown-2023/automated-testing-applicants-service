@@ -1,246 +1,367 @@
 openapi: 3.0.3
 info:
-    title: Exam manager - OpenAPI 3.0
-    description: |-
-        API for exam-manager-service.
-    license:
-        name: Apache 2.0
-        url: http://www.apache.org/licenses/LICENSE-2.0.html
-    version: 1.0.0
+  title: Exam manager - OpenAPI 3.0
+  description: |-
+    API for exam-manager-service.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
 
 servers:
-    - url: https://localhost:8080/manage
+  - url: https://localhost:8080/manage
 tags:
-    - name: exam
-      description: Operations with exams.
-    - name: test
-      description: Operations with tests.
+  - name: exam
+    description: Operations with exams.
+  - name: task
+    description: Operations with tasks.
+  - name: test
+    description: Operations with tests.
 paths:
-    /exam:
-        get:
-            tags:
-                - exam
-            summary: Get all exams
-            description: Endpoint for getting all exams with theirs tasks and tests.
-            operationId: getAllExams
-            responses:
-                '200':
-                    description: Successful operation.
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/ExamComponent'
-                '400':
-                    description: Bad Request. The request was invalid or malformed.
-                '405':
-                    description: The specified HTTP method is not supported for this resource.
-        post:
-            tags:
-                - exam
-            summary: Creating a new exam
-            description: Endpoint for creating a new exam. Requires a JSON payload with exam details in the request body.
-            operationId: createExam
-            requestBody:
-                description: JSON payload containing Exam its tasks(optional) and their tests(optional).
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/ExamComponent'
-                required: true
-            responses:
-                '200':
-                    description: Successful operation.
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ExamComponent'
-                '400':
-                    description: Bad Request. The request was invalid or malformed.
-                '405':
-                    description: The specified HTTP method is not supported for this resource.
-    /exam/{exam_id}:
-        get:
-            tags:
-                - exam
-            summary: Get an exam by id
-            description: Endpoint for getting exam with theirs tasks and tests by id.
-            operationId: getExam
-            parameters:
-                - name: exam_id
-                  in: path
-                  required: true
-                  schema:
-                      type: integer
-                      format: int64
-            responses:
-                '200':
-                    description: Successful operation.
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ExamComponent'
-                '400':
-                    description: Bad Request. The request was invalid or malformed.
-                '405':
-                    description: The specified HTTP method is not supported for this resource.
+  /exam:
+    get:
+      tags:
+        - exam
+      summary: Get all exams
+      description: Endpoint for getting all exams with theirs tasks and tests.
+      operationId: getAllExams
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExamComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+    post:
+      tags:
+        - exam
+      summary: Creating a new exam
+      description: Endpoint for creating a new exam. Requires a JSON payload with exam details in the request body.
+      operationId: createExam
+      requestBody:
+        description: JSON payload containing Exam its tasks(optional) and their tests(optional).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamComponent'
+        required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+  /exam/{exam_id}:
+    get:
+      tags:
+        - exam
+      summary: Get an exam by id
+      description: Endpoint for getting exam with theirs tasks and tests by id.
+      operationId: getExam
+      parameters:
+        - name: exam_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
 
-        delete:
-            tags:
-                - exam
-            summary: Delete an exam
-            description: Endpoint for exam deleting.
-            operationId: deleteExam
-            parameters:
-                - name: exam_id
-                  in: path
-                  required: true
-                  schema:
-                      type: integer
-                      format: int64
-            responses:
-                '200':
-                    description: Successful operation.
-                '405':
-                    description: Invalid id or the specified HTTP method is not supported for this resource.
+    delete:
+      tags:
+        - exam
+      summary: Delete an exam
+      description: Endpoint for exam deleting.
+      operationId: deleteExam
+      parameters:
+        - name: exam_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation.
+        '405':
+          description: Invalid id or the specified HTTP method is not supported for this resource.
 
-    /exam/examine/{examiner_id}:
-        get:
-            tags:
-                - exam
-            summary: Get exams by examiner id
-            description: Endpoint for getting exams with theirs tasks and tests by examiner id.
-            operationId: getExamsForExaminer
-            parameters:
-                - name: examiner_id
-                  in: path
-                  required: true
-                  schema:
-                      type: integer
-                      format: int64
-            responses:
-                '200':
-                    description: Successful operation.
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/ExamComponent'
-                '400':
-                    description: Bad Request. The request was invalid or malformed.
-                '405':
-                    description: The specified HTTP method is not supported for this resource.
+  /exam/examine/{examiner_id}:
+    get:
+      tags:
+        - exam
+      summary: Get exams by examiner id
+      description: Endpoint for getting exams with theirs tasks and tests by examiner id.
+      operationId: getExamsForExaminer
+      parameters:
+        - name: examiner_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExamComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
 
-    /test/{test_id}:
-        get:
-            tags:
-                - test
-            summary: get the test by id
-            operationId: getTest
-            parameters:
-                - name: test_id
-                  in: path
-                  required: true
-                  schema:
-                      type: integer
-                      format: int64
-            responses:
-                '200':
-                    description: Successful operation
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/TestComponent'
-                '405':
-                    description: Invalid id
+  /task:
+    get:
+      tags:
+        - task
+      summary: Get all tasks
+      description: Endpoint for getting all tasks with theirs tests.
+      operationId: getAllTasks
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
+    post:
+      tags:
+        - task
+      summary: Creating a new task
+      description: Endpoint for creating a new task. Requires a JSON payload with task details in the request body.
+      operationId: createTask
+      requestBody:
+        description: JSON payload containing Task with its tests(optional).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskComponent'
+        required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
+  /task/{task_id}:
+    get:
+      tags:
+        - task
+      summary: Get an exam by id
+      description: Endpoint for getting task with its tests by id.
+      operationId: getTask
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
+    delete:
+      tags:
+        - task
+      summary: Delete a task
+      description: Endpoint for task deleting.
+      operationId: deleteTask
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation.
+        '405':
+          description: Invalid id or the specified HTTP method is not supported for this resource.
+
+  /task/exam/{exam_id}:
+    get:
+      tags:
+        - task
+      summary: Get tasks by exam id
+      description: Endpoint for getting tasks with theirs tests by exam id.
+      operationId: getTasksForExam
+      parameters:
+        - name: exam_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
+  /test/{test_id}:
+    get:
+      tags:
+        - test
+      summary: get the test by id
+      operationId: getTest
+      parameters:
+        - name: test_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestComponent'
+        '405':
+          description: Invalid id
 
 components:
-    schemas:
-        ExamComponent:
-            type: object
-            required:
-                - examiner_id
-                - name
-                - programming_language
-            properties:
-                id:
-                    type: integer
-                    format: int64
-                    example: 10
-                examiner_id:
-                    type: integer
-                    format: int64
-                    example: 10
-                name:
-                    type: string
-                description:
-                    type: string
-                programming_language:
-                    type: string
-                    enum:
-                        - Java
-                        - JavaScript
-                        - Python
-                max_duration:
-                    type: integer
-                    format: int128
-                    default: 1000_000
-                TTL:
-                    type: integer
-                    format: int128
-                    default: 1000_000
-                creation_date:
-                    type: string
-                    example: '2023-03-21 23:59:59'
-                tasks:
-                    minItems: 0
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/TaskComponent'
+  schemas:
+    ExamComponent:
+      type: object
+      required:
+        - examiner_id
+        - name
+        - programming_language
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        examiner_id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+        description:
+          type: string
+        programming_language:
+          type: string
+          enum:
+            - Java
+            - JavaScript
+            - Python
+        max_duration:
+          type: integer
+          format: int128
+          default: 1000_000
+        TTL:
+          type: integer
+          format: int128
+          default: 1000_000
+        creation_date:
+          type: string
+          example: '2023-03-21 23:59:59'
+        tasks:
+          minItems: 0
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskComponent'
 
-        TaskComponent:
-            type: object
-            required:
-                - name
-            properties:
-                id:
-                    type: integer
-                    format: int64
-                    example: 10
-                exam_id:
-                    type: integer
-                    format: int64
-                    example: 10
-                name:
-                    type: string
-                description:
-                    type: string
-                author_source_code:
-                    type: string
-                tests:
-                    type: array
-                    minItems: 0
-                    items:
-                        $ref: '#/components/schemas/TestComponent'
+    TaskComponent:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        exam_id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+        description:
+          type: string
+        author_source_code:
+          type: string
+        tests:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/TestComponent'
 
-        TestComponent:
-            type: object
-            required:
-                - input_data
-                - output_data
-            properties:
-                id:
-                    type: integer
-                    format: int64
-                    example: 10
-                name:
-                    type: string
-                task_id:
-                    type: integer
-                    format: int64
-                input_data:
-                    type: string
-                output_data:
-                    type: string
+    TestComponent:
+      type: object
+      required:
+        - input_data
+        - output_data
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+        task_id:
+          type: integer
+          format: int64
+        input_data:
+          type: string
+        output_data:
+          type: string

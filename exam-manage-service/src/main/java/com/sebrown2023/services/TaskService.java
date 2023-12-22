@@ -1,9 +1,11 @@
 package com.sebrown2023.services;
 
-import com.sebrown2023.dto.deprecated.PostTaskDto;
-import com.sebrown2023.dto.deprecated.TaskDto;
+import com.sebrown2023.exceptions.NoElementException;
 import com.sebrown2023.mappers.TaskMapper;
 import com.sebrown2023.mappers.TestMapper;
+import com.sebrown2023.model.db.Task;
+import com.sebrown2023.model.dto.TaskComponent;
+import com.sebrown2023.repository.ExamRepository;
 import com.sebrown2023.repository.TaskRepository;
 import com.sebrown2023.repository.TestRepository;
 import jakarta.transaction.Transactional;
@@ -21,34 +23,63 @@ public class TaskService {
 
     private final TaskMapper taskMapper;
     private final TestMapper testMapper;
+    private final ExamRepository examRepository;
 
-    public TaskDto getTaskDtoById(long taskId) {
+    public TaskComponent getTaskComponentById(long taskId) {
         var task = taskRepository.findTaskById(taskId);
-        return taskMapper.taskToTaskDto(task);
+
+        if (task.isPresent()) {
+            return buildTaskComponent(task.get());
+        } else throw new NoElementException();
     }
 
-    public List<TaskDto> getAllTaskDto() {
+    public List<TaskComponent> getAllTaskComponents() {
         var tests = taskRepository.findAll();
         return tests.stream()
-                .map(taskMapper::taskToTaskDto)
+                .map(this::buildTaskComponent)
+                .collect(Collectors.toList());
+    }
+
+    public List<TaskComponent> getAllTaskComponentsByExamId(long examId) {
+        var tests = taskRepository.findTasksByExamId(examId);
+        return tests.stream()
+                .map(this::buildTaskComponent)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public void createTask(PostTaskDto postTaskDto) {
-        taskRepository.save(taskMapper.postTaskDtoToTask(postTaskDto));
+    public void createTask(TaskComponent taskComponent) {
+        var exam = examRepository.findExamById(taskComponent.getExamId());
+        var task = taskMapper.taskComponentToTask(taskComponent);
+        exam.ifPresent(task::setExam);
 
-        if (postTaskDto.tests() != null) {
-            postTaskDto.tests().stream()
-                    .map(testMapper::postTestDtoToTest)
-                    .forEach(testRepository::save);
-        }
+        var createdTask = taskRepository.save(task);
+
+        taskComponent.getTests().forEach(testComponent -> {
+                    var test = testMapper.testComponentToTest(testComponent);
+                    test.setTask(createdTask);
+                    testRepository.save(test);
+                }
+        );
     }
 
-    //TODO подумать что делать со связанными testResult
     @Transactional
     public void deleteTask(Long taskId) {
         testRepository.deleteAll(testRepository.findTestsByTaskId(taskId));
         taskRepository.deleteById(taskId);
+    }
+
+    /**
+     * Builds a TaskComponent based on the provided Task entity.
+     *
+     * @param task The Task entity for which the TaskComponent is to be built.
+     * @return A TaskComponent instance representing the provided Task entity, including associated test components.
+     */
+    private TaskComponent buildTaskComponent(Task task) {
+        var testsForTask = testRepository.findTestsByTaskId(task.getId());
+        var testComponents = testsForTask.stream()
+                .map(testMapper::testToTestComponent)
+                .collect(Collectors.toList());
+        return taskMapper.taskToTaskComponent(task, testComponents);
     }
 }

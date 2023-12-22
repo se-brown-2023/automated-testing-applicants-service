@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SubmissionRepository extends JpaRepository<Submission, Long> {
-    Submission findSubmissionById (Long id);
+    Submission findSubmissionById(Long id);
 }

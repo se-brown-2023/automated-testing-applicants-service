@@ -16,20 +16,20 @@ public class ExamController implements ExamApi {
 
     @Override
     public ResponseEntity<ExamComponent> getExam(Long examId) {
-        var taskDto = examService.getExamDtoById(examId);
-        return ResponseEntity.ok(taskDto);
+        var examComponent = examService.getExamComponentById(examId);
+        return ResponseEntity.ok(examComponent);
     }
 
     @Override
     public ResponseEntity<List<ExamComponent>> getAllExams() {
-        var examsDto = examService.getAllExamWithTasksAndTests();
-        return ResponseEntity.ok(examsDto);
+        var examComponents = examService.getAllExamWithTasksAndTests();
+        return ResponseEntity.ok(examComponents);
     }
 
     @Override
     public ResponseEntity<List<ExamComponent>> getExamsForExaminer(Long examinerId) {
-        var examsDto = examService.getAllExamWithTasksAndTestsByExaminerId(examinerId);
-        return ResponseEntity.ok(examsDto);
+        var examComponents = examService.getAllExamWithTasksAndTestsByExaminerId(examinerId);
+        return ResponseEntity.ok(examComponents);
     }
 
     @Override
