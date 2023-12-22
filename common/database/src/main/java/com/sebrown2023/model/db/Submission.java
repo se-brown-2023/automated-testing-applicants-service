@@ -31,6 +31,37 @@ public class Submission {
     @Column(nullable = false)
     private Date submitTime;
 
+    public Submission() {
+
+    }
+
+    public Submission(Task task, ExamSession examSession, String userSourceCode, Date submitTime) {
+        this.task = task;
+        this.examSession = examSession;
+        this.userSourceCode = userSourceCode;
+        this.submitTime = submitTime;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public ExamSession getExamSession() {
+        return examSession;
+    }
+
+    public String getUserSourceCode() {
+        return userSourceCode;
+    }
+
+    public Date getSubmitTime() {
+        return submitTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

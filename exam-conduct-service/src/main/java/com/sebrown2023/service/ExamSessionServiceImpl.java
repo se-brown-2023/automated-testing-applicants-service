@@ -11,6 +11,7 @@ import com.sebrown2023.exceptions.ExamSessionExpiredException;
 import com.sebrown2023.exceptions.ExamSessionNotExpiredException;
 import com.sebrown2023.exceptions.ExamSessionNotFoundException;
 import com.sebrown2023.exceptions.ExamSessionNotStartedException;
+import com.sebrown2023.model.dto.Submission;
 import com.sebrown2023.repository.ExamSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,18 @@ public class ExamSessionServiceImpl implements ExamSessionService {
     @Override
     public ExamSession getByUUID(UUID uuid) throws ExamSessionException {
         return sessionRepository.findById(uuid).orElseThrow(ExamSessionNotFoundException::new);
+    }
+
+    @Override
+    public void sendTask(UUID uuid, Submission submission) throws ExamSessionException {
+        ExamSession examSession = getByUUID(uuid);
+        checkExamExpiration(examSession);
+        if (examSession.getStatus() != Status.STARTED) {
+            sessionRepository.save(examSession);
+            throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Task cant be sent. ExamSession are not valid now");
+        }
+
+        //TODO implement send submission to kafka
     }
 
     @Override
