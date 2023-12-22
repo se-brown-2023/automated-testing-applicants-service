@@ -1,34 +1,27 @@
 package com.sebrown2023.controllers;
 
-import com.sebrown2023.dto.deprecated.GetSubmissionDto;
-import com.sebrown2023.dto.deprecated.PostSubmissionDto;
+import com.sebrown2023.controller.SubmissionApi;
+import com.sebrown2023.model.dto.SubmissionComponent;
 import com.sebrown2023.services.SubmissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/submission")
-public class SubmissionController {
+public class SubmissionController implements SubmissionApi {
 
     private final SubmissionService submissionService;
 
-    @GetMapping(value = "/{submissionId}")
-    public ResponseEntity<GetSubmissionDto> getSubmission(@PathVariable long submissionId) {
-        return ResponseEntity.ok().body(submissionService.getSubmissionDtoById(submissionId));
+    @Override
+    public ResponseEntity<SubmissionComponent> getSubmission(Long submissionId) {
+        return ResponseEntity.ok().body(submissionService.getSubmissionComponentById(submissionId));
     }
 
-    @GetMapping()
-    public ResponseEntity<List<GetSubmissionDto>> getAllSubmissions() {
-        return ResponseEntity.ok().body(submissionService.getAllSubmissionsDto());
-    }
-
-    //TODO скорее всего submissions не должны создаваться в manage-service
-    @PostMapping()
-    public ResponseEntity<?> createSubmission(PostSubmissionDto postSubmissionDto) {
-        return ResponseEntity.ok().build();
+    @Override
+    public ResponseEntity<List<SubmissionComponent>> getSubmissionsByExamSessionId(String examSessionId) {
+        return ResponseEntity.ok().body(submissionService.getSubmissionsByExamSessionId(examSessionId));
     }
 }

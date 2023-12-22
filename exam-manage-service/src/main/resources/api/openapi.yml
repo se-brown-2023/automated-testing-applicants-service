@@ -19,6 +19,8 @@ tags:
     description: Operations with tests.
   - name: exam_session
     description: Operations with tests.
+  - name: submission
+    description: Operations with submissions.
 paths:
   /exam:
     get:
@@ -502,6 +504,59 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
+  /submission/{submission_id}:
+    get:
+      tags:
+        - submission
+      summary: Get submission by id
+      description: Endpoint for getting submission by id.
+      operationId: getSubmission
+      parameters:
+        - name: submission_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
+  /submission/{exam_session_id}:
+    get:
+      tags:
+        - submission
+      summary: Get submissions by exam session id
+      description: Endpoint for getting submissions by exam sessions id.
+      operationId: getSubmissionsByExamSessionId
+      parameters:
+        - name: exam_session_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubmissionComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
 components:
   schemas:
     ExamComponent:
@@ -607,15 +662,11 @@ components:
             - FINISHED
             - EXPIRED
         start_time_stamp:
-          type: integer
-          format: int128
-          default: 1000_000
+          type: string
         finish_time_stamp:
-          type: integer
-          format: int128
-          default: 1000_000
+          type: string
         examine:
-            $ref: '#/components/schemas/ExamineComponent'
+          $ref: '#/components/schemas/ExamineComponent'
 
     ExamineComponent:
       properties:
@@ -631,3 +682,49 @@ components:
           type: string
         phone_number:
           type: string
+
+    TestResultComponent:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        submission_id:
+          type: integer
+          format: int64
+          example: 10
+        test_id:
+          type: integer
+          format: int64
+          example: 10
+        actual_output_data:
+          type: string
+        passed:
+          type: boolean
+        elapsed_time:
+          type: integer
+          format: int128
+          default: 1000_000
+
+    SubmissionComponent:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        task_id:
+          type: integer
+          format: int64
+          example: 10
+        exam_session_id:
+          type: string
+        user_source_code:
+          type: string
+        submit_time:
+          type: string
+          example: '2023-03-21 23:59:59'
+        testResults:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/TestResultComponent'

@@ -1,8 +1,5 @@
 package com.sebrown2023.mappers;
 
-import com.sebrown2023.dto.deprecated.PostTaskDto;
-import com.sebrown2023.dto.deprecated.PostTestDto;
-import com.sebrown2023.dto.deprecated.TaskDto;
 import com.sebrown2023.model.db.Task;
 import com.sebrown2023.model.dto.TaskComponent;
 import com.sebrown2023.model.dto.TestComponent;
@@ -13,15 +10,15 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
-    TaskDto taskToTaskDto(Task task);
-    Task postTaskDtoToTask(PostTaskDto postTaskDto);
-    Task postTaskDtoToTask(PostTaskDto postTaskDto, List<PostTestDto> testsDto);
-    //
+
+    @Mapping(target = "exam", ignore = true)
     Task taskComponentToTask(TaskComponent taskComponent);
 
     @Mapping(target = "tests", ignore = true)
+    @Mapping(target = "examId", expression = "java(task.getExam().getId())")
     TaskComponent taskToTaskComponentShort(Task task);
 
     @Mapping(target = "tests", expression = "java(testsOfTask)")
+    @Mapping(target = "examId", expression = "java(task.getExam().getId())")
     TaskComponent taskToTaskComponent(Task task, List<TestComponent> testsOfTask);
 }
