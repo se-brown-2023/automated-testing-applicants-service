@@ -37,23 +37,10 @@
 .task-list-footer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 15px;
 }
 
-.assign-button {
-    display: block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background: linear-gradient(90deg, #ff8a00, #e52e71);
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.assign-button:hover {
-    background: linear-gradient(90deg, #e52e71, #ff8a00);
+.task-list-footer button {
+    margin: 0 20px;
 }

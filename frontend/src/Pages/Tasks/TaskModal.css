@@ -61,23 +61,44 @@
     padding: 20px;
 }
 
+.content-task-modal {
+    padding: 20px;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 .content-task label {
     width: 80%;
     margin: 10px 0;
 }
 
+.content-task-modal label {
+    width: 30%;
+    margin: 10px 0;
+}
+
 .content-task label input {
-    width: 100%;
+    width: 98%;
+    margin: 10px 0;
+}
+
+.content-task-modal label input {
+    width: 300px;
     margin: 10px 0;
 }
 
 .content-task label textarea {
-    width: 100%;
+    width: 98%;
     margin: 10px 0;
 }
 
 .content-task .code {
-    min-height: 500px;
+    min-height: 600px;
 }
 
 .test-label {
@@ -106,10 +127,6 @@ textarea {
     justify-content: space-between;
     align-items: center;
     margin: 0 100px;
-}
-
-.rating {
-    margin: auto;
 }
 
 label {
@@ -144,4 +161,14 @@ button:hover {
 
 .hidden {
     display: none;
+}
+
+.select-language {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    color: #333;
+    margin: 10px 0;
 }

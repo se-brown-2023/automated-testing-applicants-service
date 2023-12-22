@@ -7,6 +7,8 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
     const [code, setCode] = useState('');
     const [tests, setTests] = useState([{input: '', output: ''}]);
     const [activePage, setActivePage] = useState(0);
+    const [language, setLanguage] = useState('java')
+    const [duration, setDuration] = useState('');
 
     useEffect(() => {
         if (task) {
@@ -30,6 +32,8 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
                 description,
                 code,
                 tests,
+                language,
+                duration,
             };
             createTask(newTask);
         } else {
@@ -39,6 +43,8 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
                 description,
                 code,
                 tests,
+                language,
+                duration,
             };
             updateTask(updatedTask);
         }
@@ -84,15 +90,26 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
                                 <textarea value={description} onChange={e => setDescription(e.target.value)}/>
                             </label>
                             <label>
+                                Язык:
+                                <select className="select-language" value={language}
+                                        onChange={e => setLanguage(e.target.value)}>
+                                    <option value="java">Java</option>
+                                    <option value="javascript">JavaScript</option>
+                                </select>
+                            </label>
+                            <label>
+                                Длительность экзамена:
+                                <input type="text" value={duration} onChange={e => setDuration(e.target.value)}/>
+                            </label>
+                            <label>
                                 Код задания:
                                 <textarea className="code" value={code} onChange={e => setCode(e.target.value)}/>
                             </label>
                         </div>
                     )}
                     {activePage === 1 && (
-                        <div className="content-task">
-                            <h2>Тесты</h2>
-                            {tests.map((test, index) => (
+                        <div className="content-task-modal">
+                        {tests.map((test, index) => (
                                 <div key={index} className="test-label">
                                     <label>
                                         Ввод:

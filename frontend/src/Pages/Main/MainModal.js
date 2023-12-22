@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./MainModal.css";
 
-const MainModal = ({ onClose, selectedTasks, examSession, isRatingMode, setIsRatingMode }) => {
+const MainModal = ({ onClose, examSession, isRatingMode, setIsRatingMode }) => {
     const [rating, setRating] = useState(0);
 
     const handleRatingChange = (event) => {
@@ -29,7 +29,7 @@ const MainModal = ({ onClose, selectedTasks, examSession, isRatingMode, setIsRat
                 <div className="modal-body">
                     <p>Текст задания</p>
                     <textarea
-                        value={examSession.tasks.map(task => task.title).join(', ')}
+                        value={(examSession.tasks || []).map(task => task.title).join(', ')}
                         rows={10}
                         cols={50}
                     />
@@ -37,7 +37,7 @@ const MainModal = ({ onClose, selectedTasks, examSession, isRatingMode, setIsRat
                 <div className="modal-footer">
                     {isRatingMode ? (
                         <>
-                            <div className="rating">
+                        <div className="rating">
                                 <label htmlFor="rating">Оценка:</label>
                                 <input
                                     type="number"

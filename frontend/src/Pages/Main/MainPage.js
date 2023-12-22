@@ -9,13 +9,9 @@ import Avatar from './user.png';
 import MainModal from './MainModal';
 
 export const MainPage = () => {
-    const dispatch = useDispatch();
-    const tasks = useSelector(state => state.tasks);
-    const users = useSelector(state => state.users);
     const examSessions = useSelector(state => state.examSessions);
     const navigate = useNavigate();
     const [expandedRowId, setExpandedRowId] = useState(null);
-    const [selectedTasks, setSelectedTasks] = useState([]);
     const [selectedExamSession, setSelectedExamSession] = useState(null)
     const [isRatingMode, setIsRatingMode] = useState(true);
 
@@ -125,7 +121,6 @@ export const MainPage = () => {
             {selectedExamSession && (
                 <MainModal
                     onClose={handleCloseModal}
-                    selectedTasks={selectedTasks}
                     examSession={selectedExamSession}
                     isRatingMode={isRatingMode}
                     setIsRatingMode={setIsRatingMode}

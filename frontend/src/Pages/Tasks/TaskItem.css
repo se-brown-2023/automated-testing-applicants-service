@@ -1,17 +1,17 @@
 .task-item {
-    background: linear-gradient(90deg, #ff8a00, #e52e71);
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 8px;
+
+    background-color: #2e2e3f;
+    color: white;
+    padding: 20px;
     margin-bottom: 10px;
+    border-radius: 5px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    transition: background-color 0.3s ease;
 }
 
 .task-item:hover {
-    background: linear-gradient(90deg, #e52e71, #ff8a00);
+    background-color: #3e3e4f;
+    cursor: pointer;
 }
 
 .task-details {

@@ -120,7 +120,7 @@ const ExamSession = () => {
                         </div>
                         <div className="modal-body-exam-session">
                             {tasks.map(task => (
-                                <div key={task.id} className="task-item">
+                                <div key={task.id} className="exam-task-item">
                                     <input type="checkbox" checked={selectedTasks.includes(task)}
                                            onChange={() => handleTaskSelect(task)}/>
                                     <div className="task-title">
