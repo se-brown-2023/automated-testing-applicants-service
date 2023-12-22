@@ -9,5 +9,5 @@ import java.util.Set;
 @Repository
 public interface ExamRepository extends JpaRepository<Exam, Long> {
     Exam findExamById(long id);
-    Set<Exam> findExamsByExaminerIdEquals(int examinerId);
+    Set<Exam> findExamsByExaminerIdEquals(long examinerId);
 }

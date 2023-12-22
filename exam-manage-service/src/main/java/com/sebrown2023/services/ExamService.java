@@ -1,13 +1,10 @@
 package com.sebrown2023.services;
 
-import com.sebrown2023.dto.deprecated.ExamDto;
-import com.sebrown2023.dto.deprecated.PostExamDto;
-import com.sebrown2023.dto.deprecated.TaskDto;
-import com.sebrown2023.dto.deprecated.TestDto;
 import com.sebrown2023.mappers.ExamMapper;
 import com.sebrown2023.mappers.TaskMapper;
 import com.sebrown2023.mappers.TestMapper;
 import com.sebrown2023.model.db.Exam;
+import com.sebrown2023.model.dto.ExamComponent;
 import com.sebrown2023.repository.ExamRepository;
 import com.sebrown2023.repository.TaskRepository;
 import com.sebrown2023.repository.TestRepository;
@@ -15,7 +12,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,56 +26,49 @@ public class ExamService {
     private final TaskMapper taskMapper;
     private final TestMapper testMapper;
 
-    public ExamDto getExamDtoById(long examId) {
+    public ExamComponent getExamDtoById(long examId) {
         var exam = examRepository.findExamById(examId);
-        return examMapper.examToExamDto(exam);
+        return buildExamComponent(exam);
     }
 
-    public List<ExamDto> getAllExamDtoByExamineeId(int examineeId) {
-        var exams = examRepository.findExamsByExaminerIdEquals(examineeId);
+    public List<ExamComponent> getAllExamWithTasksAndTestsByExaminerId(long examinerId) {
+        var exams = examRepository.findExamsByExaminerIdEquals(examinerId);
         return exams.stream()
-                .map(this::buildExamDto)
+                .map(this::buildExamComponent)
                 .collect(Collectors.toList());
     }
 
-    public List<ExamDto> getAllExamDto() {
+    public List<ExamComponent> getAllExamWithTasksAndTests() {
         var exams = examRepository.findAll();
         return exams.stream()
-                .map(examMapper::examToExamDto)
+                .map(this::buildExamComponent)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public void createExam(PostExamDto postExamDto) {
-        if (postExamDto == null) {
-            throw new RuntimeException("Empty Dto");
-        }
+    public void createExam(ExamComponent examComponent) {
+        var createdExam = examRepository.save(examMapper.examComponentToExam(examComponent));
 
-        //TODO нижу тоже можно доавбить проверок, но пока не понятно какой будет контракт
-        var createdExam = examRepository.save(examMapper.postExamDtoToExam(postExamDto));
+        examComponent.getTasks().forEach(taskComponent -> {
 
-        postExamDto.tasks().forEach( taskDto -> {
+            var tests = taskComponent.getTests();
+            var task = taskMapper.taskComponentToTask(taskComponent);
+            task.setExam(createdExam);
 
-                    var tests = taskDto.tests();
-                    var task = taskMapper.postTaskDtoToTask(taskDto);
-                    task.setExam(createdExam);
+            var createdTask = taskRepository.save(task);
 
-                    var createdTask = taskRepository.save(task);
+            tests.forEach(testComponent -> {
+                        var test = testMapper.testComponentToTest(testComponent);
+                        test.setTask(createdTask);
 
-                    tests.forEach( testDto -> {
-                            var test = testMapper.postTestDtoToTest(testDto);
-                            test.setTask(createdTask);
-
-                            testRepository.save(test);
-                            }
-                    );
-                });
+                        testRepository.save(test);
+                    }
+            );
+        });
     }
 
-    //TODO подумать что делать со связанными testResult и другими подвтсающими сущностями
     @Transactional
     public void deleteExam(Long examId) {
-        //TODO в репозиториях стоит возвращать Optional для проверки на null
         var tasks = taskRepository.findTasksByExamId(examId);
 
         tasks.forEach(task -> {
@@ -90,21 +79,24 @@ public class ExamService {
         examRepository.deleteById(examId);
     }
 
-    //Todo вынести в маппер
-    private ExamDto buildExamDto(Exam exam) {
-        var examDto = examMapper.examToExamDto(exam);
-        List<TaskDto> tasksForExam = new ArrayList<>();
+    /**
+     * Builds an ExamComponent based on the provided Exam entity.
+     *
+     * @param exam The Exam entity for which the ExamComponent is to be built.
+     * @return An ExamComponent representing the provided Exam entity, including associated tasks and tests.
+     */
+    private ExamComponent buildExamComponent(Exam exam) {
+        var tasksForExam = taskRepository.findTasksByExamId(exam.getId());
 
-        taskRepository.findTasksByExamId(exam.getId()).forEach( task -> {
-            List<TestDto> testsForTask = new ArrayList<>();
-
-            testRepository.findTestsByTaskId(task.getId()).forEach( test -> {
-                testsForTask.add(testMapper.testToTestDto(test));
-            });
-
-//            var taskDto = taskMapper.taskToTaskDto(task, testsForTask);
-            //Todo разобраться с dto классами
-        });
-        return examDto;
+        var taskComponents = tasksForExam.stream()
+                .map(task -> {
+                    var testsForTask = testRepository.findTestsByTaskId(task.getId());
+                    var testComponents = testsForTask.stream()
+                            .map(testMapper::testToTestComponent)
+                            .collect(Collectors.toList());
+                    return taskMapper.taskToTaskComponent(task, testComponents);
+                })
+                .toList();
+        return examMapper.examToExamComponent(exam, taskComponents);
     }
 }

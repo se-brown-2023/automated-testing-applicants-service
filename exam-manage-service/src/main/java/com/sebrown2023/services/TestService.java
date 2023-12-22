@@ -34,7 +34,7 @@ public class TestService {
     }
 
     public void deleteTest(Long testId) {
-        testRepository.deleteById(testId);
+        testRepository.deleteTestById(testId);
     }
 
 }

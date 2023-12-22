@@ -3,6 +3,7 @@ plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
     id("org.openapi.generator") version "7.1.0"
+    id("org.jetbrains.kotlin.kapt") version "1.5.20"
 }
 
 group = "org.itmo"
@@ -16,7 +17,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation(project(mapOf("path" to ":common:database")))
 
     //MAPSTRUCT
@@ -28,11 +28,12 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     //OPENAPI
-    implementation("org.openapitools", "openapi-generator", "4.3.0")
+    implementation("org.openapitools", "openapi-generator", "7.1.0")
 
     //TESTS
-    runtimeOnly("com.h2database:h2")
+    implementation("org.postgresql:postgresql:42.2.27")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
 }
 
 openApiGenerate {
@@ -71,6 +72,23 @@ openApiGenerate {
                     "serializationLibrary" to "jackson",
             ),
     )
+}
+
+sourceSets.main {
+    java.srcDirs("${layout.buildDirectory.asFile.get()}/generated/sources/annotationProcessor/java/main")
+}
+
+kapt {
+    arguments {
+        arg("mapstruct.defaultComponentModel", "spring")
+        arg("spring.bean.ignore", "false")
+    }
+}
+
+configurations {
+    all {
+        exclude(group = "ch.qos.logback", module = "logback-classic")
+    }
 }
 
 tasks.test {

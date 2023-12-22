@@ -1,9 +1,11 @@
 package com.sebrown2023;
 
+import com.sebrown2023.mappers.ExamComponentToExamMapperImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 
 @EnableConfigurationProperties
 @ConfigurationPropertiesScan
@@ -25,4 +27,11 @@ public class ExamManageApplication {
 
     ////TODO проверить работу методов репозитория
     ////TODO корректно настроить мапперы
+
+    @Bean
+    public ExamComponentToExamMapperImpl examComponentToExamMapper() {
+        // instantiate and configure MyBean obj
+        return new ExamComponentToExamMapperImpl();
+    }
+
 }

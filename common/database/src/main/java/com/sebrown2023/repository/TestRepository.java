@@ -10,5 +10,5 @@ import java.util.List;
 public interface TestRepository extends JpaRepository<Test, Long> {
     Test findTestById(long id);
     List<Test> findTestsByTaskId(Long task_id);
-    void deleteById(Long id);
+    void deleteTestById(Long id);
 }
