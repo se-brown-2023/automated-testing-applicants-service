@@ -56,7 +56,7 @@ public class ExamService {
             if (task.isPresent() && exam.isPresent()) {
                 var updatedTask = task.get();
                 updatedTask.setExam(exam.get());
-                taskRepository.updateTaskById(taskId, updatedTask);
+                taskRepository.save(updatedTask);
             }
         });
         return buildExamComponent(examRepository.findExamById(examId).orElseThrow());
