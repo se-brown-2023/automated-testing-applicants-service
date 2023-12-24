@@ -20,6 +20,7 @@ public final class TestUtil {
 
     private static final String JAVA_MAIN_CLASS_PLACEHOLDER = "CLASS_RANDOM_NUMBER";
     private static final String JAVA_RETURN_TYPE_PLACEHOLDER = "REPLACE_WITH_RETURN_TYPE";
+    private static final String JAVA_USER_SOLUTION_PLACEHOLDER = "USER_SOURCE_CODE";
     private static final Pattern JAVA_SOLUTION_METHOD_PATTERN =
             Pattern.compile("public +(final +)?(.*) +solve *\\(.*\\).*");
 
@@ -27,9 +28,9 @@ public final class TestUtil {
         switch (language) {
             case JAVA -> {
                 int mainMethodPostfix = new SecureRandom().nextInt(0, Integer.MAX_VALUE);
-                Path javaTemplate = Path.of(TestUtil.class.getResource("/codeTemplates/java-template.java").getPath());
+                Path javaMainTemplate = Path.of(TestUtil.class.getResource("/codeTemplates/java-main-template.java").getPath());
                 Path tmpDir = Files.createTempDirectory("javaSubmission");
-                String mainClass = Files.readString(javaTemplate)
+                String mainClass = Files.readString(javaMainTemplate)
                         .replace(JAVA_MAIN_CLASS_PLACEHOLDER, String.valueOf(mainMethodPostfix))
                         .replace(JAVA_RETURN_TYPE_PLACEHOLDER, extractSolutionReturnType(sourceCode));
                 var tmpMainFile = tmpDir.resolve(STR. "Main_\{ mainMethodPostfix }.java" );
@@ -40,10 +41,13 @@ public final class TestUtil {
                         StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING
                 );
+                Path javaSolutionTemplate = Path.of(TestUtil.class.getResource("/codeTemplates/java-solution-template.java").getPath());
+                String sourceCodeFile = Files.readString(javaSolutionTemplate)
+                        .replace(JAVA_USER_SOLUTION_PLACEHOLDER, extractSolutionReturnType(sourceCode));
                 var tmpSolutionFile = tmpDir.resolve("Solution.java");
                 Files.writeString(
                         tmpSolutionFile,
-                        sourceCode,
+                        sourceCodeFile,
                         StandardOpenOption.WRITE,
                         StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING
