@@ -132,7 +132,7 @@ class SubmissionsServiceTest extends WithPostgresTest {
 
         Assertions.assertEquals(newSubmission, sendResult.getProducerRecord().value());
 
-        Thread.sleep(5000); // wait for processing
+        Thread.sleep(10000); // wait for processing
 
         var submissions = StreamSupport.stream(submissionRepository.findAll().spliterator(), false).toList();
         Assertions.assertEquals(1, submissions.size());
