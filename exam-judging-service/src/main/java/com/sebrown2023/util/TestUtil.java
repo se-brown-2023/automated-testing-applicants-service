@@ -43,7 +43,7 @@ public final class TestUtil {
                 );
                 Path javaSolutionTemplate = Path.of(TestUtil.class.getResource("/codeTemplates/java-solution-template.java").getPath());
                 String sourceCodeFile = Files.readString(javaSolutionTemplate)
-                        .replace(JAVA_USER_SOLUTION_PLACEHOLDER, extractSolutionReturnType(sourceCode));
+                        .replace(JAVA_USER_SOLUTION_PLACEHOLDER, sourceCode);
                 var tmpSolutionFile = tmpDir.resolve("Solution.java");
                 Files.writeString(
                         tmpSolutionFile,
