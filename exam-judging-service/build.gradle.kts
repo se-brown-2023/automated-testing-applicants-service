@@ -40,6 +40,10 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.withType<JavaExec> {
+    jvmArgs = jvmArgs!!.toMutableList().apply { add("--enable-preview") }
+}
+
 springBoot {
     mainClass.set("com.sebrown2023.ExamJudgingApplication")
 }
