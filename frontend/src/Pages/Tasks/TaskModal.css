@@ -1,0 +1,174 @@
+.modal-task {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content-task {
+    background: #3f3f5f;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    width: 70%;
+    max-width: 1200px;
+    position: relative;
+    min-height: 1200px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 11px;
+    right: 15px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+}
+
+.modal-header-task {
+    background: #2f2f4f;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+}
+
+.modal-header-task h2 {
+    margin: 0;
+    color: #fff;
+}
+
+.modal-body-task {
+    padding: 0 20px 10px 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-height: 1000px;
+}
+
+.content-task {
+    padding: 20px;
+}
+
+.content-task-modal {
+    padding: 20px;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.content-task label {
+    width: 80%;
+    margin: 10px 0;
+}
+
+.content-task-modal label {
+    width: 30%;
+    margin: 10px 0;
+}
+
+.content-task label input {
+    width: 98%;
+    margin: 10px 0;
+}
+
+.content-task-modal label input {
+    width: 300px;
+    margin: 10px 0;
+}
+
+.content-task label textarea {
+    width: 98%;
+    margin: 10px 0;
+}
+
+.content-task .code {
+    min-height: 600px;
+}
+
+.test-label {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.test-label input {
+    width: 70%;
+    margin: 0 10px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+.modal-footer-task {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 100px;
+}
+
+label {
+    margin-right: 10px;
+}
+
+input {
+    width: 60px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 20px 0;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #e52e71, #ff8a00);
+}
+
+.rating span {
+    margin-right: 15px;
+}
+
+.hidden {
+    display: none;
+}
+
+.select-language {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    color: #333;
+    margin: 10px 0;
+}

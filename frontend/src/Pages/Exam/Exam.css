@@ -1,0 +1,99 @@
+.exam-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1e1e2f;
+    font-family: Arial, sans-serif;
+}
+
+.exam-list-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.exam-list-header {
+    color: white;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.exam-item {
+    background-color: #2e2e3f;
+    color: white;
+    padding: 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.exam-title {
+    font-size: 1.5em;
+}
+
+.exam-tasks {
+    margin-top: 10px;
+}
+
+.create-exam-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.create-exam-button:hover {
+    background-color: #0056b3;
+}
+
+.modal-exam {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-exam-content {
+    background-color: #3f3f5f;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-height: 80%;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-exam-header {
+    background: #2f2f4f;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+}
+
+.modal-exam-header h2 {
+    margin: 0;
+}
+
+.close {
+    cursor: pointer;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.task-title {
+    margin-left: 10px;
+}
