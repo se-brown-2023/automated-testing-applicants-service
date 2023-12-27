@@ -12,4 +12,10 @@ public class ExamManageApplication {
     public static void main(String[] args) {
         SpringApplication.run(ExamManageApplication.class, args);
     }
+
+    //TODO Реализовать ExceptionHandler
+    //TODO добавить логирование
+    //TODO подумать что делать со связанными testResult
+    //TODO пока живем без апдейтов сущностей(только создание и удаления)
+
 }
