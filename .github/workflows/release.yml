@@ -20,6 +20,8 @@ jobs:
             image: ghcr.io/${{ github.repository }}/judging-service
           - dockerfile: "manageService.Dockerfile"
             image: ghcr.io/${{ github.repository }}/manage-service
+          - dockerfile: "frontend.Dockerfile"
+            image: ghcr.io/${{ github.repository }}/frontend-service
     runs-on: ubuntu-latest
     permissions:
       contents: read
