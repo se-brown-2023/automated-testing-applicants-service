@@ -1,0 +1,67 @@
+name: release
+
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: 'Version'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - dockerfile: "conductService.Dockerfile"
+            image: ghcr.io/${{ github.repository }}/conduct-service
+          - dockerfile: "judgingService.Dockerfile"
+            image: ghcr.io/${{ github.repository }}/judging-service
+          - dockerfile: "manageService.Dockerfile"
+            image: ghcr.io/${{ github.repository }}/manage-service
+          - dockerfile: "frontend.Dockerfile"
+            image: ghcr.io/${{ github.repository }}/frontend-service
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5.4.0
+        with:
+          images: ${{ matrix.image }}
+      - name: Get version
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+            echo "VERSION=${{ github.event.release.tag_name }}"
+          else
+            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+            echo "VERSION=${{ github.event.inputs.version }}"
+          fi
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5.1.0
+        with:
+          context: .
+          build-args: VERSION=${{ env.VERSION }}
+          push: true
+          file: ${{ matrix.dockerfile }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
