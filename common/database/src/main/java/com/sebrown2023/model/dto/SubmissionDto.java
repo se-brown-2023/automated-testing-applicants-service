@@ -1,14 +1,20 @@
 package com.sebrown2023.model.dto;
 
-import com.sebrown2023.model.db.ExamSession;
-import com.sebrown2023.model.db.Task;
-
 import java.util.Date;
+import java.util.UUID;
 
 public record SubmissionDto(
-        Task task,
-        ExamSession examSession,
+        long taskId,
+        UUID examSessionId,
         String userSourceCode,
         Date submitTime
 ) {
+    @Override
+    public String toString() {
+        return "SubmissionDto[" +
+                "taskId=" + taskId + ", " +
+                "examSessionId=" + examSessionId.toString() + ", " +
+                "userSourceCode=" + userSourceCode.replace("\n", "\\n") + ", " +
+                "submitTime=" + submitTime + ']';
+    }
 }

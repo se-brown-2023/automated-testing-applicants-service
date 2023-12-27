@@ -24,11 +24,31 @@ public class Test {
     public Test() {
     }
 
-    public Test( Task task, String name, String inputData, String expectedOutputData) {
+    public Test(Task task, String name, String inputData, String expectedOutputData) {
         this.task = task;
         this.name = name;
         this.inputData = inputData;
         this.expectedOutputData = expectedOutputData;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getInputData() {
+        return inputData;
+    }
+
+    public String getExpectedOutputData() {
+        return expectedOutputData;
     }
 
     @Override
