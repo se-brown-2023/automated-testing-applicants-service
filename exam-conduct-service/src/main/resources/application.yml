@@ -31,6 +31,15 @@ spring:
         flush-mode: manual
         jdbc:
           batch_size: 500
+  cloud:
+    stream:
+      bindings:
+        sendSubmission-out-0:
+          destination: sendSubmissionTopic
+      kafka:
+        binder:
+          brokers: localhost
+
 
 logging:
   file:

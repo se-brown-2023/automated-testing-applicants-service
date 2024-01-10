@@ -1,5 +1,6 @@
 package com.sebrown2023.service;
 
+import com.sebrown2023.controller.SubmissionSupplier;
 import com.sebrown2023.exceptions.ExamNotFoundException;
 import com.sebrown2023.model.db.Exam;
 import com.sebrown2023.model.db.ExamSession;
@@ -26,14 +27,25 @@ import java.util.UUID;
 public class ExamSessionServiceImpl implements ExamSessionService {
     @Autowired
     private ExamSessionRepository sessionRepository;
+
     @Autowired
     private ExamService examService;
+
+    @Autowired
+    private SubmissionSupplier submissionSupplier;
+
 
     @Override
     public ExamSession getByUUID(UUID uuid) throws ExamSessionException {
         return sessionRepository.findById(uuid).orElseThrow(ExamSessionNotFoundException::new);
     }
 
+    /**
+     * Sends task solution to Kafka
+     * @param uuid exam session UUID
+     * @param submission submission with task id and source code
+     * @throws ExamSessionException
+     */
     @Override
     public void sendTask(UUID uuid, Submission submission) throws ExamSessionException {
         ExamSession examSession = getByUUID(uuid);
@@ -43,7 +55,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
             throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Task cant be sent. ExamSession are not valid now");
         }
 
-        //TODO implement send submission to kafka
+        submissionSupplier.delegateToSupplier(submission);
     }
 
     @Override
