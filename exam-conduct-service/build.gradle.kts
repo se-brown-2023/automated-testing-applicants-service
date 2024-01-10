@@ -15,7 +15,7 @@ dependencies {
     implementation("org.modelmapper:modelmapper:3.2.0")
 
     implementation("org.springframework.cloud:spring-cloud-stream-binder-kafka:4.0.4")
-    implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
+    implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka:4.0.4")
     implementation("org.springframework.cloud:spring-cloud-stream:4.0.4")
 
     runtimeOnly("org.postgresql:postgresql:42.6.0")
