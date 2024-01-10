@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +56,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
             throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Task cant be sent. ExamSession are not valid now");
         }
 
+        submission.setSubmitTime(OffsetDateTime.now());
         submissionSupplier.delegateToSupplier(submission);
     }
 
