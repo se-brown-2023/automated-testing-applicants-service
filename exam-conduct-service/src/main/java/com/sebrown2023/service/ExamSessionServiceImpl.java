@@ -1,19 +1,20 @@
 package com.sebrown2023.service;
 
+import com.sebrown2023.controller.SubmissionSupplier;
 import com.sebrown2023.exceptions.ExamNotFoundException;
+import com.sebrown2023.model.db.Exam;
+import com.sebrown2023.model.db.ExamSession;
+import com.sebrown2023.model.db.Status;
+import com.sebrown2023.model.db.Task;
 import com.sebrown2023.exceptions.ExamSessionAlreadyFinishedException;
 import com.sebrown2023.exceptions.ExamSessionException;
 import com.sebrown2023.exceptions.ExamSessionExpiredException;
 import com.sebrown2023.exceptions.ExamSessionNotExpiredException;
 import com.sebrown2023.exceptions.ExamSessionNotFoundException;
 import com.sebrown2023.exceptions.ExamSessionNotStartedException;
-import com.sebrown2023.model.db.Exam;
-import com.sebrown2023.model.db.ExamSession;
-import com.sebrown2023.model.db.Status;
-import com.sebrown2023.model.db.Task;
 import com.sebrown2023.model.dto.Submission;
-import com.sebrown2023.repository.ExamRepository;
 import com.sebrown2023.repository.ExamSessionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -32,11 +33,24 @@ public class ExamSessionServiceImpl implements ExamSessionService {
         this.examRepository = examRepository;
     }
 
+    @Autowired
+    private ExamService examService;
+
+    @Autowired
+    private SubmissionSupplier submissionSupplier;
+
+
     @Override
     public ExamSession getByUUID(UUID uuid) throws ExamSessionException {
         return sessionRepository.findById(uuid).orElseThrow(ExamSessionNotFoundException::new);
     }
 
+    /**
+     * Sends task solution to Kafka
+     * @param uuid exam session UUID
+     * @param submission submission with task id and source code
+     * @throws ExamSessionException
+     */
     @Override
     public void sendTask(UUID uuid, Submission submission) throws ExamSessionException {
         ExamSession examSession = getByUUID(uuid);
@@ -46,7 +60,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
             throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Task cant be sent. ExamSession are not valid now");
         }
 
-        //TODO implement send submission to kafka
+        submissionSupplier.delegateToSupplier(submission);
     }
 
     @Override
