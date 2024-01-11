@@ -1,4 +1,4 @@
 package com.sebrown2023.exceptions;
 
-public class NoElementException extends ApiException {
+public class NoElementException extends RuntimeException {
 }

@@ -40,6 +40,12 @@ paths:
                   $ref: '#/components/schemas/ExamComponent'
         '400':
           description: Bad Request. The request was invalid or malformed.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
         '405':
           description: The specified HTTP method is not supported for this resource.
     post:
@@ -480,6 +486,12 @@ paths:
                 $ref: '#/components/schemas/ExamSessionComponent'
         '400':
           description: Bad Request. The request was invalid or malformed.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
         '405':
           description: The specified HTTP method is not supported for this resource.
 
@@ -753,3 +765,18 @@ components:
           minItems: 0
           items:
             $ref: '#/components/schemas/TestResultComponent'
+
+    ApiError:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Entity not found
+        message:
+          type: string
+        request:
+          type: string
+          example: PUT /posts/123456
+        time:
+          type: string
+          example: 1996-12-19T16:39:57.87-08:00
