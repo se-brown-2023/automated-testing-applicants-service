@@ -33,6 +33,12 @@ public class ExamSessionController implements ExamSessionApi {
     }
 
     @Override
+    public ResponseEntity<ExamSessionComponent> createExamSession(ExamSessionComponent examSessionComponent) {
+        var examSessionsComponent = examSessionService.createNewExamSession(examSessionComponent);
+        return ResponseEntity.ok().body(examSessionsComponent);
+    }
+
+    @Override
     public ResponseEntity<Void> deleteExamSession(String examSessionId) {
         examSessionService.deleteExamSession(examSessionId);
         return ResponseEntity.ok().build();

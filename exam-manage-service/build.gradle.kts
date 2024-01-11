@@ -15,7 +15,6 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation(project(mapOf("path" to ":common:database")))
 
@@ -93,6 +92,10 @@ configurations {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+springBoot {
+    mainClass.set("com.sebrown2023.ExamManageApplication")
 }
 
 tasks.compileJava {

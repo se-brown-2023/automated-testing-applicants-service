@@ -433,6 +433,31 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
+    post:
+      tags:
+        - exam_session
+      summary: Creating a new exam session
+      description: Endpoint for creating a new exam session. Requires a JSON payload with exam session details in the request body.
+      operationId: createExamSession
+      requestBody:
+        description: JSON payload containing Test.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamSessionComponent'
+        required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamSessionComponent'
+        '400':
+          description: Bad Request. The request was invalid or malformed.
+        '405':
+          description: The specified HTTP method is not supported for this resource.
+
   /exam_session/{exam_session_id}:
     get:
       tags:
