@@ -6,13 +6,6 @@ plugins {
     id("org.jetbrains.kotlin.kapt") version "1.5.20"
 }
 
-group = "org.itmo"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -27,7 +20,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     //OPENAPI
-    implementation("org.openapitools", "openapi-generator", "7.1.0")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
     //TESTS
     implementation("org.postgresql:postgresql:42.2.27")
@@ -56,6 +49,7 @@ openApiGenerate {
 
     configOptions.set(
             mapOf(
+                    "documentationProvider" to "none",
                     "generatedConstructorWithRequiredArgs" to "true",
                     "openApiNullable" to "false",
                     "useSpringBoot3" to "true",
