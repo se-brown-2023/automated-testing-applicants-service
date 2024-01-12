@@ -27,4 +27,4 @@ jobs:
       - name: Grant execution permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew :exam-judging-service:build
+        run: ./gradlew clean :exam-judging-service:build

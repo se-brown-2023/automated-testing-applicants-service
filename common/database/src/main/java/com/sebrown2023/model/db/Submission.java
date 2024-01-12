@@ -1,6 +1,12 @@
 package com.sebrown2023.model.db;
 
-import jakarta.persistence.*;
+import com.sebrown2023.model.dto.SubmissionDto;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +36,21 @@ public class Submission {
 
     @Column(nullable = false)
     private Date submitTime;
+
+    public Submission(Task task, ExamSession examSession, String userSourceCode, Date submitTime) {
+        this.task = task;
+        this.examSession = examSession;
+        this.userSourceCode = userSourceCode;
+        this.submitTime = submitTime;
+    }
+
+    public static Submission createFromDto(Task task, ExamSession session, SubmissionDto submissionDto) {
+        return new Submission(task,
+                session,
+                submissionDto.userSourceCode(),
+                submissionDto.submitTime()
+        );
+    }
 
     @Override
     public boolean equals(Object o) {

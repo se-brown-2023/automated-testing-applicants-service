@@ -152,7 +152,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /exam/examine/{examiner_id}:
+  /exam/examinee/{examiner_id}:
     get:
       tags:
         - exam
@@ -423,7 +423,7 @@ paths:
       tags:
         - exam_session
       summary: Get all exam sessions
-      description: Endpoint for getting all exam sessions with examine.
+      description: Endpoint for getting all exam sessions with examinee.
       operationId: getAllExamSessions
       responses:
         '200':
@@ -469,7 +469,7 @@ paths:
       tags:
         - exam_session
       summary: Get an exam session by id
-      description: Endpoint for getting exam session with examine by id.
+      description: Endpoint for getting exam session with examinee by id.
       operationId: getExamSession
       parameters:
         - name: exam_session_id
@@ -618,9 +618,8 @@ components:
         programming_language:
           type: string
           enum:
-            - Java
-            - JavaScript
-            - Python
+            - JAVA
+            - JAVA_SCRIPT
         max_duration:
           type: integer
           format: int128
@@ -702,10 +701,10 @@ components:
           type: string
         finish_time_stamp:
           type: string
-        examine:
-          $ref: '#/components/schemas/ExamineComponent'
+        examinee:
+          $ref: '#/components/schemas/ExamineeComponent'
 
-    ExamineComponent:
+    ExamineeComponent:
       properties:
         id:
           type: integer

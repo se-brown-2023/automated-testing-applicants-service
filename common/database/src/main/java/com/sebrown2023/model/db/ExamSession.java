@@ -1,6 +1,13 @@
 package com.sebrown2023.model.db;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +29,9 @@ public class ExamSession {
     @ManyToOne
     private Exam exam;
     @ManyToOne()
-    private Examinee examine;
+    private Examinee examinee;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
     @Column
     private LocalDateTime startTimestamp;
@@ -39,7 +47,7 @@ public class ExamSession {
 
         if (!id.equals(that.id)) return false;
         if (!exam.equals(that.exam)) return false;
-        if (!Objects.equals(examine, that.examine)) return false;
+        if (!examinee.equals(that.examinee)) return false;
         if (status != that.status) return false;
         if (!Objects.equals(startTimestamp, that.startTimestamp))
             return false;
@@ -50,7 +58,7 @@ public class ExamSession {
     public int hashCode() {
         int result = id.hashCode();
         result = 31 * result + exam.hashCode();
-        result = 31 * result + examine.hashCode();
+        result = 31 * result + examinee.hashCode();
         result = 31 * result + status.hashCode();
         result = 31 * result + (startTimestamp != null ? startTimestamp.hashCode() : 0);
         result = 31 * result + (finishTimestamp != null ? finishTimestamp.hashCode() : 0);
