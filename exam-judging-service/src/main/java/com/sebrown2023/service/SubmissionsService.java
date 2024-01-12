@@ -147,9 +147,10 @@ public class SubmissionsService {
                 if (!executionsStatus.errorStream().isEmpty()) {
                 logger.info(STR. "Test \{ test } failed: \{ executionsStatus.errorStream() }" );
                 return new TestResult(
+                        null,
                         submission,
                         test,
-                        "Execution error: " + executionsStatus.errorStream(),
+                        STR."Execution error: \{executionsStatus.errorStream()}",
                         false,
                         Duration.of(executionsStatus.executionTimeMs(), ChronoUnit.MILLIS)
                 );
@@ -158,6 +159,7 @@ public class SubmissionsService {
             var actualOutput = executionsStatus.outputStream().replace("USER_SOLUTION_RESULT: ", "");
 
             return new TestResult(
+                    null,
                     submission,
                     test,
                     actualOutput,
@@ -171,6 +173,7 @@ public class SubmissionsService {
     private void saveCompilationErrorResult(String message, Submission submission, InvokeStatus invokeStatus) {
         var testResults = testRepository.findAllByTaskId(submission.getTask().getId()).stream().map(test ->
                 new TestResult(
+                        null,
                         submission,
                         test,
                         message + invokeStatus.combinedOutput(),
@@ -184,6 +187,6 @@ public class SubmissionsService {
 
     @DltHandler
     public void dlt(SubmissionDto data, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
-        logger.error("Event from topic " + topic + " is dead lettered - event:" + data);
+        logger.error(STR."Event from topic \{topic} is dead lettered - event:\{data}");
     }
 }

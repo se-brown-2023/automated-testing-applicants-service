@@ -34,6 +34,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.StreamSupport;
@@ -88,27 +90,30 @@ class SubmissionsServiceTest extends WithPostgresTest {
     @Test
     void javaCompileTest() throws InterruptedException, IOException, ExecutionException {
         var examinee = examineeRepository.save(
-                new Examinee("Oleg", "Mongol", "oleg@mongol.com", "78889997766")
+                new Examinee(null, "Oleg", "Mongol", "oleg@mongol.com", "78889997766")
         );
         var exam = examRepository.save(new Exam(
+                null,
                 1,
                 "test_exam",
                 "descr",
                 ProgrammingLanguage.JAVA,
                 Duration.ofHours(1),
                 Duration.ofHours(2),
-                LocalDateTime.now().truncatedTo(ChronoUnit.MICROS)
+                LocalDateTime.now().truncatedTo(ChronoUnit.MICROS),
+                Collections.emptyList()
         ));
 
         var task =
-                taskRepository.save(new Task(exam, "fib", "fib_desk", "class Solution { }"));
+                taskRepository.save(new Task(null, exam, "fib", "fib_desk", "class Solution { }"));
 
         var test = testRepository.save(
-                new com.sebrown2023.model.db.Test(task, "test_test", "52", "42")
+                new com.sebrown2023.model.db.Test(null, task, "test_test", "52", "42")
         );
 
         var examSession = examSessionRepository.save(
                 new ExamSession(
+                        null,
                         exam,
                         examinee,
                         Status.FINISHED,
