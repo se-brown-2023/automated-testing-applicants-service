@@ -65,6 +65,7 @@ services:
       - "8080:8080"
     volumes:
       - './manage-service:/etc/swe2023brown/exam-manage-service/'
+      - './manage-service/logs:/var/log/swe2023brown/exam-manage-service/'
     depends_on:
       - postgres
   exam-judging-service:
@@ -73,6 +74,7 @@ services:
       - "8010:8010"
     volumes:
       - './judging-service:/etc/swe2023brown/exam-judging-service/'
+      - './judging-service/logs:/var/log/swe2023brown/exam-judging-service/'
     depends_on:
       - postgres
       - kafka
@@ -82,6 +84,7 @@ services:
       - "8020:8020"
     volumes:
       - './conduct-service:/etc/swe2023brown/exam-conduct-service/'
+      - './conduct-service/logs:/var/log/swe2023brown/exam-conduct-service/'
     depends_on:
       - postgres
       - kafka
