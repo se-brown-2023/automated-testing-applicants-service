@@ -85,3 +85,11 @@ services:
     depends_on:
       - postgres
       - kafka
+  frontend:
+    image: ghcr.io/se-brown-2023/automated-testing-applicants-service/frontend-service:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - exam-conduct-service
+      - exam-judging-service
+      - exam-manage-service
