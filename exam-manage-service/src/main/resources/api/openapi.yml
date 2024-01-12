@@ -769,14 +769,10 @@ components:
     ApiError:
       type: object
       properties:
-        title:
+        status:
           type: string
-          example: Entity not found
         message:
           type: string
-        request:
-          type: string
-          example: PUT /posts/123456
-        time:
-          type: string
-          example: 1996-12-19T16:39:57.87-08:00
+      required:
+        - status
+        - message

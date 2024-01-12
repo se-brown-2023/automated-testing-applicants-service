@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,25 +27,24 @@ public class ExamService {
     private final TestMapper testMapper;
 
     public ExamComponent getExamComponentById(long examId) {
-        var exam = examRepository.findExamById(examId);
+        var exam = examRepository.findExamById(examId)
+                .orElseThrow(() -> new NoElementException("Exam with id" + examId));
 
-        if (exam.isPresent()) {
-            return buildExamComponent(exam.get());
-        } else throw new NoElementException();
+        return buildExamComponent(exam);
     }
 
     public List<ExamComponent> getAllExamWithTasksAndTestsByExaminerId(long examinerId) {
         var exams = examRepository.findExamsByExaminerIdEquals(examinerId);
         return exams.stream()
                 .map(this::buildExamComponent)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ExamComponent> getAllExamWithTasksAndTests() {
         var exams = examRepository.findAll();
         return exams.stream()
                 .map(this::buildExamComponent)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ExamComponent addTasksToExam(Long examId, List<Long> tasksIds) {
@@ -111,7 +109,7 @@ public class ExamService {
                     var testsForTask = testRepository.findTestsByTaskId(task.getId());
                     var testComponents = testsForTask.stream()
                             .map(testMapper::testToTestComponent)
-                            .collect(Collectors.toList());
+                            .toList();
                     return taskMapper.taskToTaskComponent(task, testComponents);
                 })
                 .toList();

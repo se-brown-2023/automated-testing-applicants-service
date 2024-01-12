@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +27,10 @@ public class SubmissionService {
         if (submission.isPresent()) {
             var testResults = testResultRepository.findTestResultBySubmission(submission.get()).stream()
                     .map(testResultMapper::testResultToTestResultComponent)
-                    .collect(Collectors.toList());
+                    .toList();
 
             return submissionMapper.submissionToSubmissionComponent(submission.get(), testResults);
-        } else throw new NoElementException();
+        } else throw new NoElementException("Submission with id " + submissionId);
     }
 
     public List<SubmissionComponent> getSubmissionsByExamSessionId(String examSessionId) {
@@ -39,10 +38,10 @@ public class SubmissionService {
                 .map(submission -> {
                     var testResults = testResultRepository.findTestResultBySubmission(submission).stream()
                             .map(testResultMapper::testResultToTestResultComponent)
-                            .collect(Collectors.toList());
+                            .toList();
 
                     return submissionMapper.submissionToSubmissionComponent(submission, testResults);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 }

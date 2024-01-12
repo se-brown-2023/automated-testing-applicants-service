@@ -1,5 +1,6 @@
 package com.sebrown2023.services;
 
+import com.sebrown2023.exceptions.ExamSessionNotFoundException;
 import com.sebrown2023.mappers.ExamSessionMapper;
 import com.sebrown2023.model.dto.ExamSessionComponent;
 import com.sebrown2023.repository.ExamRepository;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,33 +21,36 @@ public class ExamSessionService {
     private final ExamSessionMapper examSessionMapper;
 
     public ExamSessionComponent getExamSessionComponentById(String examSessionId) {
-        var examSession = examSessionRepository.findExamSessionById(UUID.fromString(examSessionId));
+        var examSession = examSessionRepository.findExamSessionById(UUID.fromString(examSessionId))
+                .orElseThrow(() -> new ExamSessionNotFoundException(examSessionId));
 
-        return examSessionMapper.examSessionToExamSessionComponent(examSession.orElseThrow());
+        return examSessionMapper.examSessionToExamSessionComponent(examSession);
     }
 
     public List<ExamSessionComponent> getAllExamSessions() {
         var tests = examSessionRepository.findAll();
         return tests.stream()
                 .map(examSessionMapper::examSessionToExamSessionComponent)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ExamSessionComponent> getExamSessionComponentsByExamId(long examId) {
         var tests = examSessionRepository.findExamSessionByExam_Id(examId);
         return tests.stream()
                 .map(examSessionMapper::examSessionToExamSessionComponent)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void deleteExamSession(String examSessionId) {
-        var examSession = examSessionRepository.findExamSessionById(UUID.fromString(examSessionId));
+        var examSession = examSessionRepository.findExamSessionById(UUID.fromString(examSessionId))
+                .orElseThrow(() -> new ExamSessionNotFoundException(examSessionId));
 
-        examSessionRepository.delete(examSession.orElseThrow());
+        examSessionRepository.delete(examSession);
     }
 
     public ExamSessionComponent createNewExamSession(ExamSessionComponent examSessionComponent) {
-        var exam = examRepository.findExamById(examSessionComponent.getExamId()).orElseThrow();
+        var exam = examRepository.findExamById(examSessionComponent.getExamId())
+                .orElseThrow(() -> new ExamSessionNotFoundException(examSessionComponent.getExamId().toString()));
         var examSession = examSessionMapper.examSessionComponentToExamSession(examSessionComponent, exam);
 
         var createdExamSession = examSessionRepository.save(examSession);

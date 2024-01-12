@@ -15,6 +15,24 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
+    @ExceptionHandler(NoElementException.class)
+    public ResponseEntity<ApiError> handleNoElementException(NoElementException e, WebRequest request) {
+        ApiError responseError = new ApiError();
+
+        var method = ((ServletWebRequest) request).getHttpMethod();
+        String url = ((ServletWebRequest) request).getRequest().getRequestURI();
+        var requestInfo = method + " " + url;
+
+        responseError.setMessage(e.getMessage());
+
+        log.error("Message: {}, requset: {}, time: {}",
+                responseError.getMessage(),
+                requestInfo,
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(responseError, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleApiException(Exception handledEx, WebRequest request) {
         ApiError responseError = new ApiError();
@@ -23,16 +41,12 @@ public class ApiExceptionHandler {
         String url = ((ServletWebRequest) request).getRequest().getRequestURI();
         var requestInfo = method + " " + url;
 
-        responseError.setTitle("Error");
         responseError.setMessage(handledEx.getMessage());
-        responseError.setRequest(requestInfo);
-        responseError.setTime(LocalDateTime.now().toString());
 
-        log.error("Tittle: {}, message: {}, requset: {}, time: {}",
-                responseError.getTitle(),
+        log.error("Message: {}, requset: {}, time: {}",
                 responseError.getMessage(),
-                responseError.getRequest(),
-                responseError.getTime());
+                requestInfo,
+                LocalDateTime.now());
 
         return new ResponseEntity<>(responseError, HttpStatus.BAD_REQUEST);
     }

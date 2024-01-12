@@ -30,21 +30,21 @@ public class TaskService {
 
         if (task.isPresent()) {
             return buildTaskComponent(task.get());
-        } else throw new NoElementException();
+        } else throw new NoElementException("Task with id ");
     }
 
     public List<TaskComponent> getAllTaskComponents() {
         var tests = taskRepository.findAll();
         return tests.stream()
                 .map(this::buildTaskComponent)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<TaskComponent> getAllTaskComponentsByExamId(long examId) {
         var tests = taskRepository.findTasksByExamId(examId);
         return tests.stream()
                 .map(this::buildTaskComponent)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional
@@ -80,7 +80,7 @@ public class TaskService {
         var testsForTask = testRepository.findTestsByTaskId(task.getId());
         var testComponents = testsForTask.stream()
                 .map(testMapper::testToTestComponent)
-                .collect(Collectors.toList());
+                .toList();
         return taskMapper.taskToTaskComponent(task, testComponents);
     }
 }
