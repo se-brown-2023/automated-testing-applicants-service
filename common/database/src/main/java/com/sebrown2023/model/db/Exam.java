@@ -3,20 +3,33 @@ package com.sebrown2023.model.db;
 import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import java.time.Duration;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private Integer examinerId;
 
@@ -27,69 +40,22 @@ public class Exam {
     private String description;
 
     @Column(nullable = false)
-    private String programmingLanguage;
+    @Enumerated(EnumType.STRING)
+    private ProgrammingLanguage programmingLanguage;
 
     @Type(PostgreSQLIntervalType.class)
     @Column(columnDefinition = "interval")
     private Duration maxDuration;
+
     @Type(PostgreSQLIntervalType.class)
     @Column(columnDefinition = "interval")
     private Duration ttl;
+
     @Column
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
-    public Exam() {
-    }
-
-    public Exam(
-            Integer examinerId,
-            String name,
-            String description,
-            String programmingLanguage,
-            Duration maxDuration,
-            Duration ttl,
-            Date creationDate
-    ) {
-        this.examinerId = examinerId;
-        this.name = name;
-        this.description = description;
-        this.programmingLanguage = programmingLanguage;
-        this.maxDuration = maxDuration;
-        this.ttl = ttl;
-        this.creationDate = creationDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Integer getExaminerId() {
-        return examinerId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getProgrammingLanguage() {
-        return programmingLanguage;
-    }
-
-    public Duration getMaxDuration() {
-        return maxDuration;
-    }
-
-    public Duration getTtl() {
-        return ttl;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
+    @OneToMany(mappedBy = "exam")
+    private List<Task> tasks;
 
     @Override
     public boolean equals(Object o) {

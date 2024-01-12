@@ -2,79 +2,41 @@ package com.sebrown2023.model.db;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ExamSession {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     @ManyToOne
     private Exam exam;
-    @ManyToOne
-    private Examinee examine;
+    @ManyToOne()
+    private Examinee examinee;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
     @Column
-    private Date starTimestamp;
+    private LocalDateTime startTimestamp;
     @Column
-    private Date finishTimestamp;
-    @Column(nullable = false)
-    private Boolean expired;
-
-    public ExamSession() {
-
-    }
-
-    public ExamSession(
-            Exam exam,
-            Examinee examine,
-            Status status,
-            Date starTimestamp,
-            Date finishTimestamp,
-            Boolean expired
-    ) {
-        this.exam = exam;
-        this.examine = examine;
-        this.status = status;
-        this.starTimestamp = starTimestamp;
-        this.finishTimestamp = finishTimestamp;
-        this.expired = expired;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Exam getExam() {
-        return exam;
-    }
-
-    public Examinee getExamine() {
-        return examine;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public Date getStarTimestamp() {
-        return starTimestamp;
-    }
-
-    public Date getFinishTimestamp() {
-        return finishTimestamp;
-    }
-
-    public Boolean getExpired() {
-        return expired;
-    }
+    private LocalDateTime finishTimestamp;
 
     @Override
     public boolean equals(Object o) {
@@ -85,24 +47,21 @@ public class ExamSession {
 
         if (!id.equals(that.id)) return false;
         if (!exam.equals(that.exam)) return false;
-        if (!examine.equals(that.examine)) return false;
+        if (!examinee.equals(that.examinee)) return false;
         if (status != that.status) return false;
-        if (!Objects.equals(starTimestamp, that.starTimestamp))
+        if (!Objects.equals(startTimestamp, that.startTimestamp))
             return false;
-        if (!Objects.equals(finishTimestamp, that.finishTimestamp))
-            return false;
-        return expired.equals(that.expired);
+        return Objects.equals(finishTimestamp, that.finishTimestamp);
     }
 
     @Override
     public int hashCode() {
         int result = id.hashCode();
         result = 31 * result + exam.hashCode();
-        result = 31 * result + examine.hashCode();
+        result = 31 * result + examinee.hashCode();
         result = 31 * result + status.hashCode();
-        result = 31 * result + (starTimestamp != null ? starTimestamp.hashCode() : 0);
+        result = 31 * result + (startTimestamp != null ? startTimestamp.hashCode() : 0);
         result = 31 * result + (finishTimestamp != null ? finishTimestamp.hashCode() : 0);
-        result = 31 * result + expired.hashCode();
         return result;
     }
 }

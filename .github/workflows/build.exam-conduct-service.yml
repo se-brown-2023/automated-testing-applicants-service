@@ -2,17 +2,9 @@ name: Build exam conduct service
 
 on:
   push:
-    branches: master
-    paths:
-      - exam-conduct-service/**
-      - common/**
-      - .github/workflows/build.exam-conduct-service.yml
+    branches: [ master ]
   pull_request:
-    branches: master
-    paths:
-      - exam-conduct-service/**
-      - common/**
-      - .github/workflows/build.exam-conduct-service.yml
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -27,4 +19,4 @@ jobs:
       - name: Grant execution permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew :exam-conduct-service:build
+        run: ./gradlew clean :exam-conduct-service:build

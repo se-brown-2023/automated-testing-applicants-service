@@ -2,17 +2,9 @@ name: Build exam judging service
 
 on:
   push:
-    branches: master
-    paths:
-      - exam-judging-service/**
-      - common/**
-      - .github/workflows/build.exam-judging-service.yml
+    branches: [ master ]
   pull_request:
-    branches: master
-    paths:
-      - exam-judging-service/**
-      - common/**
-      - .github/workflows/build.exam-judging-service.yml
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -27,4 +19,4 @@ jobs:
       - name: Grant execution permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew :exam-judging-service:build
+        run: ./gradlew clean :exam-judging-service:build

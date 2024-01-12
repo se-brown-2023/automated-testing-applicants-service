@@ -1,32 +1,41 @@
 package com.sebrown2023.model.db;
 
+import com.sebrown2023.model.dto.SubmissionDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Submission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(optional = false)
     private Task task;
+
     @ManyToOne(optional = false)
     private ExamSession examSession;
+
     @Column
     private String userSourceCode;
+
     @Column(nullable = false)
     private Date submitTime;
-
-    public Submission() {
-
-    }
 
     public Submission(Task task, ExamSession examSession, String userSourceCode, Date submitTime) {
         this.task = task;
@@ -35,24 +44,12 @@ public class Submission {
         this.submitTime = submitTime;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Task getTask() {
-        return task;
-    }
-
-    public ExamSession getExamSession() {
-        return examSession;
-    }
-
-    public String getUserSourceCode() {
-        return userSourceCode;
-    }
-
-    public Date getSubmitTime() {
-        return submitTime;
+    public static Submission createFromDto(Task task, ExamSession session, SubmissionDto submissionDto) {
+        return new Submission(task,
+                session,
+                submissionDto.userSourceCode(),
+                submissionDto.submitTime()
+        );
     }
 
     @Override
