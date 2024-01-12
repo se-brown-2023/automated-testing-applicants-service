@@ -1,58 +1,34 @@
 package com.sebrown2023.model.db;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne
     private Exam exam;
+
     @Column(nullable = false)
     private String name;
+
     @Column
     private String description;
+
     @Column
     private String authorSourceCode;
-
-    public Task() {
-
-    }
-
-    public Task( Exam exam, String name, String description, String authorSourceCode) {
-        this.exam = exam;
-        this.name = name;
-        this.description = description;
-        this.authorSourceCode = authorSourceCode;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Exam getExam() {
-        return exam;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getAuthorSourceCode() {
-        return authorSourceCode;
-    }
 
     @Override
     public String toString() {
