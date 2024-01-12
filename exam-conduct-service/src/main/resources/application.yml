@@ -12,6 +12,9 @@ spring:
     username:
     password:
 
+graylog:
+  server:
+
 logging:
   file:
     name: ${log.dir:/tmp}/exam-conduct-service.main.log

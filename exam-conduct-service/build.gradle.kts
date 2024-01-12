@@ -16,6 +16,7 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql:42.6.0")
 
     implementation(project(":common:database"))
+    implementation(project(":common:logging"))
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))

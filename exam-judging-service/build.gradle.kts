@@ -12,6 +12,7 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka")
 
     implementation(project(":common:database"))
+    implementation(project(":common:logging"))
 
     implementation("org.apache.commons:commons-exec:1.3")
 
