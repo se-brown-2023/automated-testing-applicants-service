@@ -78,12 +78,6 @@ kapt {
     }
 }
 
-configurations {
-    all {
-        exclude(group = "ch.qos.logback", module = "logback-classic")
-    }
-}
-
 tasks.test {
     useJUnitPlatform()
 }
