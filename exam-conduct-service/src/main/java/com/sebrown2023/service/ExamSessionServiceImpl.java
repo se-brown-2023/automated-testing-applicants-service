@@ -1,19 +1,19 @@
 package com.sebrown2023.service;
 
 import com.sebrown2023.exceptions.ExamNotFoundException;
-import com.sebrown2023.model.db.Exam;
-import com.sebrown2023.model.db.ExamSession;
-import com.sebrown2023.model.db.Status;
-import com.sebrown2023.model.db.Task;
 import com.sebrown2023.exceptions.ExamSessionAlreadyFinishedException;
 import com.sebrown2023.exceptions.ExamSessionException;
 import com.sebrown2023.exceptions.ExamSessionExpiredException;
 import com.sebrown2023.exceptions.ExamSessionNotExpiredException;
 import com.sebrown2023.exceptions.ExamSessionNotFoundException;
 import com.sebrown2023.exceptions.ExamSessionNotStartedException;
+import com.sebrown2023.model.db.Exam;
+import com.sebrown2023.model.db.ExamSession;
+import com.sebrown2023.model.db.Status;
+import com.sebrown2023.model.db.Task;
 import com.sebrown2023.model.dto.Submission;
+import com.sebrown2023.repository.ExamRepository;
 import com.sebrown2023.repository.ExamSessionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +24,13 @@ import java.util.UUID;
 
 @Service
 public class ExamSessionServiceImpl implements ExamSessionService {
-    @Autowired
-    private ExamSessionRepository sessionRepository;
-    @Autowired
-    private ExamService examService;
+    private final ExamSessionRepository sessionRepository;
+    private final ExamRepository examRepository;
+
+    public ExamSessionServiceImpl(ExamSessionRepository sessionRepository, ExamRepository examRepository) {
+        this.sessionRepository = sessionRepository;
+        this.examRepository = examRepository;
+    }
 
     @Override
     public ExamSession getByUUID(UUID uuid) throws ExamSessionException {
@@ -140,7 +143,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
     @Override
     public ExamSession create(Long examId) throws ExamNotFoundException {
         ExamSession session = new ExamSession();
-        Exam exam = examService.getExamById(examId);
+        Exam exam = examRepository.findById(examId).orElseThrow(ExamNotFoundException::new);
         session.setExam(exam);
         session.setStatus(Status.CREATED);
 
