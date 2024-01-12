@@ -3,3 +3,5 @@ spring:
     url: jdbc:postgresql://localhost:5432/atas?reWriteBatchedInserts=true
     username: postgres
     password: test
+log:
+  dir: exam-manage-service/logs

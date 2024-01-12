@@ -22,6 +22,8 @@ dependencies {
     //OPENAPI
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    implementation(project(":common:logging"))
+
     //TESTS
     implementation("org.postgresql:postgresql:42.2.27")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
