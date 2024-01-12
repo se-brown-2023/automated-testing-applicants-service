@@ -11,4 +11,4 @@ ARG VERSION
 ENV VERSION ${VERSION}
 WORKDIR /opt/swe2023brown/exam-judging-service
 COPY --from=builder /opt/swe2023brown/exam-judging-service/exam-judging-service/build/libs/exam-judging-service-${VERSION}.jar .
-CMD java -jar exam-judging-service-${VERSION}.jar --spring.config.location=classpath:/application.yml,optional:/etc/swe2023brown/exam-judging-service/application.yml
+CMD java -jar exam-judging-service-${VERSION}.jar --spring.config.location=classpath:/application.yml,optional:/etc/swe2023brown/exam-judging-service/application.yml -Dlog.dir=/var/log/swe2023brown
