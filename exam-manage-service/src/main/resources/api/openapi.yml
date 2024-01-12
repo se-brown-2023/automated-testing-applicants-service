@@ -10,6 +10,8 @@ info:
 
 servers:
   - url: https://localhost:8080/manage
+security:
+  - bearerAuth: [ ]
 tags:
   - name: exam
     description: Operations with exams.
@@ -22,7 +24,7 @@ tags:
   - name: submission
     description: Operations with submissions.
 paths:
-  /exam:
+  /api/exam:
     get:
       tags:
         - exam
@@ -72,7 +74,7 @@ paths:
           description: Bad Request. The request was invalid or malformed.
         '405':
           description: The specified HTTP method is not supported for this resource.
-  /exam/{exam_id}:
+  /api/exam/{exam_id}:
     get:
       tags:
         - exam
@@ -117,7 +119,7 @@ paths:
         '405':
           description: Invalid id or the specified HTTP method is not supported for this resource.
 
-  /exam/{exam_id}/add_tasks:
+  /api/exam/{exam_id}/add_tasks:
     post:
       tags:
         - exam
@@ -152,7 +154,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /exam/examinee/{examiner_id}:
+  /api/exam/examinee/{examiner_id}:
     get:
       tags:
         - exam
@@ -180,7 +182,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /task:
+  /api/task:
     get:
       tags:
         - task
@@ -226,7 +228,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /task/{task_id}:
+  /api/task/{task_id}:
     get:
       tags:
         - task
@@ -271,7 +273,7 @@ paths:
         '405':
           description: Invalid id or the specified HTTP method is not supported for this resource.
 
-  /task/exam/{exam_id}:
+  /api/task/exam/{exam_id}:
     get:
       tags:
         - task
@@ -299,7 +301,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /test:
+  /api/test:
     get:
       tags:
         - test
@@ -345,7 +347,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /test/{test_id}:
+  /api/test/{test_id}:
     get:
       tags:
         - test
@@ -390,7 +392,7 @@ paths:
         '405':
           description: Invalid id or the specified HTTP method is not supported for this resource.
 
-  /test/task/{test_id}:
+  /api/test/task/{test_id}:
     get:
       tags:
         - test
@@ -418,7 +420,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /exam_session:
+  /api/exam_session:
     get:
       tags:
         - exam_session
@@ -464,7 +466,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /exam_session/{exam_session_id}:
+  /api/exam_session/{exam_session_id}:
     get:
       tags:
         - exam_session
@@ -513,7 +515,7 @@ paths:
         '405':
           description: Invalid id or the specified HTTP method is not supported for this resource.
 
-  /exam_session/{exam_id}:
+  /api/exam_session/{exam_id}:
     get:
       tags:
         - exam_session
@@ -541,7 +543,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /submission/{submission_id}:
+  /api/submission/{submission_id}:
     get:
       tags:
         - submission
@@ -567,7 +569,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /submission/{exam_session_id}:
+  /api/submission/{exam_session_id}:
     get:
       tags:
         - submission
