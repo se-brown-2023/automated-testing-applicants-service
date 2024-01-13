@@ -15,7 +15,6 @@ import com.sebrown2023.repository.SubmissionRepository;
 import com.sebrown2023.repository.TaskRepository;
 import com.sebrown2023.repository.TestRepository;
 import com.sebrown2023.repository.TestResultRepository;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,11 +33,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.StreamSupport;
 
 @SpringBootTest
 @EmbeddedKafka(
@@ -139,13 +136,13 @@ class SubmissionsServiceTest extends WithPostgresTest {
 
         Thread.sleep(10000); // wait for processing
 
-        var submissions = StreamSupport.stream(submissionRepository.findAll().spliterator(), false).toList();
+        var submissions = submissionRepository.findAll().stream().toList();
         Assertions.assertEquals(1, submissions.size());
         var submission = submissions.get(0);
         Assertions.assertEquals(task, submission.getTask());
         Assertions.assertEquals(sourceCode, submission.getUserSourceCode());
 
-        var testResults = StreamSupport.stream(testResultRepository.findAll().spliterator(), false).toList();
+        var testResults = testResultRepository.findAll().stream().toList();
         Assertions.assertEquals(1, testResults.size());
         var testResult = testResults.get(0);
         Assertions.assertEquals(test, testResult.getTest());
