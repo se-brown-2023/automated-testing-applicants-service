@@ -63,7 +63,7 @@ services:
   exam-manage-service:
     image: ghcr.io/se-brown-2023/automated-testing-applicants-service/manage-service:latest
     ports:
-      - "8080:8080"
+      - "8000:8000"
     volumes:
       - './manage-service:/etc/swe2023brown/exam-manage-service/'
       - './manage-service/logs:/var/log/swe2023brown/exam-manage-service/'
