@@ -11,6 +11,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.keycloak:keycloak-spring-boot-starter:23.0.1")
+    implementation("org.springframework.security.oauth:spring-security-oauth2:2.5.2.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.security:spring-security-oauth2-jose:6.1.5")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.modelmapper:modelmapper:3.2.0")
 
     runtimeOnly("org.postgresql:postgresql:42.6.0")

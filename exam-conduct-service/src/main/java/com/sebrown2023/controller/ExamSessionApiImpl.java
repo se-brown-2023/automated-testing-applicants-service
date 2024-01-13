@@ -6,6 +6,7 @@ import com.sebrown2023.model.dto.SendTaskSolutionRequest;
 import com.sebrown2023.model.dto.StartExamSessionResponse;
 import com.sebrown2023.model.dto.Submission;
 import com.sebrown2023.service.ExamSessionService;
+import jakarta.annotation.security.RolesAllowed;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class ExamSessionApiImpl implements ExamSessionApi {
     }
 
     @Override
+    @RolesAllowed({"ROLE_ADMIN"})
     public ResponseEntity<String> apiExamSessionExamSessionIdSendSolutionPut(UUID examSessionId, SendTaskSolutionRequest sendTaskSolutionRequest) {
         Submission submission = sendTaskSolutionRequest.getSubmission();
         sessionService.sendTask(examSessionId, submission);
@@ -48,6 +50,7 @@ public class ExamSessionApiImpl implements ExamSessionApi {
     }
 
     @Override
+    @RolesAllowed({"ROLE_ADMIN"})
     public ResponseEntity<Long> apiExamSessionExamSessionIdTimeGet(UUID examSessionId) {
          Long minutes = sessionService.getAvailableTimeMinutes(examSessionId);
          return ResponseEntity.ok(minutes);
