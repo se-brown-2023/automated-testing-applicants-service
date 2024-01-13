@@ -2,6 +2,7 @@ plugins {
     id("java")
     id("org.springframework.boot")
     id("io.spring.dependency-management")
+    id("com.adarshr.test-logger")
 }
 
 dependencies {

@@ -15,6 +15,24 @@
 
     <property name="port" value="12201"/>
 
+    <if condition='property("spring.profiles.active").contains("dev")'>
+        <then>
+            <property name="devProfile" value="true"/>
+        </then>
+        <else>
+            <property name="devProfile" value="false"/>
+        </else>
+    </if>
+
+    <if condition='property("spring.profiles.active").contains("test")'>
+        <then>
+            <property name="testProfile" value="true"/>
+        </then>
+        <else>
+            <property name="testProfile" value="false"/>
+        </else>
+    </if>
+
     <appender name="GELF" class="de.siegmar.logbackgelf.GelfUdpAppender">
         <graylogHost>${GRAYLOG_SERVER}</graylogHost>
         <graylogPort>${port}</graylogPort>
@@ -39,14 +57,27 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="GELF"/>
-        <appender-ref ref="FILE"/>
+        <if condition='${testProfile} || ${devProfile}'>
+            <then>
+                <appender-ref ref="CONSOLE"/>
+            </then>
+            <else>
+                <appender-ref ref="GELF"/>
+                <appender-ref ref="FILE"/>
+            </else>
+        </if>
     </root>
 
     <logger name="com.sebrown2023" additivity="false">
         <level value="INFO"/>
-        <appender-ref ref="GELF"/>
+        <if condition='${testProfile} || ${devProfile}'>
+            <then>
+                <appender-ref ref="CONSOLE"/>
+            </then>
+            <else>
+                <appender-ref ref="GELF"/>
+            </else>
+        </if>
     </logger>
 
 </configuration>
