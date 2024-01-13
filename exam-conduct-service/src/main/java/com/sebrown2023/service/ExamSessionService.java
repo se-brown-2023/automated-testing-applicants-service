@@ -12,6 +12,7 @@ import java.util.UUID;
 
 public interface ExamSessionService {
     ExamSession create(Long examId) throws ExamNotFoundException;
+    Long getAvailableTimeMinutes(UUID uuid);
     ExamSession getByUUID(UUID uuid) throws ExamSessionException;
     void sendTask(UUID uuid, Submission submission) throws ExamSessionException;
     ExamSession startSession(UUID uuid) throws ExamSessionException;
