@@ -8,3 +8,6 @@ kafka:
 
 java-compiler:
   lib-dir: src/main/conf/lib
+
+logging:
+  config: classpath:logback-test.xml
