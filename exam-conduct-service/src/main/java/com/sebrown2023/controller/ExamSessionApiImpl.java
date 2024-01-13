@@ -46,4 +46,10 @@ public class ExamSessionApiImpl implements ExamSessionApi {
 
         return ResponseEntity.ok(response);
     }
+
+    @Override
+    public ResponseEntity<Long> apiExamSessionExamSessionIdTimeGet(UUID examSessionId) {
+         Long minutes = sessionService.getAvailableTimeMinutes(examSessionId);
+         return ResponseEntity.ok(minutes);
+    }
 }

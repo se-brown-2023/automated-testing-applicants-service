@@ -151,6 +151,12 @@ public class ExamSessionServiceImpl implements ExamSessionService {
     }
 
     @Override
+    public Long getAvailableTimeMinutes(UUID uuid) {
+        ExamSession session = getByUUID(uuid);
+        return session.getExam().getMaxDuration().toMinutes();
+    }
+
+    @Override
     public void deleteSession(UUID uuid) {
         sessionRepository.deleteById(uuid);
     }
