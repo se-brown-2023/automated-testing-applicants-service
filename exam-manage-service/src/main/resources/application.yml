@@ -18,6 +18,7 @@ graylog:
 logging:
   file:
     name: ${log.dir:/tmp}/exam-manage-service.main.log
+  config: classpath:logback.xml
 
 management:
   endpoints:

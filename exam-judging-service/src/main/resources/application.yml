@@ -41,6 +41,7 @@ graylog:
 logging:
   file:
     name: ${log.dir:/tmp}/exam-judging-service.main.log
+  config: classpath:logback.xml
 
 management:
   endpoints:
