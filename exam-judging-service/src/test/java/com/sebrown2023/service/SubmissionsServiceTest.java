@@ -15,7 +15,6 @@ import com.sebrown2023.repository.SubmissionRepository;
 import com.sebrown2023.repository.TaskRepository;
 import com.sebrown2023.repository.TestRepository;
 import com.sebrown2023.repository.TestResultRepository;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,11 +33,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.StreamSupport;
+import java.util.concurrent.TimeUnit;
+
+import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 @SpringBootTest
 @EmbeddedKafka(
@@ -137,17 +137,19 @@ class SubmissionsServiceTest extends WithPostgresTest {
 
         Assertions.assertEquals(newSubmission, sendResult.getProducerRecord().value());
 
-        Thread.sleep(10000); // wait for processing
+        await().atMost(15, TimeUnit.SECONDS).until(() -> { // wait for processing
+            var submissions = submissionRepository.findAll().stream().toList();
+            var testResults = testResultRepository.findAll().stream().toList();
+            return submissions.size() == 1 && testResults.size() == 1;
+        });
 
-        var submissions = StreamSupport.stream(submissionRepository.findAll().spliterator(), false).toList();
-        Assertions.assertEquals(1, submissions.size());
-        var submission = submissions.get(0);
+        var submission = submissionRepository.findAll().stream().toList().getFirst();
         Assertions.assertEquals(task, submission.getTask());
         Assertions.assertEquals(sourceCode, submission.getUserSourceCode());
 
-        var testResults = StreamSupport.stream(testResultRepository.findAll().spliterator(), false).toList();
+        var testResults = testResultRepository.findAll().stream().toList();
         Assertions.assertEquals(1, testResults.size());
-        var testResult = testResults.get(0);
+        var testResult = testResults.getFirst();
         Assertions.assertEquals(test, testResult.getTest());
         Assertions.assertTrue(testResult.getPassed());
     }

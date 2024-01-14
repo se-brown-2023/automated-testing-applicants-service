@@ -89,7 +89,32 @@ paths:
               schema:
                 $ref: "#/components/schemas/ApiErrorDto"
               example: { "status": "Bad Request", "message": "Solution can not be send" }
-
+  /api/exam-session/{examSessionId}/time:
+    get:
+      tags:
+        - ExamSession
+      summary: Get exam time
+      parameters:
+        - in: path
+          required: true
+          name: examSessionId
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Exam session time successfully get
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetExamSessionTimeResponse"
+        '400':
+          description: ExamSessionException
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorDto"
+              example: { "status": "Bad Request", "message": "Exam can not be started. No any time available." }
 components:
   securitySchemes:
     bearerAuth:
@@ -135,6 +160,9 @@ components:
       required:
         - id
         - status
+    GetExamSessionTimeResponse:
+      type: integer
+      format: int64
     SendTaskSolutionRequest:
       type: object
       properties:
@@ -142,7 +170,6 @@ components:
           $ref: "#/components/schemas/Submission"
       required:
         - submission
-
     Exam:
       type: object
       properties:
@@ -205,7 +232,6 @@ components:
           format: int64
         userSourceCode:
           type: string
-
     ApiErrorDto:
       type: object
       properties:

@@ -2,16 +2,19 @@ plugins {
     id("java")
     id("org.springframework.boot")
     id("io.spring.dependency-management")
+    id("com.adarshr.test-logger")
 }
 
 dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.kafka:spring-kafka")
 
     implementation(project(":common:database"))
+    implementation(project(":common:logging"))
 
     implementation("org.apache.commons:commons-exec:1.3")
 

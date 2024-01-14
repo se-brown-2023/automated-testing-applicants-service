@@ -9,6 +9,8 @@ plugins {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-registry-prometheus")
     implementation(project(mapOf("path" to ":common:database")))
 
     //MAPSTRUCT
@@ -21,6 +23,8 @@ dependencies {
 
     //OPENAPI
     implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    implementation(project(":common:logging"))
 
     //TESTS
     implementation("org.postgresql:postgresql:42.2.27")

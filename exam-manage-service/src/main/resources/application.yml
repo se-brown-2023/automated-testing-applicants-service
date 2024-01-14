@@ -12,6 +12,24 @@ spring:
     username:
     password:
 
+graylog:
+  server:
+
 logging:
   file:
     name: ${log.dir:/tmp}/exam-manage-service.main.log
+  config: classpath:logback.xml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
