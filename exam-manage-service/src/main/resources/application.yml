@@ -12,6 +12,10 @@ spring:
     username:
     password:
 
+cors:
+  frontend:
+    url:
+
 graylog:
   server:
 
