@@ -12,7 +12,7 @@ spring:
     username:
     password:
 
-cros:
+cors:
   frontend:
     url:
 
