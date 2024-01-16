@@ -1,13 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Accept.css';
+import {ExamSessionApi} from "../../api-backend-conduct";
+import {toaster} from "evergreen-ui";
 
 export const Accept = () => {
     const navigate = useNavigate();
-    const examTime = 60;
+    const apiInstance = new ExamSessionApi();
+    const [examTime, setExamTime] = useState(null);
+    useEffect(() => {
+        apiInstance.apiExamSessionExamSessionIdTimeGet("c55cc77f-59ff-4d15-99f7-4a92efea7673")
+            .then((response) => {
+                setExamTime(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
 
+    useEffect(() => {
+
+    }, []);
     const handleStartExam = () => {
-        navigate('/examinee');
+        const apiInstance = new ExamSessionApi();
+        apiInstance.apiExamSessionExamSessionIdStartGet("c55cc77f-59ff-4d15-99f7-4a92efea7673")
+            .then(() => navigate('/examinee'))
+            .catch(() => toaster.danger('Не удалось начать экзамен'));
     }
 
     return (

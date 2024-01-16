@@ -67,3 +67,17 @@
 .finish-exam-button:hover {
     background-color: #0056b3;
 }
+
+.cm-editor {
+    width: 1200px;
+    height: 700px;
+    overflow: auto;
+}
+
+.cm-content {
+    font-size: 18px;
+}
+
+.cm-gutters {
+    font-size: 18px;
+}

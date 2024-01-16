@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './TaskModal.css';
+import {TaskApi, TestApi} from "../../api-backend-manage";
+import {TestComponentImpl} from "../../component/TestComponentImpl";
 
 const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
     const [title, setTitle] = useState('');
@@ -24,32 +26,35 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
         }
     }, [task]);
 
-    const handleCreateTask = () => {
-        if (!task) {
-            const newTask = {
-                id: Date.now(),
-                title,
-                description,
-                code,
-                tests,
-                language,
-                duration,
-            };
-            createTask(newTask);
-        } else {
-            const updatedTask = {
-                ...task,
-                title,
-                description,
-                code,
-                tests,
-                language,
-                duration,
-            };
-            updateTask(updatedTask);
+    const handleCreateTask = async () => {
+        const apiInstance = new TestApi();
+        const testIds = [];
+
+        for (let test of tests) {
+            const testComponent = new TestComponentImpl();
+            testComponent.input_data = test.input;
+            testComponent.output_data = test.output;
+            const response = await apiInstance.createTest(testComponent);
+            testIds.push(response.data.id);
         }
+
+        const newTask = {
+            name: title,
+            description: description,
+            author_source_code: code,
+            tests: testIds,
+        };
+
+        const taskApiInstance = new TaskApi();
+        await taskApiInstance.createTask(newTask);
         closeModal();
     };
+
+    // const handleUpdateTask = async (updatedTask) => {
+    //     const apiInstance = new TaskApi();
+    //     await apiInstance.updateTask(updatedTask);
+    //     closeModal();
+    // };
 
     const handleAddTest = () => {
         setTests([...tests, {input: '', output: ''}]);
@@ -136,7 +141,9 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
                             <button onClick={handleAddTest}>Добавить тест</button>
                         </>
                     )}
-                    <button onClick={handleCreateTask}>{task ? 'Сохранить изменения' : 'Создать задание'}</button>
+                    <button onClick={handleCreateTask}>
+                        {task ? 'Сохранить изменения' : 'Создать задание'}
+                    </button>
                 </div>
             </div>
         </div>
