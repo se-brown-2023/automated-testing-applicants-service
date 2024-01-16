@@ -9,9 +9,10 @@ import org.mapstruct.Mapping;
 public interface TestMapper {
     @Mapping(target = "expectedOutputData", source = "outputData")
     @Mapping(target = "task", ignore = true)
+    @Mapping(target = "id", defaultValue = "0L")
     Test testComponentToTest(TestComponent testComponent);
 
-    @Mapping(target = "taskId", expression = "java(test.getTask().getId())")
+    @Mapping(target = "taskId", expression = "java(test.getTask() != null ? test.getTask().getId() : null)")
     @Mapping(target = "outputData", source = "expectedOutputData")
     TestComponent testToTestComponent(Test test);
 

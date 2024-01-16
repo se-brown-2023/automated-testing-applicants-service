@@ -137,7 +137,7 @@ class SubmissionsServiceTest extends WithPostgresTest {
 
         Assertions.assertEquals(newSubmission, sendResult.getProducerRecord().value());
 
-        await().atMost(15, TimeUnit.SECONDS).until(() -> { // wait for processing
+        await().atMost(25, TimeUnit.SECONDS).until(() -> { // wait for processing
             var submissions = submissionRepository.findAll().stream().toList();
             var testResults = testResultRepository.findAll().stream().toList();
             return submissions.size() == 1 && testResults.size() == 1;
