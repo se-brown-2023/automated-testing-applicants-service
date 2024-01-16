@@ -140,7 +140,7 @@ input {
     border-radius: 5px;
 }
 
-button {
+.modal-content-task button {
     background: linear-gradient(90deg, #ff8a00, #e52e71);
     color: #fff;
     border: none;
@@ -151,7 +151,7 @@ button {
     margin: 20px 0;
 }
 
-button:hover {
+.modal-content-task button:hover {
     background: linear-gradient(90deg, #e52e71, #ff8a00);
 }
 

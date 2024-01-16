@@ -9,6 +9,7 @@ import {java} from "@codemirror/lang-java";
 import {EditorState} from "@codemirror/state";
 import './Examinee.css';
 import {ExamSessionApi} from "../../api-backend-conduct";
+import {toaster} from "evergreen-ui";
 
 const Examinee = () => {
 
@@ -18,6 +19,8 @@ const Examinee = () => {
     const [tasks, setTasks] = useState([]);
     const [taskDescriptions, setTaskDescriptions] = useState([]);
     const [taskCodes, setTaskCodes] = useState([]);
+    const [editorCodes, setEditorCodes] = useState({});
+    const [startState, setStartState] = useState(null);
 
     const apiInstance = new ExamSessionApi();
     const editorRef = useRef();
@@ -70,26 +73,27 @@ const Examinee = () => {
     }, {dark: true})
 
     useEffect(() => {
-        apiInstance.apiExamSessionExamSessionIdGet("c55cc77f-59ff-4d15-99f7-4a92efea7673")
-            .then((response) => {
-                console.log(response.data)
-                setTasks(response.data.exam.tasks.map((task) => task.name));
-                setTaskDescriptions(response.data.exam.tasks.map((task) => task.description));
-                setTaskCodes(response.data.exam.tasks.map((task) => task.authorSourceCode));
-                setCode(taskCodes[currentTask]);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-
         if (editorRef.current) {
-            let startState = EditorState.create({
+            let state = EditorState.create({
                 doc: code,
-                extensions: [basicSetup, keymap.of([indentWithTab]), java(), myTheme, syntaxHighlighting(myHighlightStyle)]
+                extensions: [
+                    basicSetup,
+                    keymap.of([indentWithTab]),
+                    java(),
+                    myTheme,
+                    syntaxHighlighting(myHighlightStyle),
+                    EditorView.updateListener.of(update => {
+                        if (update.docChanged) {
+                            let tr = state.update({changes: update.changes});
+                            state = tr.state;
+                            setStartState(state); // update startState
+                        }
+                    })
+                ]
             });
 
             let editor = new EditorView({
-                state: startState,
+                state: state,
                 parent: editorRef.current
             });
 
@@ -97,7 +101,23 @@ const Examinee = () => {
                 editor.destroy();
             };
         }
-    }, [code, currentTask]);
+    }, [code]);
+
+    useEffect(() => {
+        apiInstance.apiExamSessionExamSessionIdGet("c55cc77f-59ff-4d15-99f7-4a92efea7673")
+            .then((response) => {
+                console.log(response.data)
+                setTasks(response.data.exam.tasks.map((task) => task.name));
+                setTaskDescriptions(response.data.exam.tasks.map((task) => task.description));
+                setTaskCodes(response.data.exam.tasks.map((task) => task.authorSourceCode));
+                if (code === '') {
+                    setCode(response.data.exam.tasks[0].authorSourceCode);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
 
     useEffect(() => {
         apiInstance.apiExamSessionExamSessionIdTimeGet("c55cc77f-59ff-4d15-99f7-4a92efea7673")
@@ -117,14 +137,61 @@ const Examinee = () => {
         };
     }, []);
 
-    const handleSubmit = () => {
-        console.log(`Задание ${currentTask + 1} сдано с кодом: ${code}`);
-        setCode('');
-    };
+    useEffect(() => {
+        if (startState) {
+            setEditorCodes(prevCodes => ({
+                ...prevCodes,
+                [currentTask]: startState.doc.toString()
+            }));
+        }
+    }, [startState]);
+
+    useEffect(() => {
+        const handleUnload = (event) => {
+            event.preventDefault();
+            event.returnValue = '';
+        };
+
+        window.addEventListener('beforeunload', handleUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleUnload);
+        };
+    }, []);
 
     const handleTaskChange = (index) => {
         setCurrentTask(index);
-        setCode(taskCodes[index]);
+        setCode(editorCodes[index] || taskCodes[index]);
+    };
+
+    const handleSubmit = async () => {
+        if (startState) {
+            const solution = startState.doc.toString();
+            const taskId = tasks[currentTask].id;
+
+            const sendTaskSolutionRequest = {
+                submission: {
+                    taskId: taskId,
+                    userSourceCode: solution
+                }
+            };
+
+            try {
+                await apiInstance.apiExamSessionExamSessionIdSendSolutionPut("c55cc77f-59ff-4d15-99f7-4a92efea7673", sendTaskSolutionRequest);
+                toaster.success(`Задание ${currentTask + 1} успешно сдано`);
+            } catch (error) {
+                toaster.danger("Ошибка при отправке решения");
+            }
+        }
+    };
+
+    const finishExam = async () => {
+        try {
+            await apiInstance.apiExamSessionExamSessionIdFinishGet("c55cc77f-59ff-4d15-99f7-4a92efea7673");
+            toaster.success(`Экзамен успешно завершен`);
+        } catch (error) {
+            toaster.danger("Ошибка при завершении экзамена");
+        }
     };
 
     const formatTime = (time) => {
@@ -137,7 +204,7 @@ const Examinee = () => {
     return (
         <div className="examinee-page">
             <p className="time">Оставшееся время: {formatTime(time)}</p>
-            <button className="finish-exam-button" onClick={handleSubmit}>Завершить экзамен</button>
+            <button className="finish-exam-button" onClick={finishExam}>Завершить экзамен</button>
             <h1>{tasks[currentTask]}</h1>
             <p>{taskDescriptions[currentTask]}</p>
             <div ref={editorRef}></div>

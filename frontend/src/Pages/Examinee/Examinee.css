@@ -29,14 +29,15 @@
     margin-top: 20px;
     padding: 10px 20px;
     border: none;
-    background-color: #007BFF;
-    color: white;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
+    color: #fff;
+    border-radius: 5px;
 }
 
 .examinee-page button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(90deg, #e52e71, #ff8a00);
 }
 
 .task-switcher {
