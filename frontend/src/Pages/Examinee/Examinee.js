@@ -22,9 +22,8 @@ const Examinee = ({examSessionId}) => {
     const [taskCodes, setTaskCodes] = useState([]);
     const [editorCodes, setEditorCodes] = useState({});
     const [startState, setStartState] = useState(null);
-    const [isExamFinished, setIsExamFinished] = useState(false);
-
     const navigate = useNavigate();
+    const [session, setSession] = useState(null);
 
     const apiInstance = new ExamSessionApi();
     const editorRef = useRef();
@@ -111,7 +110,8 @@ const Examinee = ({examSessionId}) => {
         apiInstance.apiExamSessionExamSessionIdGet(examSessionId)
             .then((response) => {
                 console.log(response.data)
-                setTasks(response.data.exam.tasks.map((task) => task.name));
+                setSession(response.data)
+                setTasks(response.data.exam.tasks.map((task) => task));
                 setTaskDescriptions(response.data.exam.tasks.map((task) => task.description));
                 setTaskCodes(response.data.exam.tasks.map((task) => task.authorSourceCode));
                 if (code === '') {
@@ -141,23 +141,13 @@ const Examinee = ({examSessionId}) => {
             });
 
         const timer = setInterval(() => {
-            if (!isExamFinished) {
-                setTime((prevTime) => {
-                    if (prevTime > 0) {
-                        return prevTime - 1;
-                    } else {
-                        handleSubmitOutOfTime();
-                        finishExam();
-                        return 0;
-                    }
-                });
-            }
+            setTime((prevTime) => prevTime > 0 ? prevTime - 1 : 0);
         }, 1000);
 
         return () => {
             clearInterval(timer);
         };
-    }, [isExamFinished]);
+    }, []);
 
     useEffect(() => {
         if (startState) {
@@ -186,27 +176,6 @@ const Examinee = ({examSessionId}) => {
         setCode(editorCodes[index] || taskCodes[index]);
     };
 
-    const handleSubmitOutOfTime = async () => {
-        for (let i = 0; i < tasks.length; i++) {
-            const solution = editorCodes[i];
-            const taskId = tasks[i].id;
-
-            const sendTaskSolutionRequest = {
-                submission: {
-                    taskId: taskId,
-                    userSourceCode: solution
-                }
-            };
-
-            try {
-                await apiInstance.apiExamSessionExamSessionIdSendSolutionPut(examSessionId, sendTaskSolutionRequest);
-                toaster.success(`Задание ${i + 1} успешно сдано`);
-            } catch (error) {
-                toaster.danger(`Ошибка при отправке решения для задания ${i + 1}`);
-            }
-        }
-    };
-
     const handleSubmit = async () => {
         if (startState) {
             const solution = startState.doc.toString();
@@ -214,6 +183,7 @@ const Examinee = ({examSessionId}) => {
 
             const sendTaskSolutionRequest = {
                 submission: {
+                    examSessionId: examSessionId,
                     taskId: taskId,
                     userSourceCode: solution
                 }
@@ -232,10 +202,9 @@ const Examinee = ({examSessionId}) => {
         const userConfirmation = window.confirm("Вы уверены, что хотите завершить экзамен?");
         if (userConfirmation) {
             try {
+                localStorage.setItem('examStartTime', null);
                 await apiInstance.apiExamSessionExamSessionIdFinishGet(examSessionId);
-                setIsExamFinished(true);
-                toaster.success("Экзамен успешно завершен");
-                navigate('/main');
+                navigate('/exam-end');
             } catch (error) {
                 toaster.danger("Ошибка при завершении экзамена");
             }
@@ -253,14 +222,14 @@ const Examinee = ({examSessionId}) => {
         <div className="examinee-page">
             <p className="time">Оставшееся время: {formatTime(time)}</p>
             <button className="finish-exam-button" onClick={finishExam}>Завершить экзамен</button>
-            <h1>{tasks[currentTask]}</h1>
+            <h1>{tasks[currentTask] && tasks[currentTask].name}</h1>
             <p>{taskDescriptions[currentTask]}</p>
             <div ref={editorRef}></div>
             <button onClick={handleSubmit}>Сдать задание</button>
             <div className="task-switcher">
                 {tasks.map((task, index) => (
                     <button key={index} onClick={() => handleTaskChange(index)}>
-                        {task}
+                        {task.name}
                     </button>
                 ))}
             </div>
