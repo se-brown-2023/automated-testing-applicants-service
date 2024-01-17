@@ -1,9 +1,9 @@
 package com.sebrown2023.service;
 
 import com.sebrown2023.exceptions.ExamNotFoundException;
+import com.sebrown2023.exceptions.ExamSessionException;
 import com.sebrown2023.model.db.ExamSession;
 import com.sebrown2023.model.db.Task;
-import com.sebrown2023.exceptions.ExamSessionException;
 import com.sebrown2023.model.dto.Submission;
 
 import java.time.Duration;

@@ -258,6 +258,15 @@ components:
           format: int64
         userSourceCode:
           type: string
+        examSessionId:
+          type: integer
+          format: uuid
+        submitTime:
+          type: string
+          format: date-time
+        processingStartTime:
+          type: string
+          format: date-time
     ApiErrorDto:
       type: object
       properties:

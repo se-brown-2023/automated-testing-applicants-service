@@ -13,6 +13,7 @@ import com.sebrown2023.exceptions.ExamSessionNotExpiredException;
 import com.sebrown2023.exceptions.ExamSessionNotFoundException;
 import com.sebrown2023.exceptions.ExamSessionNotStartedException;
 import com.sebrown2023.model.dto.Submission;
+import com.sebrown2023.repository.ExamRepository;
 import com.sebrown2023.repository.ExamSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,17 +29,13 @@ import java.util.UUID;
 public class ExamSessionServiceImpl implements ExamSessionService {
     private final ExamSessionRepository sessionRepository;
     private final ExamRepository examRepository;
+    @Autowired
+    private SubmissionSupplier submissionSupplier;
 
     public ExamSessionServiceImpl(ExamSessionRepository sessionRepository, ExamRepository examRepository) {
         this.sessionRepository = sessionRepository;
         this.examRepository = examRepository;
     }
-
-    @Autowired
-    private ExamService examService;
-
-    @Autowired
-    private SubmissionSupplier submissionSupplier;
 
 
     @Override
