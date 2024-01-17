@@ -24,7 +24,7 @@ export const Accept = ({ examSessionId }) => {
     const handleStartExam = () => {
         const apiInstance = new ExamSessionApi();
         apiInstance.apiExamSessionExamSessionIdStartGet(examSessionId)
-            .then(() => navigate('/examinee'))
+            .then(() => navigate(`/exam/${examSessionId}`))
             .catch(() => toaster.danger('Не удалось начать экзамен'));
     }
 

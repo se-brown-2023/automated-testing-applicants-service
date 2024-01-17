@@ -24,7 +24,7 @@ public class SubmissionSupplier {
     }
 
     @Bean
-    public Supplier<Flux<Submission>> sendSubmission() {
+    public Supplier<Flux<Submission>> submissionsTopic() {
         return () -> this.processor;
     }
 }

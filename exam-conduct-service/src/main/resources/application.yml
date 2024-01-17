@@ -3,6 +3,11 @@ server:
   shutdown: graceful
 
 spring:
+  cloud:
+    stream:
+      bindings:
+        output:
+          destination: submissionsTopic
   application:
     name: exam-conduct-service
   config:

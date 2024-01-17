@@ -6,6 +6,7 @@ import {ExamApi, ExamineeApi, ExamSessionApi, TaskApi} from "../../api-backend-m
 import {Body, Cell, Header, HeaderCell, HeaderRow, Row, Table} from "@table-library/react-table-library/table";
 import {useTheme} from "@table-library/react-table-library/theme";
 import {getTheme} from "@table-library/react-table-library/baseline";
+import {toaster} from "evergreen-ui";
 
 const ExamSession = () => {
     const dispatch = useDispatch();
@@ -78,14 +79,20 @@ const ExamSession = () => {
             alert("Необходимо выбрать пользователя")
             return;
         }
-        selectedExams.forEach(exam => {
-            examSessionApi.createExamSession(
+        const promises = selectedExams.map(exam => {
+            return examSessionApi.createExamSession(
                 {
                     exam_id: exam.id,
                     status: "CREATED",
                     examinee: users.find(u => u.id == selectedUser)
                 }
             )
+        })
+
+        Promise.all(promises).then(sessions => {
+            sessions.forEach(session => {
+                toaster.success("Сессия с id " + session.id + " успешно создана.")
+            })
         })
 
         setSelectedExams([]);

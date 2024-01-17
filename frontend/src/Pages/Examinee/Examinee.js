@@ -23,6 +23,7 @@ const Examinee = ({examSessionId}) => {
     const [editorCodes, setEditorCodes] = useState({});
     const [startState, setStartState] = useState(null);
     const navigate = useNavigate();
+    const [session, setSession] = useState(null);
 
     const apiInstance = new ExamSessionApi();
     const editorRef = useRef();
@@ -109,7 +110,8 @@ const Examinee = ({examSessionId}) => {
         apiInstance.apiExamSessionExamSessionIdGet(examSessionId)
             .then((response) => {
                 console.log(response.data)
-                setTasks(response.data.exam.tasks.map((task) => task.name));
+                setSession(response.data)
+                setTasks(response.data.exam.tasks.map((task) => task));
                 setTaskDescriptions(response.data.exam.tasks.map((task) => task.description));
                 setTaskCodes(response.data.exam.tasks.map((task) => task.authorSourceCode));
                 if (code === '') {
@@ -181,6 +183,7 @@ const Examinee = ({examSessionId}) => {
 
             const sendTaskSolutionRequest = {
                 submission: {
+                    examSessionId: examSessionId,
                     taskId: taskId,
                     userSourceCode: solution
                 }
@@ -199,6 +202,7 @@ const Examinee = ({examSessionId}) => {
         const userConfirmation = window.confirm("Вы уверены, что хотите завершить экзамен?");
         if (userConfirmation) {
             try {
+                localStorage.setItem('examStartTime', null);
                 await apiInstance.apiExamSessionExamSessionIdFinishGet(examSessionId);
                 navigate('/exam-end');
             } catch (error) {
@@ -218,14 +222,14 @@ const Examinee = ({examSessionId}) => {
         <div className="examinee-page">
             <p className="time">Оставшееся время: {formatTime(time)}</p>
             <button className="finish-exam-button" onClick={finishExam}>Завершить экзамен</button>
-            <h1>{tasks[currentTask]}</h1>
+            <h1>{tasks[currentTask] && tasks[currentTask].name}</h1>
             <p>{taskDescriptions[currentTask]}</p>
             <div ref={editorRef}></div>
             <button onClick={handleSubmit}>Сдать задание</button>
             <div className="task-switcher">
                 {tasks.map((task, index) => (
                     <button key={index} onClick={() => handleTaskChange(index)}>
-                        {task}
+                        {task.name}
                     </button>
                 ))}
             </div>
