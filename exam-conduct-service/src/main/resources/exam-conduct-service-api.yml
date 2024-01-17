@@ -259,7 +259,7 @@ components:
         userSourceCode:
           type: string
         examSessionId:
-          type: integer
+          type: string
           format: uuid
         submitTime:
           type: string
