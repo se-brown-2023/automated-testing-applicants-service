@@ -87,6 +87,7 @@
     border-radius: 20px;
     height: 50%;
     width: 100%;
+    font-size: 20px;
 }
 
 .screen .password {
@@ -114,6 +115,7 @@
     border-radius: 20px;
     height: 50%;
     width: 100%;
+    font-size: 20px;
 }
 
 .screen .submit {
