@@ -139,15 +139,7 @@ const Examinee = ({examSessionId}) => {
             });
 
         const timer = setInterval(() => {
-            setTime((prevTime) => {
-                if (prevTime > 0) {
-                    return prevTime - 1;
-                } else {
-                    handleSubmitOutOfTime();
-                    finishExam();
-                    return 0;
-                }
-            });
+            setTime((prevTime) => prevTime > 0 ? prevTime - 1 : 0);
         }, 1000);
 
         return () => {
@@ -180,27 +172,6 @@ const Examinee = ({examSessionId}) => {
     const handleTaskChange = (index) => {
         setCurrentTask(index);
         setCode(editorCodes[index] || taskCodes[index]);
-    };
-
-    const handleSubmitOutOfTime = async () => {
-        for (let i = 0; i < tasks.length; i++) {
-            const solution = editorCodes[i];
-            const taskId = tasks[i].id;
-
-            const sendTaskSolutionRequest = {
-                submission: {
-                    taskId: taskId,
-                    userSourceCode: solution
-                }
-            };
-
-            try {
-                await apiInstance.apiExamSessionExamSessionIdSendSolutionPut(examSessionId, sendTaskSolutionRequest);
-                toaster.success(`Задание ${i + 1} успешно сдано`);
-            } catch (error) {
-                toaster.danger(`Ошибка при отправке решения для задания ${i + 1}`);
-            }
-        }
     };
 
     const handleSubmit = async () => {
