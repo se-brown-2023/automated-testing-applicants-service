@@ -16,7 +16,6 @@ dependencies {
     implementation("org.keycloak:keycloak-spring-boot-starter:23.0.1")
     implementation("org.springframework.security.oauth:spring-security-oauth2:2.5.2.RELEASE")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.security:spring-security-oauth2-jose:6.1.5")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.modelmapper:modelmapper:3.2.0")

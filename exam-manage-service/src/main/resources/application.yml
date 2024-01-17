@@ -27,6 +27,10 @@ spring:
             issuer-uri: http://localhost:8080/realms/swe-brown-2023-realm
             user-name-attribute: preferred_username
 
+cors:
+  frontend:
+    url:
+
 graylog:
   server:
 

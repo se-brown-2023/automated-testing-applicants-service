@@ -47,6 +47,7 @@ public class ExamSessionApiImpl implements ExamSessionApi {
     }
 
     @Override
+    @RolesAllowed({"ROLE_ADMIN"})
     public ResponseEntity<ExamSessionComponent> apiExamSessionExamSessionIdStartGet(UUID examSessionId) {
         ExamSession examSession = sessionService.startSession(examSessionId);
 
