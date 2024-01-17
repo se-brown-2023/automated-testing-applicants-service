@@ -51,6 +51,7 @@ public class ExamSessionService {
     public ExamSessionComponent createNewExamSession(ExamSessionComponent examSessionComponent) {
         var exam = examRepository.findExamById(examSessionComponent.getExamId())
                 .orElseThrow(() -> new ExamSessionNotFoundException(examSessionComponent.getExamId().toString()));
+
         var examSession = examSessionMapper.examSessionComponentToExamSession(examSessionComponent, exam);
 
         var createdExamSession = examSessionRepository.save(examSession);

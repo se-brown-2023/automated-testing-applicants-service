@@ -124,6 +124,9 @@ export const MainPage = () => {
                                                         <td style={{flex: "1", border: "0"}}>
                                                             <ul>
                                                                 <li>
+                                                                    <strong>session id:</strong> {item.id}
+                                                                </li>
+                                                                <li>
                                                                     <strong>Имя:</strong> {item.examinee.first_name}
                                                                 </li>
                                                                 <li>

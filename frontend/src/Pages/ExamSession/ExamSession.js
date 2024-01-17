@@ -44,13 +44,17 @@ const ExamSession = () => {
     const examineeApi = new ExamineeApi();
     const taskApi = new TaskApi();
 
+    const fetchExams = () => {
+        examApi.getAllExams().then(r => {
+            setExams(r.data)
+        })
+    }
+
     useEffect(() => {
         examineeApi.getExaminees().then(r => {
             setUsers(r.data)
         })
-        examApi.getAllExams().then(r => {
-            setExams(r.data)
-        })
+        fetchExams()
         taskApi.getAllTasks().then(r => {
             setTasks(r.data)
         })
@@ -70,12 +74,16 @@ const ExamSession = () => {
             alert("Необходимо выбрать экзамен")
             return;
         }
+        if (!selectedUser) {
+            alert("Необходимо выбрать пользователя")
+            return;
+        }
         selectedExams.forEach(exam => {
             examSessionApi.createExamSession(
                 {
                     exam_id: exam.id,
                     status: "CREATED",
-                    examinee: selectedUser
+                    examinee: users.find(u => u.id == selectedUser)
                 }
             )
         })
@@ -108,6 +116,10 @@ const ExamSession = () => {
             alert("Выберите язык экзамена")
             return
         }
+        if (max_duration <= 0) {
+            alert('Неверная максимальная длительность')
+            return;
+        }
         examApi.createExam(
             {
                 examiner_id: 1,
@@ -116,12 +128,14 @@ const ExamSession = () => {
                 programming_language: selectedLanguage,
                 max_duration: max_duration * 60,
                 TTL: Date.parse(endTime) - new Date(),
-                tasks: selectedTasks
+                tasks: selectedTasks,
+                creation_date: new Date().toISOString().replace("Z", "")
             }
         ).then(r => console.log("Exam created" + r.data)).catch(e => {
             console.error("Exam not created" + e)
         })
         closeModal();
+        fetchExams();
     };
 
     const formatDuration = (seconds) => {
@@ -179,7 +193,7 @@ const ExamSession = () => {
                                                     <Cell>{item.description}</Cell>
                                                     <Cell>{item.programming_language}</Cell>
                                                     <Cell>{formatDuration(item.max_duration)}</Cell>
-                                                    <Cell>{formatDate(Date.parse(item.creation_date) + item.TTL * 1000 + 21600000)}</Cell>
+                                                    <Cell>{formatDate(Date.parse(item.creation_date) + item.TTL + 21600000)}</Cell>
                                                 </Row>
                                                 {item.id === expandedRowId && (
                                                     <Row item={item} className="exam-item">
