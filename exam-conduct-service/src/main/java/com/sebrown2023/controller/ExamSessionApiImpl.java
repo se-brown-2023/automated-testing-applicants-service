@@ -38,7 +38,6 @@ public class ExamSessionApiImpl implements ExamSessionApi {
     }
 
     @Override
-    @RolesAllowed({"ROLE_ADMIN"})
     public ResponseEntity<String> apiExamSessionExamSessionIdSendSolutionPut(UUID examSessionId, SendTaskSolutionRequest sendTaskSolutionRequest) {
         Submission submission = sendTaskSolutionRequest.getSubmission();
         sessionService.sendTask(examSessionId, submission);
@@ -47,7 +46,6 @@ public class ExamSessionApiImpl implements ExamSessionApi {
     }
 
     @Override
-    @RolesAllowed({"ROLE_ADMIN"})
     public ResponseEntity<ExamSessionComponent> apiExamSessionExamSessionIdStartGet(UUID examSessionId) {
         ExamSession examSession = sessionService.startSession(examSessionId);
 
@@ -58,7 +56,6 @@ public class ExamSessionApiImpl implements ExamSessionApi {
     }
 
     @Override
-    @RolesAllowed({"ROLE_ADMIN"})
     public ResponseEntity<Long> apiExamSessionExamSessionIdTimeGet(UUID examSessionId) {
         Long minutes = sessionService.getAvailableTimeMinutes(examSessionId);
         return ResponseEntity.ok(minutes);
