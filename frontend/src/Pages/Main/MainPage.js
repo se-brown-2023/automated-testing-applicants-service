@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Body, Cell, Header, HeaderCell, HeaderRow, Row, Table} from '@table-library/react-table-library/table';
 import {useTheme} from '@table-library/react-table-library/theme';
@@ -7,13 +6,56 @@ import {getTheme} from '@table-library/react-table-library/baseline';
 import './MainPage.css';
 import Avatar from './user.png';
 import MainModal from './MainModal';
+import {ExamApi, ExamSessionApi, SubmissionApi} from "../../api-backend-manage";
 
 export const MainPage = () => {
-    const examSessions = useSelector(state => state.examSessions);
+    const [examSessions, setExamSessions] = useState({nodes: []})
     const navigate = useNavigate();
     const [expandedRowId, setExpandedRowId] = useState(null);
     const [selectedExamSession, setSelectedExamSession] = useState(null)
     const [isRatingMode, setIsRatingMode] = useState(true);
+
+    const examSessionApi = new ExamSessionApi();
+    const submissionApi = new SubmissionApi();
+    const examApi = new ExamApi();
+
+    useEffect(() => {
+        examSessionApi.getAllExamSessions().then(r => {
+            const newExamSessionsPromises = r.data.map(async examSession => {
+                const submissionsPromise = submissionApi.getSubmissionsByExamSessionId(examSession.id).then(r => {
+                    let passedTotal = 0;
+                    let total = 0;
+                    r.data.forEach(submission => {
+                        passedTotal += submission.testResults.filter(it => it.passed).length;
+                        total += submission.testResults.length;
+                    });
+                    return {
+                        passedTotal: passedTotal,
+                        total: total,
+                        submissions: r.data
+                    };
+                })
+                const examPromise = examApi.getExam(examSession.exam_id).then(r => {
+                    return r.data
+                });
+                const promises = await Promise.all([submissionsPromise, examPromise]);
+                const submissions = promises[0];
+                const exam = promises[1];
+                return {
+                    id: examSession.id,
+                    status: examSession.status,
+                    exam: exam,
+                    examinee: examSession.examinee,
+                    startTime: examSession.start_time_stamp,
+                    endTime: examSession.finish_time_stamp,
+                    submissions: submissions
+                };
+            });
+            Promise.all(newExamSessionsPromises).then(r => {
+                setExamSessions({nodes: r})
+            })
+        })
+    }, []);
 
     const handleToggleExpansion = (rowId) => {
         setExpandedRowId(rowId === expandedRowId ? null : rowId);
@@ -51,7 +93,7 @@ export const MainPage = () => {
                     </div>
                 </div>
                 <div className="mainSection">
-                    <Table data={{nodes: examSessions}} theme={theme} className="table">
+                    <Table data={examSessions} theme={theme} className="table">
                         {(tableList) => (
                             <>
                                 <Header>
@@ -68,9 +110,9 @@ export const MainPage = () => {
                                                 item={item}
                                                 onClick={() => handleToggleExpansion(item.id)}
                                             >
-                                                <Cell>Имя</Cell>
-                                                <Cell>example@mail.ru</Cell>
-                                                <Cell>9/10</Cell>
+                                                <Cell>{item.examinee.first_name}</Cell>
+                                                <Cell>{item.examinee.email}</Cell>
+                                                <Cell>{item.submissions.passedTotal} / {item.submissions.total}</Cell>
                                             </Row>
                                             {item.id === expandedRowId && (
                                                 <Row item={item}>
@@ -82,16 +124,19 @@ export const MainPage = () => {
                                                         <td style={{flex: "1", border: "0"}}>
                                                             <ul>
                                                                 <li>
-                                                                    <strong>Имя:</strong> Имя
+                                                                    <strong>Имя:</strong> {item.examinee.first_name}
                                                                 </li>
                                                                 <li>
-                                                                    <strong>Email:</strong> example@mail.ru
+                                                                    <strong>Email:</strong> {item.examinee.email}
                                                                 </li>
                                                                 <li>
-                                                                    <strong>Описание:</strong> Описание
+                                                                    <strong>Описание:</strong> {item.exam.description}
                                                                 </li>
                                                                 <li>
-                                                                    <strong>Язык:</strong> Java
+                                                                    <strong>Язык:</strong> {item.exam.programming_language}
+                                                                </li>
+                                                                <li>
+                                                                    <strong>Статус:</strong> {item.status}
                                                                 </li>
                                                                 <li>
                                                                     <strong>Время начала:</strong> {item.startTime}

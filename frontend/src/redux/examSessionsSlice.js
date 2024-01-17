@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 const examSessionsSlice = createSlice({
     name: 'examSessions',
@@ -10,6 +10,6 @@ const examSessionsSlice = createSlice({
     },
 });
 
-export const { createExamSession } = examSessionsSlice.actions;
+export const {createExamSession} = examSessionsSlice.actions;
 
 export default examSessionsSlice.reducer;

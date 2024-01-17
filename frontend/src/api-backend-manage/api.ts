@@ -1254,7 +1254,7 @@ export const SubmissionApiAxiosParamCreator = function (configuration?: Configur
         getSubmissionsByExamSessionId: async (examSessionId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'examSessionId' is not null or undefined
             assertParamExists('getSubmissionsByExamSessionId', 'examSessionId', examSessionId)
-            const localVarPath = `/api/submission/{exam_session_id}`
+            const localVarPath = `/api/submission/by_exam_session_id/{exam_session_id}`
                 .replace(`{${"exam_session_id"}}`, encodeURIComponent(String(examSessionId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
