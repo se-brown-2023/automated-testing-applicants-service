@@ -1,5 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import './TaskModal.css';
+import {TaskApi, TestApi} from "../../api-backend-manage";
+import {TestComponentImpl} from "../../component/TestComponentImpl";
+import {EditorView, keymap} from "@codemirror/view";
+import {HighlightStyle, syntaxHighlighting} from "@codemirror/language";
+import {tags} from "@lezer/highlight";
+import {EditorState} from "@codemirror/state";
+import {basicSetup} from "codemirror";
+import {indentWithTab} from "@codemirror/commands";
+import {java} from "@codemirror/lang-java";
 
 const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
     const [title, setTitle] = useState('');
@@ -8,14 +17,79 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
     const [tests, setTests] = useState([{input: '', output: ''}]);
     const [activePage, setActivePage] = useState(0);
     const [language, setLanguage] = useState('java')
-    const [duration, setDuration] = useState('');
+    const [startState, setStartState] = useState(null);
+    const [editorCodes, setEditorCodes] = useState({});
+    const [currentTask, setCurrentTask] = useState(0);
+    const codeEditorRef = useRef();
+
+    let myTheme = EditorView.theme({
+        "&": {
+            color: "white",
+            backgroundColor: "#252849",
+            maxWidth: "80%",
+            height: "40vh",
+            overflow: "auto"
+        },
+        ".cm-content": {
+            caretColor: "#0e9"
+        },
+        "&.cm-focused .cm-cursor": {
+            borderLeftColor: "#0e9"
+        },
+        "&.cm-focused .cm-selectionBackground, ::selection": {
+            backgroundColor: "#074"
+        },
+        ".cm-gutters": {
+            backgroundColor: "#252838",
+            color: "#ddd",
+            border: "none"
+        },
+    }, {dark: true});
+
+    const myHighlightStyle = HighlightStyle.define([
+        {tag: tags.keyword, color: "#fc6"},
+        {tag: tags.comment, color: "#f5d", fontStyle: "italic"},
+        {tag: tags.atom, color: "#f0f"},
+        {tag: tags.number, color: "#ff8"},
+        {tag: tags.string, color: "#f0f"},
+        {tag: tags.meta, color: "#f88"},
+        {tag: tags.bracket, color: "#8f8"},
+        {tag: tags.quote, color: "#8ff"},
+        {tag: tags.link, color: "#f8f"},
+        {tag: tags.name, color: "#f88"},
+        {tag: tags.variableName, color: "#8ff"},
+        {tag: tags.typeName, color: "#f8f"},
+        {tag: tags.propertyName, color: "#8f8"},
+        {tag: tags.className, color: "#f0f"},
+        {tag: tags.literal, color: "#ff8"},
+        {tag: tags.operator, color: "#f88"},
+        {tag: tags.punctuation, color: "#8ff"},
+        {tag: tags.heading, color: "#f8f"},
+        {tag: tags.content, color: "#8f8"},
+        {tag: tags.invalid, color: "#f00"},
+    ])
 
     useEffect(() => {
         if (task) {
-            setTitle(task.title);
+            setTitle(task.name);
             setDescription(task.description);
-            setCode(task.code);
-            setTests(task.tests);
+            setCode(task.author_source_code);
+
+            const fetchTests = async () => {
+                try {
+                    const testApiInstance = new TestApi();
+                    const response = await testApiInstance.getTestsForTask(task.id);
+                    const formattedTests = response.data.map(test => ({
+                        input: test.input_data,
+                        output: test.output_data
+                    }));
+                    setTests(formattedTests);
+                } catch (error) {
+                    console.error("Ошибка при загрузке тестов: ", error);
+                }
+            };
+
+            fetchTests();
         } else {
             setTitle('');
             setDescription('');
@@ -24,32 +98,92 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
         }
     }, [task]);
 
-    const handleCreateTask = () => {
-        if (!task) {
-            const newTask = {
-                id: Date.now(),
-                title,
-                description,
-                code,
-                tests,
-                language,
-                duration,
+    useEffect(() => {
+        if (codeEditorRef.current) {
+            let state = EditorState.create({
+                doc: editorCodes[activePage] || '',
+                extensions: [
+                    basicSetup,
+                    keymap.of([indentWithTab]),
+                    java(),
+                    myTheme,
+                    syntaxHighlighting(myHighlightStyle),
+                    EditorView.updateListener.of(update => {
+                        if (update.docChanged) {
+                            let tr = state.update({changes: update.changes});
+                            state = tr.state;
+                            setStartState(state);
+                        }
+                    })
+                ]
+            });
+
+            let editor = new EditorView({
+                state: state,
+                parent: codeEditorRef.current
+            });
+
+            if (task) {
+                editor.setState(EditorState.create({doc: code,
+                    extensions: [
+                        basicSetup,
+                        java(),
+                        myTheme,
+                        syntaxHighlighting(myHighlightStyle)
+                    ]
+                }));
+            }
+
+            return () => {
+                editor.destroy();
             };
-            createTask(newTask);
-        } else {
-            const updatedTask = {
-                ...task,
-                title,
-                description,
-                code,
-                tests,
-                language,
-                duration,
-            };
-            updateTask(updatedTask);
         }
-        closeModal();
+    }, [code, activePage]);
+
+    useEffect(() => {
+        if (startState) {
+            setEditorCodes(prevCodes => ({
+                ...prevCodes,
+                [activePage]: startState.doc.toString()
+            }));
+        }
+    }, [startState, activePage]);
+
+    const handleCreateTask = async () => {
+        if (startState) {
+            const currentCode = startState.doc.toString();
+            const apiInstance = new TestApi();
+            const testComponents = [];
+
+            for (let test of tests) {
+                const testComponent = new TestComponentImpl();
+                testComponent.input_data = test.input;
+                testComponent.output_data = test.output;
+                const response = await apiInstance.createTest(testComponent);
+                testComponents.push(response.data);
+            }
+
+            const newTask = {
+                name: title,
+                description: description,
+                author_source_code: currentCode,
+                tests: testComponents,
+                language: language,
+            };
+
+            const taskApiInstance = new TaskApi();
+
+            console.log(newTask);
+            await taskApiInstance.createTask(newTask);
+            closeModal();
+        }
     };
+
+    // const handleUpdateTask = async (updatedTask) => {
+    //     const apiInstance = new TaskApi();
+    //     await apiInstance.updateTask(updatedTask);
+    //     closeModal();
+    // };
 
     const handleAddTest = () => {
         setTests([...tests, {input: '', output: ''}]);
@@ -98,12 +232,8 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
                                 </select>
                             </label>
                             <label>
-                                Длительность экзамена:
-                                <input type="text" value={duration} onChange={e => setDuration(e.target.value)}/>
-                            </label>
-                            <label>
                                 Код задания:
-                                <textarea className="code" value={code} onChange={e => setCode(e.target.value)}/>
+                                <div ref={codeEditorRef} className="code-editor"></div>
                             </label>
                         </div>
                     )}
@@ -136,7 +266,9 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
                             <button onClick={handleAddTest}>Добавить тест</button>
                         </>
                     )}
-                    <button onClick={handleCreateTask}>{task ? 'Сохранить изменения' : 'Создать задание'}</button>
+                    <button onClick={handleCreateTask}>
+                        {task ? 'Сохранить изменения' : 'Создать задание'}
+                    </button>
                 </div>
             </div>
         </div>

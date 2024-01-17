@@ -1,32 +1,36 @@
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {createTask, updateTask} from '../../redux/tasksSlice';
+import React, {useEffect, useState} from 'react';
+import {TaskApi} from "../../api-backend-manage";
 import TaskModal from './TaskModal';
 import TaskItem from './TaskItem';
 import './TaskList.css';
 import {useNavigate} from "react-router-dom";
 
 const TaskList = () => {
-    const dispatch = useDispatch();
-    const tasks = useSelector(state => state.tasks);
+    const [tasks, setTasks] = useState([]);
     const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                const taskApiInstance = new TaskApi();
+                const response = await taskApiInstance.getAllTasks();
+                setTasks(response.data);
+                console.log('Fetched tasks:', response.data);
+            } catch (error) {
+                console.error('Failed to fetch tasks:', error);
+            }
+        };
+
+        fetchTasks();
+    }, []);
 
     const openModal = () => setModalIsOpen(true);
 
     const closeModal = () => {
         setModalIsOpen(false);
         setSelectedTask(null);
-    };
-
-    const handleCreateTask = newTask => {
-        dispatch(createTask(newTask));
-        closeModal();
-    };
-
-    const handleUpdateTask = updatedTask => {
-        dispatch(updateTask(updatedTask));
     };
 
     const handleTaskClick = task => {
@@ -42,9 +46,9 @@ const TaskList = () => {
         <div className="task-screen">
             <div className="task-list-container">
                 <div className="task-list-header">Список заданий</div>
-                <div className="task-list">
-                    {tasks.map(task => (
-                        <TaskItem key={task.id} task={task} onTaskClick={handleTaskClick}/>
+                <div className="task-list-body">
+                    {tasks.map((task, index) => (
+                        <TaskItem key={index} task={task} onTaskClick={handleTaskClick}/>
                     ))}
                 </div>
                 <div className="task-list-footer">
@@ -53,8 +57,7 @@ const TaskList = () => {
                         Создать новое задание
                     </button>
                 </div>
-                <TaskModal isOpen={modalIsOpen} closeModal={closeModal} createTask={handleCreateTask}
-                           updateTask={handleUpdateTask} task={selectedTask}/>
+                <TaskModal isOpen={modalIsOpen} closeModal={closeModal} task={selectedTask}/>
             </div>
         </div>
     );

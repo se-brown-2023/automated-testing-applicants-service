@@ -44,11 +44,25 @@
     min-height: 1000px;
 }
 
-.exam-session-form select,
-.exam-session-form button {
+.exam-session-form select {
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 5px;
+}
+
+.exam-session-form button {
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 20px 0;
+}
+
+.exam-session-form button:hover {
+    background: linear-gradient(90deg, #e52e71, #ff8a00);
 }
 
 .user-select {
@@ -156,10 +170,13 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin: 20px;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
+    color: #fff;
+    border-radius: 5px;
 }
 
 .modal-footer-exam-session button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(90deg, #e52e71, #ff8a00);
 }
 
 .modal-body-exam-session {

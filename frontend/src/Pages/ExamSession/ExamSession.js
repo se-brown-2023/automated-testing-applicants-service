@@ -69,11 +69,11 @@ const ExamSession = () => {
     return (
         <div className="exam-session-screen">
             <div className="exam-session-container">
-                <h1 className="exam-session-header">Exam Sessions</h1>
+                <h1 className="exam-session-header">Экзаменационные сессии</h1>
                 <div className="exam-session-form">
-                    <h2>Create a new exam session</h2>
+                    <h2>Создать новую экзаменационную сессию</h2>
                     <select className="user-select" onChange={e => setSelectedUser(e.target.value)}>
-                        <option>Select a user</option>
+                        <option>Выбрать пользователя</option>
                         {users.map(user => (
                             <option key={user.id} value={user.id}>{user.name}</option>
                         ))}
@@ -104,8 +104,8 @@ const ExamSession = () => {
                     </div>
                     <div className="footer-exam-session">
                         <button onClick={handleBack}>Назад</button>
-                        <button onClick={handleCreateExamSession}>Create Exam Session</button>
-                        <button onClick={openModal}>Create Exam</button>
+                        <button onClick={handleCreateExamSession}>Создать экзаменационную сессию</button>
+                        <button onClick={openModal}>Создать экзамен</button>
                     </div>
                 </div>
             </div>
@@ -113,7 +113,7 @@ const ExamSession = () => {
                 <div className="modal-exam-session" onClick={closeModal}>
                     <div className="modal-content-exam-session" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header-exam-session">
-                            <h2>Create New Exam</h2>
+                            <h2>Создать экзамен</h2>
                             <span className="close" onClick={closeModal}>
                                 &times;
                             </span>
@@ -130,8 +130,8 @@ const ExamSession = () => {
                             ))}
                         </div>
                         <div className="modal-footer-exam-session">
-                            <button onClick={() => navigate('/tasks')}>Create New Task</button>
-                            <button onClick={handleCreateExam}>Create Exam</button>
+                            <button onClick={() => navigate('/tasks')}>Создать новое задание</button>
+                            <button onClick={handleCreateExam}>Создать экзамен</button>
                         </div>
                     </div>
                 </div>

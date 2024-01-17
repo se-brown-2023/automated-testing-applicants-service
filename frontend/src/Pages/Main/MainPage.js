@@ -68,9 +68,9 @@ export const MainPage = () => {
                                                 item={item}
                                                 onClick={() => handleToggleExpansion(item.id)}
                                             >
-                                                <Cell>{item.user?.name}</Cell>
-                                                <Cell>{item.user?.email}</Cell>
-                                                <Cell>{item.testResults}</Cell>
+                                                <Cell>Имя</Cell>
+                                                <Cell>example@mail.ru</Cell>
+                                                <Cell>9/10</Cell>
                                             </Row>
                                             {item.id === expandedRowId && (
                                                 <Row item={item}>
@@ -82,19 +82,16 @@ export const MainPage = () => {
                                                         <td style={{flex: "1", border: "0"}}>
                                                             <ul>
                                                                 <li>
-                                                                    <strong>Name:</strong> {item.name}
+                                                                    <strong>Имя:</strong> Имя
                                                                 </li>
                                                                 <li>
-                                                                    <strong>Email:</strong> {item.email}
+                                                                    <strong>Email:</strong> example@mail.ru
                                                                 </li>
                                                                 <li>
-                                                                    <strong>Описание:</strong> {item.description}
+                                                                    <strong>Описание:</strong> Описание
                                                                 </li>
                                                                 <li>
-                                                                    <strong>Язык:</strong> {item.language}
-                                                                </li>
-                                                                <li>
-                                                                    <strong>Дата создания:</strong> {item.creationDate}
+                                                                    <strong>Язык:</strong> Java
                                                                 </li>
                                                                 <li>
                                                                     <strong>Время начала:</strong> {item.startTime}

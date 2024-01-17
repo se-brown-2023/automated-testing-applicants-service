@@ -13,12 +13,13 @@
 .modal-content-task {
     background: #3f3f5f;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: auto; /* добавлено */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     width: 70%;
     max-width: 1200px;
     position: relative;
-    min-height: 1200px;
+    height: auto;
+    max-height: 95vh;
 }
 
 .close {
@@ -50,15 +51,15 @@
 }
 
 .modal-body-task {
-    padding: 0 20px 10px 20px;
+    padding: 10px 20px 0 20px;
     display: flex;
     align-items: center;
     flex-direction: column;
-    min-height: 1000px;
+    min-height: 60vh;
 }
 
 .content-task {
-    padding: 20px;
+    width: 100%;
 }
 
 .content-task-modal {
@@ -73,12 +74,12 @@
 }
 
 .content-task label {
+    padding: 10px;
     width: 80%;
     margin: 10px 0;
 }
 
 .content-task-modal label {
-    width: 30%;
     margin: 10px 0;
 }
 
@@ -97,10 +98,6 @@
     margin: 10px 0;
 }
 
-.content-task .code {
-    min-height: 600px;
-}
-
 .test-label {
     width: 100%;
     display: flex;
@@ -113,16 +110,7 @@
     margin: 0 10px;
 }
 
-textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    resize: vertical;
-}
-
 .modal-footer-task {
-    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -140,7 +128,7 @@ input {
     border-radius: 5px;
 }
 
-button {
+.modal-content-task button {
     background: linear-gradient(90deg, #ff8a00, #e52e71);
     color: #fff;
     border: none;
@@ -151,7 +139,7 @@ button {
     margin: 20px 0;
 }
 
-button:hover {
+.modal-content-task button:hover {
     background: linear-gradient(90deg, #e52e71, #ff8a00);
 }
 
@@ -171,4 +159,19 @@ button:hover {
     font-size: 16px;
     color: #333;
     margin: 10px 0;
+}
+
+.code-editor .cm-editor {
+    min-width: 600px;
+    width: 100%;
+    height: 45vh;
+    overflow: auto;
+}
+
+.cm-content {
+    font-size: 18px;
+}
+
+.cm-gutters {
+    font-size: 18px;
 }
