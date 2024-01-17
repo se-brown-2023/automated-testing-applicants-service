@@ -12,7 +12,7 @@ import {ExamSessionApi} from "../../api-backend-conduct";
 import {toaster} from "evergreen-ui";
 import {useNavigate} from "react-router-dom";
 
-const Examinee = () => {
+const Examinee = ({examSessionId}) => {
 
     const [currentTask, setCurrentTask] = useState(0);
     const [code, setCode] = useState('');
@@ -22,6 +22,8 @@ const Examinee = () => {
     const [taskCodes, setTaskCodes] = useState([]);
     const [editorCodes, setEditorCodes] = useState({});
     const [startState, setStartState] = useState(null);
+    const [isExamFinished, setIsExamFinished] = useState(false);
+
     const navigate = useNavigate();
 
     const apiInstance = new ExamSessionApi();
@@ -106,7 +108,7 @@ const Examinee = () => {
     }, [code]);
 
     useEffect(() => {
-        apiInstance.apiExamSessionExamSessionIdGet("c55cc77f-59ff-4d15-99f7-4a92efea7673")
+        apiInstance.apiExamSessionExamSessionIdGet(examSessionId)
             .then((response) => {
                 console.log(response.data)
                 setTasks(response.data.exam.tasks.map((task) => task.name));
@@ -122,22 +124,40 @@ const Examinee = () => {
     }, []);
 
     useEffect(() => {
-        apiInstance.apiExamSessionExamSessionIdTimeGet("c55cc77f-59ff-4d15-99f7-4a92efea7673")
+        let storedStartTime = localStorage.getItem('examStartTime');
+        if (!storedStartTime) {
+            storedStartTime = Date.now();
+            localStorage.setItem('examStartTime', storedStartTime);
+        }
+
+        apiInstance.apiExamSessionExamSessionIdTimeGet(examSessionId)
             .then((response) => {
-                setTime(response.data * 60);
+                const maxTime = response.data * 60;
+                const elapsedTime = Math.floor((Date.now() - storedStartTime) / 1000);
+                setTime(maxTime - elapsedTime);
             })
             .catch((error) => {
                 console.error(error);
             });
 
         const timer = setInterval(() => {
-            setTime((prevTime) => prevTime > 0 ? prevTime - 1 : 0);
+            if (!isExamFinished) {
+                setTime((prevTime) => {
+                    if (prevTime > 0) {
+                        return prevTime - 1;
+                    } else {
+                        handleSubmitOutOfTime();
+                        finishExam();
+                        return 0;
+                    }
+                });
+            }
         }, 1000);
 
         return () => {
             clearInterval(timer);
         };
-    }, []);
+    }, [isExamFinished]);
 
     useEffect(() => {
         if (startState) {
@@ -166,6 +186,27 @@ const Examinee = () => {
         setCode(editorCodes[index] || taskCodes[index]);
     };
 
+    const handleSubmitOutOfTime = async () => {
+        for (let i = 0; i < tasks.length; i++) {
+            const solution = editorCodes[i];
+            const taskId = tasks[i].id;
+
+            const sendTaskSolutionRequest = {
+                submission: {
+                    taskId: taskId,
+                    userSourceCode: solution
+                }
+            };
+
+            try {
+                await apiInstance.apiExamSessionExamSessionIdSendSolutionPut(examSessionId, sendTaskSolutionRequest);
+                toaster.success(`Задание ${i + 1} успешно сдано`);
+            } catch (error) {
+                toaster.danger(`Ошибка при отправке решения для задания ${i + 1}`);
+            }
+        }
+    };
+
     const handleSubmit = async () => {
         if (startState) {
             const solution = startState.doc.toString();
@@ -179,7 +220,7 @@ const Examinee = () => {
             };
 
             try {
-                await apiInstance.apiExamSessionExamSessionIdSendSolutionPut("c55cc77f-59ff-4d15-99f7-4a92efea7673", sendTaskSolutionRequest);
+                await apiInstance.apiExamSessionExamSessionIdSendSolutionPut(examSessionId, sendTaskSolutionRequest);
                 toaster.success(`Задание ${currentTask + 1} успешно сдано`);
             } catch (error) {
                 toaster.danger("Ошибка при отправке решения");
@@ -191,8 +232,10 @@ const Examinee = () => {
         const userConfirmation = window.confirm("Вы уверены, что хотите завершить экзамен?");
         if (userConfirmation) {
             try {
-                await apiInstance.apiExamSessionExamSessionIdFinishGet("c55cc77f-59ff-4d15-99f7-4a92efea7673");
-                navigate('/exam-end');
+                await apiInstance.apiExamSessionExamSessionIdFinishGet(examSessionId);
+                setIsExamFinished(true);
+                toaster.success("Экзамен успешно завершен");
+                navigate('/main');
             } catch (error) {
                 toaster.danger("Ошибка при завершении экзамена");
             }

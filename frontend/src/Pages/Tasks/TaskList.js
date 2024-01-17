@@ -12,19 +12,19 @@ const TaskList = () => {
     const [selectedTask, setSelectedTask] = useState(null);
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                const taskApiInstance = new TaskApi();
-                const response = await taskApiInstance.getAllTasks();
-                setTasks(response.data);
-                console.log('Fetched tasks:', response.data);
-            } catch (error) {
-                console.error('Failed to fetch tasks:', error);
-            }
-        };
-
         fetchTasks();
     }, []);
+
+    const fetchTasks = async () => {
+        try {
+            const taskApiInstance = new TaskApi();
+            const response = await taskApiInstance.getAllTasks();
+            setTasks(response.data);
+            console.log('Fetched tasks:', response.data);
+        } catch (error) {
+            console.error('Failed to fetch tasks:', error);
+        }
+    };
 
     const openModal = () => setModalIsOpen(true);
 
@@ -57,7 +57,7 @@ const TaskList = () => {
                         Создать новое задание
                     </button>
                 </div>
-                <TaskModal isOpen={modalIsOpen} closeModal={closeModal} task={selectedTask}/>
+                <TaskModal isOpen={modalIsOpen} closeModal={closeModal} fetchTasks={fetchTasks}/>
             </div>
         </div>
     );
