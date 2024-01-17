@@ -1205,6 +1205,247 @@ export class ExamSessionApi extends BaseAPI {
 
 
 /**
+ * ExamineeApi - axios parameter creator
+ * @export
+ */
+export const ExamineeApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Endpoint for creating a new examinee. Requires a JSON payload with exam session details in the request body.
+         * @summary Creating a new examinee
+         * @param {ExamineeComponent} examineeComponent JSON payload containing Test.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createExaminee: async (examineeComponent: ExamineeComponent, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'examineeComponent' is not null or undefined
+            assertParamExists('createExaminee', 'examineeComponent', examineeComponent)
+            const localVarPath = `/api/examinee`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(examineeComponent, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Endpoint for getting examinee by id.
+         * @summary Get examinee by id
+         * @param {number} examineeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getExamineeById: async (examineeId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'examineeId' is not null or undefined
+            assertParamExists('getExamineeById', 'examineeId', examineeId)
+            const localVarPath = `/api/examinee/{examinee_id}`
+                .replace(`{${"examinee_id"}}`, encodeURIComponent(String(examineeId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Endpoint for getting examinees.
+         * @summary Get examinees
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getExaminees: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/examinee`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ExamineeApi - functional programming interface
+ * @export
+ */
+export const ExamineeApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ExamineeApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Endpoint for creating a new examinee. Requires a JSON payload with exam session details in the request body.
+         * @summary Creating a new examinee
+         * @param {ExamineeComponent} examineeComponent JSON payload containing Test.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createExaminee(examineeComponent: ExamineeComponent, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamineeComponent>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createExaminee(examineeComponent, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['ExamineeApi.createExaminee']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * Endpoint for getting examinee by id.
+         * @summary Get examinee by id
+         * @param {number} examineeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getExamineeById(examineeId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExamineeComponent>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getExamineeById(examineeId, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['ExamineeApi.getExamineeById']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * Endpoint for getting examinees.
+         * @summary Get examinees
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getExaminees(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExamineeComponent>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getExaminees(options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['ExamineeApi.getExaminees']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * ExamineeApi - factory interface
+ * @export
+ */
+export const ExamineeApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ExamineeApiFp(configuration)
+    return {
+        /**
+         * Endpoint for creating a new examinee. Requires a JSON payload with exam session details in the request body.
+         * @summary Creating a new examinee
+         * @param {ExamineeComponent} examineeComponent JSON payload containing Test.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createExaminee(examineeComponent: ExamineeComponent, options?: any): AxiosPromise<ExamineeComponent> {
+            return localVarFp.createExaminee(examineeComponent, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Endpoint for getting examinee by id.
+         * @summary Get examinee by id
+         * @param {number} examineeId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getExamineeById(examineeId: number, options?: any): AxiosPromise<ExamineeComponent> {
+            return localVarFp.getExamineeById(examineeId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Endpoint for getting examinees.
+         * @summary Get examinees
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getExaminees(options?: any): AxiosPromise<Array<ExamineeComponent>> {
+            return localVarFp.getExaminees(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ExamineeApi - object-oriented interface
+ * @export
+ * @class ExamineeApi
+ * @extends {BaseAPI}
+ */
+export class ExamineeApi extends BaseAPI {
+    /**
+     * Endpoint for creating a new examinee. Requires a JSON payload with exam session details in the request body.
+     * @summary Creating a new examinee
+     * @param {ExamineeComponent} examineeComponent JSON payload containing Test.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExamineeApi
+     */
+    public createExaminee(examineeComponent: ExamineeComponent, options?: RawAxiosRequestConfig) {
+        return ExamineeApiFp(this.configuration).createExaminee(examineeComponent, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Endpoint for getting examinee by id.
+     * @summary Get examinee by id
+     * @param {number} examineeId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExamineeApi
+     */
+    public getExamineeById(examineeId: number, options?: RawAxiosRequestConfig) {
+        return ExamineeApiFp(this.configuration).getExamineeById(examineeId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Endpoint for getting examinees.
+     * @summary Get examinees
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExamineeApi
+     */
+    public getExaminees(options?: RawAxiosRequestConfig) {
+        return ExamineeApiFp(this.configuration).getExaminees(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * SubmissionApi - axios parameter creator
  * @export
  */
