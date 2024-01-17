@@ -569,7 +569,7 @@ paths:
         '405':
           description: The specified HTTP method is not supported for this resource.
 
-  /api/submission/{exam_session_id}:
+  /api/submission/by_exam_session_id/{exam_session_id}:
     get:
       tags:
         - submission

@@ -1,5 +1,6 @@
 package com.sebrown2023.repository;
 
+import com.sebrown2023.model.db.ExamSession;
 import com.sebrown2023.model.db.Submission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,4 +14,7 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     Optional<Submission> findSubmissionById(Long id);
 
     List<Submission> findSubmissionByExamSession_Id(UUID examSessionId);
+
+    List<Submission> findSubmissionByExamSession(ExamSession examSession);
+
 }
