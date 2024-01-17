@@ -19,24 +19,15 @@
     margin-right: 10px;
 }
 
+.task-list-body {
+    max-height: 75vh;
+    overflow: auto;
+    margin-bottom: 30px;
+}
+
 .task-title {
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     color: #fff;
-}
-
-.assign-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background: linear-gradient(90deg, #ff8a00, #e52e71);
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.assign-button:hover {
-    background: linear-gradient(90deg, #e52e71, #ff8a00);
 }

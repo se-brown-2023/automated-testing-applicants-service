@@ -10,6 +10,7 @@ import {EditorState} from "@codemirror/state";
 import './Examinee.css';
 import {ExamSessionApi} from "../../api-backend-conduct";
 import {toaster} from "evergreen-ui";
+import {useNavigate} from "react-router-dom";
 
 const Examinee = () => {
 
@@ -21,6 +22,7 @@ const Examinee = () => {
     const [taskCodes, setTaskCodes] = useState([]);
     const [editorCodes, setEditorCodes] = useState({});
     const [startState, setStartState] = useState(null);
+    const navigate = useNavigate();
 
     const apiInstance = new ExamSessionApi();
     const editorRef = useRef();
@@ -52,8 +54,8 @@ const Examinee = () => {
         "&": {
             color: "white",
             backgroundColor: "#252849",
-            width: "1200px",
-            height: "700px",
+            maxWidth: "100%",
+            height: "60vh",
             overflow: "auto"
         },
         ".cm-content": {
@@ -86,7 +88,7 @@ const Examinee = () => {
                         if (update.docChanged) {
                             let tr = state.update({changes: update.changes});
                             state = tr.state;
-                            setStartState(state); // update startState
+                            setStartState(state);
                         }
                     })
                 ]
@@ -186,11 +188,14 @@ const Examinee = () => {
     };
 
     const finishExam = async () => {
-        try {
-            await apiInstance.apiExamSessionExamSessionIdFinishGet("c55cc77f-59ff-4d15-99f7-4a92efea7673");
-            toaster.success(`Экзамен успешно завершен`);
-        } catch (error) {
-            toaster.danger("Ошибка при завершении экзамена");
+        const userConfirmation = window.confirm("Вы уверены, что хотите завершить экзамен?");
+        if (userConfirmation) {
+            try {
+                await apiInstance.apiExamSessionExamSessionIdFinishGet("c55cc77f-59ff-4d15-99f7-4a92efea7673");
+                navigate('/exam-end');
+            } catch (error) {
+                toaster.danger("Ошибка при завершении экзамена");
+            }
         }
     };
 

@@ -22602,7 +22602,7 @@
        };
    }
    /**
-   Accept the current completion.
+   FinishExam the current completion.
    */
    const acceptCompletion = (view) => {
        let cState = view.state.field(completionState, false);
@@ -24785,7 +24785,7 @@
            return result;
        }
        /**
-       Accept a token. By default, the end of the token is set to the
+       FinishExam a token. By default, the end of the token is set to the
        current stream position, but you can pass an offset (relative to
        the stream position) to change that.
        */
@@ -24996,7 +24996,7 @@
                break;
            let accEnd = data[state + 1];
            // Check whether this state can lead to a token in the current group
-           // Accept tokens in this state, possibly overwriting
+           // FinishExam tokens in this state, possibly overwriting
            // lower-precedence / shorter tokens
            for (let i = state + 3; i < accEnd; i += 2)
                if ((data[i + 1] & groupMask) > 0) {

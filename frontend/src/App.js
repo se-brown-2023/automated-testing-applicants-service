@@ -7,6 +7,8 @@ import TaskList from './Pages/Tasks/TaskList';
 import ExamSession from "./Pages/ExamSession/ExamSession";
 import Exam from "./Pages/Exam/Exam";
 import Examinee from "./Pages/Examinee/Examinee";
+import {FinishExam} from "./Pages/FinishExam/FinishExam";
+
 
 function App() {
     return (
@@ -19,6 +21,7 @@ function App() {
                 <Route path="/exam-start" element={<Accept/>}/>
                 <Route path="/examinee" element={<Examinee/>}/>
                 <Route path="/exam" element={<Exam/>}/>
+                <Route path="/exam-end" element={<FinishExam/>}/>
                 <Route path="/" element={<Login/>}/>
             </Routes>
         </Router>
