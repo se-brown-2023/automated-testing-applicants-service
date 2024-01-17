@@ -37,6 +37,7 @@ graylog:
 logging:
   file:
     name: ${log.dir:/tmp}/exam-manage-service.main.log
+  config: classpath:logback.xml
 
 keycloak:
   tokenUri: http://localhost:8080/realms/swe-brown-2023-realm/protocol/openid-connect/token
