@@ -5,32 +5,6 @@ info:
 security:
   - bearerAuth: [ ]
 paths:
-  /api/exam-session/{examSessionId}:
-    get:
-      tags:
-        - ExamSession
-      summary: Get an exam session
-      parameters:
-        - in: path
-          required: true
-          name: examSessionId
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          description: Exam session
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ExamSessionComponent"
-        '404':
-          description: Exam session not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiErrorDto"
-              example: { "status": "Not found", "message": "Exam session was not found" }
   /api/exam-session/{examSessionId}/start:
     get:
       tags:
@@ -267,6 +241,7 @@ components:
         processingStartTime:
           type: string
           format: date-time
+
     ApiErrorDto:
       type: object
       properties:
