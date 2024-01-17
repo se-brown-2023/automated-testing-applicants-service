@@ -44,6 +44,7 @@ public class SubmissionService {
             log.info("Успешно найдена сессия c id: {}", examSessionId);
         } else {
             log.info("Cессия не найдена. id: {}", examSessionId);
+            throw new NoElementException("Session");
         }
 
         return submissionRepository.findSubmissionByExamSession(examSessionOptional.orElseThrow()).stream()
