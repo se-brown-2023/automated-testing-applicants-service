@@ -22,8 +22,6 @@ const Examinee = ({examSessionId}) => {
     const [taskCodes, setTaskCodes] = useState([]);
     const [editorCodes, setEditorCodes] = useState({});
     const [startState, setStartState] = useState(null);
-    const [isExamFinished, setIsExamFinished] = useState(false);
-
     const navigate = useNavigate();
 
     const apiInstance = new ExamSessionApi();
@@ -141,23 +139,21 @@ const Examinee = ({examSessionId}) => {
             });
 
         const timer = setInterval(() => {
-            if (!isExamFinished) {
-                setTime((prevTime) => {
-                    if (prevTime > 0) {
-                        return prevTime - 1;
-                    } else {
-                        handleSubmitOutOfTime();
-                        finishExam();
-                        return 0;
-                    }
-                });
-            }
+            setTime((prevTime) => {
+                if (prevTime > 0) {
+                    return prevTime - 1;
+                } else {
+                    handleSubmitOutOfTime();
+                    finishExam();
+                    return 0;
+                }
+            });
         }, 1000);
 
         return () => {
             clearInterval(timer);
         };
-    }, [isExamFinished]);
+    }, []);
 
     useEffect(() => {
         if (startState) {
@@ -233,9 +229,7 @@ const Examinee = ({examSessionId}) => {
         if (userConfirmation) {
             try {
                 await apiInstance.apiExamSessionExamSessionIdFinishGet(examSessionId);
-                setIsExamFinished(true);
-                toaster.success("Экзамен успешно завершен");
-                navigate('/main');
+                navigate('/exam-end');
             } catch (error) {
                 toaster.danger("Ошибка при завершении экзамена");
             }
