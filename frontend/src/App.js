@@ -22,6 +22,7 @@ function App() {
                 <Route path="/examinee" element={<Examinee/>}/>
                 <Route path="/exam" element={<Exam/>}/>
                 <Route path="/exam-end" element={<FinishExam/>}/>
+                <Route path="exam/:examSessionId" element={<Exam />} />
                 <Route path="/" element={<Login/>}/>
             </Routes>
         </Router>

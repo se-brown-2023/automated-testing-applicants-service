@@ -10,7 +10,7 @@ import {basicSetup} from "codemirror";
 import {indentWithTab} from "@codemirror/commands";
 import {java} from "@codemirror/lang-java";
 
-const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
+const TaskModal = ({isOpen, closeModal, fetchTasks, task}) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [code, setCode] = useState('');
@@ -174,7 +174,9 @@ const TaskModal = ({isOpen, closeModal, createTask, updateTask, task}) => {
             const taskApiInstance = new TaskApi();
 
             console.log(newTask);
+
             await taskApiInstance.createTask(newTask);
+            fetchTasks();
             closeModal();
         }
     };

@@ -1,5 +1,6 @@
 package com.sebrown2023.service;
 
+import com.sebrown2023.controller.SubmissionSupplier;
 import com.sebrown2023.exceptions.ExamNotFoundException;
 import com.sebrown2023.exceptions.ExamSessionAlreadyFinishedException;
 import com.sebrown2023.exceptions.ExamSessionException;
@@ -14,11 +15,13 @@ import com.sebrown2023.model.db.Task;
 import com.sebrown2023.model.dto.Submission;
 import com.sebrown2023.repository.ExamRepository;
 import com.sebrown2023.repository.ExamSessionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,17 +29,26 @@ import java.util.UUID;
 public class ExamSessionServiceImpl implements ExamSessionService {
     private final ExamSessionRepository sessionRepository;
     private final ExamRepository examRepository;
+    @Autowired
+    private SubmissionSupplier submissionSupplier;
 
     public ExamSessionServiceImpl(ExamSessionRepository sessionRepository, ExamRepository examRepository) {
         this.sessionRepository = sessionRepository;
         this.examRepository = examRepository;
     }
 
+
     @Override
     public ExamSession getByUUID(UUID uuid) throws ExamSessionException {
         return sessionRepository.findById(uuid).orElseThrow(ExamSessionNotFoundException::new);
     }
 
+    /**
+     * Sends task solution to Kafka
+     * @param uuid exam session UUID
+     * @param submission submission with task id and source code
+     * @throws ExamSessionException
+     */
     @Override
     public void sendTask(UUID uuid, Submission submission) throws ExamSessionException {
         ExamSession examSession = getByUUID(uuid);
@@ -46,7 +58,8 @@ public class ExamSessionServiceImpl implements ExamSessionService {
             throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Task cant be sent. ExamSession are not valid now");
         }
 
-        //TODO implement send submission to kafka
+        submission.setSubmitTime(OffsetDateTime.now());
+        submissionSupplier.delegateToSupplier(submission);
     }
 
     @Override
