@@ -264,10 +264,6 @@ components:
         submitTime:
           type: string
           format: date-time
-        processingStartTime:
-          type: string
-          format: date-time
-
     ApiErrorDto:
       type: object
       properties:
