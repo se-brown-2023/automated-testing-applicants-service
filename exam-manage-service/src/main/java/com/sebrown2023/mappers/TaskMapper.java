@@ -15,10 +15,10 @@ public interface TaskMapper {
     Task taskComponentToTask(TaskComponent taskComponent);
 
     @Mapping(target = "tests", ignore = true)
-    @Mapping(target = "examId", expression = "java(task.getExam().getId())")
+    @Mapping(target = "examId", expression =  "java(task.getExam() != null ? task.getExam().getId() : null)")
     TaskComponent taskToTaskComponentShort(Task task);
 
     @Mapping(target = "tests", expression = "java(testsOfTask)")
-    @Mapping(target = "examId", expression = "java(task.getExam().getId())")
+    @Mapping(target = "examId", expression = "java(task.getExam() != null ? task.getExam().getId() : null)")
     TaskComponent taskToTaskComponent(Task task, List<TestComponent> testsOfTask);
 }

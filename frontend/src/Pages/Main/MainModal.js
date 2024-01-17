@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./MainModal.css";
+import {TaskApi} from "../../api-backend-manage";
 
 const MainModal = ({ onClose, examSession, isRatingMode, setIsRatingMode }) => {
     const [rating, setRating] = useState(0);
+    const [tasks, setTasks] = useState([]);
+    const taskApi = new TaskApi();
+
+    useEffect(() => {
+        examSession.submissions.submissions.forEach(submission => {
+            taskApi.getTask(submission.task_id).then(r => {
+                tasks.push(r.data)
+            })
+        })
+    })
 
     const handleRatingChange = (event) => {
         setRating(event.target.value);
@@ -29,7 +40,7 @@ const MainModal = ({ onClose, examSession, isRatingMode, setIsRatingMode }) => {
                 <div className="modal-body">
                     <p>Текст задания</p>
                     <textarea
-                        value={(examSession.tasks || []).map(task => task.title).join(', ')}
+                        value={tasks.map(task => task.description).join(', ')}
                         rows={10}
                         cols={50}
                     />

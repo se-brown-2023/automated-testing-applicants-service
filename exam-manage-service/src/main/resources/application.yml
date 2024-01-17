@@ -14,7 +14,7 @@ spring:
 
 cors:
   frontend:
-    url:
+    url: http://localhost:3000
 
 graylog:
   server:

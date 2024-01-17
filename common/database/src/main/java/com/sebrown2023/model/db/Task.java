@@ -58,7 +58,7 @@ public class Task {
     @Override
     public int hashCode() {
         int result = id.hashCode();
-        result = 31 * result + exam.hashCode();
+        result = 31 * result + (exam != null ? exam.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (authorSourceCode != null ? authorSourceCode.hashCode() : 0);

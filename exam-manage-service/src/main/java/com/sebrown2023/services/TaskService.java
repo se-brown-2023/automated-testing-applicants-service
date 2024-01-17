@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,9 +48,12 @@ public class TaskService {
 
     @Transactional
     public TaskComponent createTask(TaskComponent taskComponent) {
-        var exam = examRepository.findExamById(taskComponent.getExamId());
         var task = taskMapper.taskComponentToTask(taskComponent);
-        exam.ifPresent(task::setExam);
+
+        if (taskComponent.getExamId() != null) {
+            var exam = examRepository.findExamById(taskComponent.getExamId());
+            exam.ifPresent(task::setExam);
+        }
 
         var createdTask = taskRepository.save(task);
 
