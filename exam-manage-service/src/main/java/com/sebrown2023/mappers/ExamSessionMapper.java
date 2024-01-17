@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring",
-imports = {UUID.class, LocalDateTime.class})
+        imports = {UUID.class, LocalDateTime.class}, uses = ExamineeMapper.class)
 public interface ExamSessionMapper {
 
     @Mapping(target = "id", expression = "java(examSession.getId().toString())")
@@ -19,9 +19,9 @@ public interface ExamSessionMapper {
     @Mapping(target = "finishTimeStamp", source = "finishTimestamp")
     ExamSessionComponent examSessionToExamSessionComponent(ExamSession examSession);
 
-    @Mapping(target = "id", expression = "java(UUID.fromString(examSessionComponent.getId()))")
+    @Mapping(target = "id", expression = "java(examSessionComponent.getId() != null ? UUID.fromString(examSessionComponent.getId()) : null)")
     @Mapping(target = "exam", expression = "java(exam)")
-    @Mapping(target = "startTimestamp", expression = "java(LocalDateTime.parse(examSessionComponent.getStartTimeStamp(), DateTimeFormatter.ISO_LOCAL_DATE_TIME))")
-    @Mapping(target = "finishTimestamp", expression = "java(LocalDateTime.parse(examSessionComponent.getFinishTimeStamp(), DateTimeFormatter.ISO_LOCAL_DATE_TIME))")
+    @Mapping(target = "startTimestamp", expression = "java(examSessionComponent.getStartTimeStamp() != null ? LocalDateTime.parse(examSessionComponent.getStartTimeStamp(), DateTimeFormatter.ISO_LOCAL_DATE_TIME): null)")
+    @Mapping(target = "finishTimestamp", expression = "java(examSessionComponent.getFinishTimeStamp() != null ? LocalDateTime.parse(examSessionComponent.getFinishTimeStamp(), DateTimeFormatter.ISO_LOCAL_DATE_TIME): null)")
     ExamSession examSessionComponentToExamSession(ExamSessionComponent examSessionComponent, Exam exam);
 }
