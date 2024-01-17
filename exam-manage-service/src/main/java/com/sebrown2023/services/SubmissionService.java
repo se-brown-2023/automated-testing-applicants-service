@@ -52,7 +52,7 @@ public class SubmissionService {
                             .map(testResultMapper::testResultToTestResultComponent)
                             .toList();
 
-                    log.info("Найдены результаты выполнения теста для данного Subission. testResults: {}", testResults);
+                    log.info("Найдены результаты выполнения теста для данного Subission c id: {}. testResults: {}", submission.getId(), testResults);
                     return submissionMapper.submissionToSubmissionComponent(submission, testResults);
                 })
                 .toList();
