@@ -15,4 +15,21 @@
 
 # Usage
 
-// TODO
+1. Set up [docker compose](docker-compose.yml) volumes for application.yml configs
+2. Run `docker compose up -d`
+
+# Graylog
+
+```shell
+cd graylogServer
+docker compose up -d
+```
+
+Also see: https://github.com/Graylog2/docker-compose
+
+# Monitoring
+
+```shell
+cd monitoring
+docker compose up -d
+```

@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  grafana:
+    image: 'grafana/grafana:10.2.3'
+    volumes:
+      - './grafana:/var/lib/grafana'
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=seBrown2023Dev
+    ports:
+      - "3100:3000"
+    networks:
+      - monitoring_network
+  prometheus:
+    image: 'prom/prometheus:v2.48.1'
+    volumes:
+      - './prometheus:/etc/prometheus'
+    ports:
+      - '9090:9090'
+    networks:
+      - automated-testing-applicants-service_default
+      - monitoring_network
+networks:
+  monitoring_network:
+    driver: bridge
+  automated-testing-applicants-service_default:
+    external: true
+
