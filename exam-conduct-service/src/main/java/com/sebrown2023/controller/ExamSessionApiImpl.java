@@ -6,6 +6,7 @@ import com.sebrown2023.model.dto.FinishExamSessionResponse;
 import com.sebrown2023.model.dto.SendTaskSolutionRequest;
 import com.sebrown2023.model.dto.Submission;
 import com.sebrown2023.service.ExamSessionService;
+import jakarta.annotation.security.RolesAllowed;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

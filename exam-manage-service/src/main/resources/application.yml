@@ -11,6 +11,21 @@ spring:
     url:
     username:
     password:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/swe-brown-2023-realm
+      client:
+        registration:
+          keycloak:
+            client-id: automated-testing-applicants-service
+            authorization-grant-type: authorization_code
+            scope: openid
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/swe-brown-2023-realm
+            user-name-attribute: preferred_username
 
 cors:
   frontend:
@@ -23,6 +38,12 @@ logging:
   file:
     name: ${log.dir:/tmp}/exam-manage-service.main.log
   config: classpath:logback.xml
+
+keycloak:
+  tokenUri: http://localhost:8080/realms/swe-brown-2023-realm/protocol/openid-connect/token
+  clientId: automated-testing-applicants-service
+  clientSecret: P3mSHqKJLPrav1nv0daXlsbVDpsYg7sj
+
 
 management:
   endpoints:

@@ -30,6 +30,14 @@ dependencies {
     implementation("org.postgresql:postgresql:42.2.27")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
+    //SECURITY
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.keycloak:keycloak-spring-boot-starter:23.0.1")
+    implementation("org.springframework.security.oauth:spring-security-oauth2:2.5.2.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.security:spring-security-oauth2-jose:6.1.5")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+
 }
 
 openApiGenerate {
