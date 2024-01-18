@@ -127,7 +127,7 @@ export const MainPage = () => {
                                                                     <strong>session id:</strong> {item.id}
                                                                 </li>
                                                                 <li>
-                                                                    <strong>Имя:</strong> {item.examinee.first_name}
+                                                                    <strong>Имя:</strong> {item.examinee.first_name} {item.examinee.last_name}
                                                                 </li>
                                                                 <li>
                                                                     <strong>Email:</strong> {item.examinee.email}

@@ -8,12 +8,15 @@ const MainModal = ({ onClose, examSession, isRatingMode, setIsRatingMode }) => {
     const taskApi = new TaskApi();
 
     useEffect(() => {
-        examSession.submissions.submissions.forEach(submission => {
-            taskApi.getTask(submission.task_id).then(r => {
-                tasks.push(r.data)
+        const promises = examSession.submissions.submissions.map(submission => {
+            return taskApi.getTask(submission.task_id).then(r => {
+                return r.data
             })
         })
-    })
+        Promise.all(promises).then(tasks => {
+            setTasks(tasks)
+        })
+    }, [])
 
     const handleRatingChange = (event) => {
         setRating(event.target.value);
@@ -37,14 +40,18 @@ const MainModal = ({ onClose, examSession, isRatingMode, setIsRatingMode }) => {
                         &times;
                     </span>
                 </div>
-                <div className="modal-body">
-                    <p>Текст задания</p>
-                    <textarea
-                        value={tasks.map(task => task.description).join(', ')}
-                        rows={10}
-                        cols={50}
-                    />
-                </div>
+                {tasks.map(task =>
+                    (<div key={task} className="modal-body">
+                        <p>{task.name} | {task.description}</p>
+                        <textarea
+                            value={examSession.submissions.submissions.filter(submission => submission.task_id === task.id)
+                                .map(s => s.user_source_code)}
+                            rows={10}
+                            cols={50}
+                        />
+                    </div>)
+                )}
+
                 <div className="modal-footer">
                     {isRatingMode ? (
                         <>

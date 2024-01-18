@@ -86,7 +86,7 @@ const ExamSession = () => {
                     status: "CREATED",
                     examinee: users.find(u => u.id == selectedUser)
                 }
-            )
+            ).then(r => r.data)
         })
 
         Promise.all(promises).then(sessions => {
