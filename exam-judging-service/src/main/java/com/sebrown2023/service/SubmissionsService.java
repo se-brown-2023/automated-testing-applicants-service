@@ -79,7 +79,7 @@ public class SubmissionsService {
         this.javaCompilerProperties = javaCompilerProperties;
     }
 
-    @KafkaListener(topics = "submissionsTopic-out-0")
+    @KafkaListener(topics = "submissionsTopic")
     @RetryableTopic(
             backoff = @Backoff(delayExpression = "#{'${kafka.backoff.delay}'}"),
             attempts = "${kafka.backoff.retry}"

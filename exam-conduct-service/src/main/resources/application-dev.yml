@@ -3,5 +3,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/atas?reWriteBatchedInserts=true
     username: postgres
     password: test
+  kafka:
+    bootstrap-servers: localhost:9092
+
 log:
   dir: exam-conduct-service/logs

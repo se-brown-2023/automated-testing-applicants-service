@@ -57,7 +57,7 @@ public class ExamJudgingConfiguration {
 
     @Bean
     public NewTopic submissionsTopic() {
-        return new NewTopic("submissionsTopic-out-0", 1, (short) 3);
+        return new NewTopic("submissionsTopic", 1, (short) 3);
     }
 
     @Bean
