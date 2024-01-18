@@ -1,6 +1,5 @@
 package com.sebrown2023.service;
 
-import com.sebrown2023.controller.SubmissionSupplier;
 import com.sebrown2023.exceptions.ExamNotFoundException;
 import com.sebrown2023.exceptions.ExamSessionAlreadyFinishedException;
 import com.sebrown2023.exceptions.ExamSessionException;
@@ -94,10 +93,11 @@ public class ExamSessionServiceImpl implements ExamSessionService {
             case EXPIRED -> throw new ExamSessionExpiredException();
             case STARTED -> {
                 Duration duration = checkExamExpiration(session);
-                if (duration.isPositive()) {
+                if (duration.isNegative()) {
                     throw new ExamSessionNotExpiredException();
                 } else {
                     session.setStatus(Status.FINISHED);
+                    session.setFinishTimestamp(LocalDateTime.now());
                 }
             }
             case CREATED -> throw new ExamSessionNotStartedException();
@@ -112,7 +112,7 @@ public class ExamSessionServiceImpl implements ExamSessionService {
      */
     @Override
     public boolean checkSessionExpiration(ExamSession session) {
-        return session.getExam().getCreationDate().plus(session.getExam().getTtl()).isBefore(LocalDateTime.now());
+        return session.getExam().getCreationDate().plus(session.getExam().getTtl()).isAfter(LocalDateTime.now());
     }
 
     /**
@@ -124,10 +124,10 @@ public class ExamSessionServiceImpl implements ExamSessionService {
             case EXPIRED -> Duration.ZERO;
             case CREATED, FINISHED -> throw new ExamSessionException(HttpStatus.BAD_REQUEST, "Can not check session expiration");
             case STARTED -> {
-                LocalDateTime start = session.getStartTimestamp();
+                LocalDateTime start = session.getStartTimestamp().plus(session.getExam().getMaxDuration());
                 LocalDateTime now = LocalDateTime.now();
 
-                Duration duration = Duration.between(start, now);
+                Duration duration = Duration.between(now, start);
 
                 if (duration.isNegative()) {
                     session.setStatus(Status.EXPIRED);

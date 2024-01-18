@@ -41,7 +41,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     color: white;
-    min-height: 1000px;
+    min-height: 80vh;
 }
 
 .exam-session-form select {
@@ -137,11 +137,19 @@
     cursor: pointer;
 }
 
+.modal-inputs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 100px;
+}
+
 .tasks-list {
     justify-content: center;
     align-items: center;
     display: grid;
     overflow-y: auto;
+    max-height: 50vh;
 }
 
 .exam-task-item {
@@ -167,7 +175,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 5px;
 }
 
 .modal-footer-exam-session button {

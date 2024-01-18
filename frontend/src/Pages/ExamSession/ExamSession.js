@@ -86,7 +86,7 @@ const ExamSession = () => {
                     status: "CREATED",
                     examinee: users.find(u => u.id == selectedUser)
                 }
-            )
+            ).then(r => r.data)
         })
 
         Promise.all(promises).then(sessions => {
@@ -252,27 +252,29 @@ const ExamSession = () => {
                                 &times;
                             </span>
                         </div>
-                        <div className="exam-name">
-                            <strong>Название экзамена: </strong>
-                            <input type="text" value={examName} style={{width: "200px"}}
-                                   onChange={e => handleExamNameChange(e.target.value)}/>
-                        </div>
-                        <div className="exam-name">
-                            <strong>Описание экзамена: </strong>
-                            <input type="text" value={description} style={{width: "500px"}}
-                                   onChange={e => handleExamDescriptionChange(e.target.value)}/>
-                        </div>
-                        <div className="exam-name">
-                            <select className="select-language" onChange={e => setSelectedLanguage(e.target.value)}>
-                                <option>Выбрать язык</option>
+                        <div className="modal-inputs">
+                            <div className="exam-name">
+                                <strong>Название экзамена: </strong>
+                                <input type="text" value={examName} style={{width: "200px"}}
+                                       onChange={e => handleExamNameChange(e.target.value)}/>
+                            </div>
+                            <div className="exam-name">
+                                <strong>Описание экзамена: </strong>
+                                <input type="text" value={description} style={{width: "500px"}}
+                                       onChange={e => handleExamDescriptionChange(e.target.value)}/>
+                            </div>
+                            <div className="exam-name">
+                                <select className="select-language" onChange={e => setSelectedLanguage(e.target.value)}>
+                                    <option>Выбрать язык</option>
 
-                                <option key="JAVA"
-                                        value="JAVA">JAVA
-                                </option>
-                                <option key="JAVA_SCRIPT"
-                                        value="JAVA_SCRIPT">JAVA_SCRIPT
-                                </option>
-                            </select>
+                                    <option key="JAVA"
+                                            value="JAVA">JAVA
+                                    </option>
+                                    <option key="JAVA_SCRIPT"
+                                            value="JAVA_SCRIPT">JAVA_SCRIPT
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                         <div class="tasks-list">
                             {tasks.map(task => (

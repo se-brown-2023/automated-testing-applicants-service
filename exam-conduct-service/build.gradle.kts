@@ -20,9 +20,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.modelmapper:modelmapper:3.2.0")
 
-    implementation("org.springframework.cloud:spring-cloud-stream-binder-kafka:4.0.4")
-    implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka:4.0.4")
-    implementation("org.springframework.cloud:spring-cloud-stream:4.0.4")
+    implementation("org.springframework.kafka:spring-kafka")
 
     runtimeOnly("org.postgresql:postgresql:42.6.0")
 

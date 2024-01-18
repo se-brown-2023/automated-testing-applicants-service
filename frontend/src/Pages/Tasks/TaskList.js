@@ -10,21 +10,32 @@ const TaskList = () => {
     const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
-        fetchTasks();
-    }, []);
+        const fetchTasks = async () => {
+            try {
+                const taskApiInstance = new TaskApi();
+                const response = await taskApiInstance.getAllTasks();
+                setTasks(response.data);
+                console.log('Fetched tasks:', response.data);
+            } catch (error) {
+                console.error('Failed to fetch tasks:', error);
+            }
+        };
 
-    const fetchTasks = async () => {
-        try {
-            const taskApiInstance = new TaskApi();
-            const response = await taskApiInstance.getAllTasks();
-            setTasks(response.data);
-            console.log('Fetched tasks:', response.data);
-        } catch (error) {
-            console.error('Failed to fetch tasks:', error);
-        }
-    };
+        fetchTasks();
+    }, [refresh]);
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            // ...
+        };
+
+        fetchTasks();
+    }, [refresh]);
+
+    const handleRefresh = () => setRefresh(!refresh);
 
     const openModal = () => setModalIsOpen(true);
 
@@ -57,7 +68,7 @@ const TaskList = () => {
                         Создать новое задание
                     </button>
                 </div>
-                <TaskModal isOpen={modalIsOpen} closeModal={closeModal} fetchTasks={fetchTasks}/>
+                <TaskModal isOpen={modalIsOpen} closeModal={closeModal} task={selectedTask} onTaskCreated={handleRefresh}/>
             </div>
         </div>
     );

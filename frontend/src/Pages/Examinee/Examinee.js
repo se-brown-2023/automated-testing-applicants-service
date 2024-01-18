@@ -202,7 +202,7 @@ const Examinee = ({examSessionId}) => {
         const userConfirmation = window.confirm("Вы уверены, что хотите завершить экзамен?");
         if (userConfirmation) {
             try {
-                localStorage.setItem('examStartTime', null);
+                localStorage.removeItem('examStartTime');
                 await apiInstance.apiExamSessionExamSessionIdFinishGet(examSessionId);
                 navigate('/exam-end');
             } catch (error) {
