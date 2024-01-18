@@ -4,7 +4,7 @@ plugins {
 }
 allprojects {
     group = "com.sebrown2023"
-    version = "0.0.1-SNAPSHOT"
+    version = "1.0.0-SNAPSHOT"
     repositories {
         mavenCentral()
     }
